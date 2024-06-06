@@ -84,7 +84,7 @@ jobs:
           PORTAINER_URL: ${{ vars.PORTAINER_URL }}
         if: env.NEW_RELEASE != 'false'
         run: |
-          pip install json requests
+          pip install requests
           python - <<'EOF'
           import json
           import os
