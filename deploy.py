@@ -2,7 +2,7 @@ from requests import Session
 import json
 import os
 
-app = os.getenv("DIR")
+app = os.getenv("APP")
 apps = json.loads(os.getenv("APPS"))
 portainer_api_token = os.getenv("PORTAINER_API_TOKEN")
 portainer_url = f"{os.getenv("PORTAINER_URL")}/api"
