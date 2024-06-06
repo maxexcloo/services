@@ -1,4 +1,4 @@
-name: Check Releases & Build
+name: Check Changes & Deploy
 
 on:
   push:
