@@ -2,28 +2,28 @@ from requests import Session
 import json
 import os
 
-app = os.getenv("APP")
-apps = json.loads(os.getenv("APPS"))
 portainer_api_token = os.getenv("PORTAINER_API_TOKEN")
 portainer_url = f"{os.getenv("PORTAINER_URL")}/api"
+stack = os.getenv("STACK")
+stacks = json.loads(os.getenv("STACKS"))
 
 r = requests.Session()
 r.headers.update({"Content-Type": "application/json", "X-API-Key": portainer_api_token})
 
-endpoints = []
+portainer_endpoints = []
 response = r.get(f"{portainer_url}/endpoints")
 if response.status_code == 200:
-    endpoints = response.json()
+    portainer_endpoints = response.json()
 else:
     print("Failed to retrieve endpoints:", response.status_code)
 
-print(endpoints)
+print(portainer_endpoints)
 
-stacks = []
+portainer_stacks = []
 response = r.get(f"{portainer_url}/stacks")
 if response.status_code == 200:
-    stacks = response.json()
+    portainer_stacks = response.json()
 else:
     print("Failed to retrieve endpoints:", response.status_code)
 
-print(stacks)
+print(portainer_stacks)
