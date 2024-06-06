@@ -73,6 +73,7 @@ jobs:
           fi
 
       - uses: actions/setup-python@v5
+        if: env.NEW_RELEASE != 'false'
         with:
           python-version: "3.x"
 
