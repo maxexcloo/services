@@ -1,0 +1,78 @@
+name: Check Releases & Build
+
+on:
+  push:
+    paths:
+      - "**/*"
+  workflow_dispatch:
+    inputs:
+      bypass_check:
+        default: "false"
+        description: "Bypass Change Check"
+
+jobs:
+  generate-matrix:
+    name: Generate Matrix
+    outputs:
+      matrix: ${{ env.MATRIX }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate matrix
+        id: set-matrix
+        run: |
+          DIRS=$(find . -maxdepth 1 -mindepth 1 -not -name ".*" -type d)
+          FIRST=true
+
+          MATRIX="{\"include\":["
+          for DIR in $DIRS; do
+            TARGETS=$(cat $DIR/TARGETS)
+            if [ $FIRST = true ]; then
+              FIRST=false
+            else
+              MATRIX="$MATRIX,"
+            fi
+            MATRIX="$MATRIX{\"dir\":\"${DIR#./}\",\"targets\":\"$TARGETS\"}"
+          done
+          MATRIX="$MATRIX]}"
+
+          echo "MATRIX=$MATRIX" >> $GITHUB_ENV
+
+  check-changes-and-deploy:
+    name: Check Changes & Deploy
+    needs: generate-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for changes in ${{ matrix.dir }}
+        run: |
+          if [ "${{ github.event.inputs.bypass_check }}" == "true" ]; then
+            echo "NEW_RELEASE=bypass" >> $GITHUB_ENV
+            echo "Bypassing change check as requested."
+          else
+            if [[ -f ${{ matrix.dir }}/docker-compose.yaml ]]; then
+              if [[ $(git diff --name-only HEAD^ HEAD ${{ matrix.dir }}) ]]; then
+                echo "NEW_RELEASE=true" >> $GITHUB_ENV
+                echo "Changes detected, new release."
+              else
+                echo "NEW_RELEASE=false" >> $GITHUB_ENV
+                echo "No new release."
+              fi
+            else
+              echo "NEW_RELEASE=false" >> $GITHUB_ENV
+              echo "No docker-compose.yaml file found for ${{ matrix.dir }}, skipping."
+            fi
+          fi
+
+      - name: Deploy ${{ matrix.dir }} to Portainer
+        if: env.NEW_RELEASE != 'false'
+        run: |
+          curl -d @"$stack_file" -s -H "Authorization: Bearer ${{ secrets.PORTAINER_API_TOKEN }}" -H "Content-Type: application/json" -X POST "${{ vars.PORTAINER_URL }}/api/stacks"
