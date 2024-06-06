@@ -72,7 +72,44 @@ jobs:
             fi
           fi
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
       - name: Deploy ${{ matrix.dir }} to Portainer
+        env:
+          CLOUDFLARE_API_TOKENS: ${{ secrets.CLOUDFLARE_API_TOKENS }}
+          DATABASE_PASSWORDS: ${{ secrets.DATABASE_PASSWORDS }}
+          PORTAINER_API_TOKEN: ${{ secrets.PORTAINER_API_TOKEN }}
+          PORTAINER_URL: ${{ vars.PORTAINER_URL }}
+          RESEND_API_KEYS: ${{ secrets.RESEND_API_KEYS }}
+          SECRET_HASHES: ${{ secrets.SECRET_HASHES }}
+          SERVERS: ${{ vars.SERVERS }}
+          WEBSITES: ${{ secrets.WEBSITES }}
         if: env.NEW_RELEASE != 'false'
         run: |
-          curl -d @"$stack_file" -s -H "Authorization: Bearer ${{ secrets.PORTAINER_API_TOKEN }}" -H "Content-Type: application/json" -X POST "${{ vars.PORTAINER_URL }}/api/stacks"
+          python - <<'EOF'
+          import json
+          import os
+          import requests
+
+          cloudflare_api_tokens = json.loads(os.getenv("cloudflare_api_tokens"))
+          database_passwords = json.loads(os.getenv("database_passwords"))
+          portainer_headers = {"Content-Type": "application/json", "X-API-Key": os.getenv("PORTAINER_API_TOKEN")}
+          portainer_url = f"{os.getenv("portainer_url")}/api"
+          resend_api_keys = json.loads(os.getenv("resend_api_keys"))
+          secret_hashes = json.loads(os.getenv("secret_hashes"))
+          servers = json.loads(os.getenv("servers"))
+          websites = json.loads(os.getenv("websites"))
+
+          endpoints = []
+          response = requests.get(f"{portainer_url}/endpoints", headers=portainer_headers)
+          if response.status_code == 200:
+              data = response.json()
+              for endpoint in response.json():
+                  endpoints.append({"id": endpoint["Id"], "name": endpoint["Name"]})
+          else:
+              print("Failed to retrieve endpoints:", response.status_code)
+
+          print(endpoints)
+          EOF

@@ -1,0 +1,33 @@
+networks:
+  default:
+    external: true
+    name: caddy
+services:
+  n8n:
+    environment:
+      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_PASSWORD: Yy8VwNhp93dkvY8DjQ8PhxnB
+      DB_POSTGRESDB_USER: n8n
+      DB_TYPE: postgresdb
+      GENERIC_TIMEZONE: Australia/Sydney
+      N8N_HOST: n8n.excloo.com
+      N8N_PROTOCOL: https
+      WEBHOOK_URL: https://n8n.excloo.com/
+    image: n8nio/n8n
+    labels:
+      caddy: n8n.excloo.com
+      caddy.reverse_proxy: "{{upstreams 5678}}"
+    restart: unless-stopped
+    volumes:
+      - n8n_data:/home/node/.n8n
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: Yy8VwNhp93dkvY8DjQ8PhxnB
+      POSTGRES_USER: n8n
+    image: postgres:16
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  n8n_data:
+  postgres_data:

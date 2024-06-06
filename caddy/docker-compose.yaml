@@ -1,0 +1,18 @@
+networks:
+  default:
+    external: true
+    name: caddy
+services:
+  caddy:
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    image: ghcr.io/maxexcloo/caddy
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+volumes:
+  caddy_data:

@@ -1,0 +1,17 @@
+networks:
+  default:
+    external: true
+    name: caddy
+services:
+  commafeed:
+    environment:
+      CF_APP_PUBLICURL: https://reader.excloo.com/
+    image: athou/commafeed
+    labels:
+      caddy: reader.excloo.com
+      caddy.reverse_proxy: "{{upstreams 8082}}"
+    restart: unless-stopped
+    volumes:
+      - commafeed_data:/commafeed/data
+volumes:
+  commafeed_data:
