@@ -1,6 +1,6 @@
-from requests import Session
 import json
 import os
+import requests
 
 portainer_api_token = os.getenv("PORTAINER_API_TOKEN")
 portainer_url = f"{os.getenv("PORTAINER_URL")}/api"
