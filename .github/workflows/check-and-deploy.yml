@@ -20,17 +20,21 @@ jobs:
       - name: Generate matrix
         id: set-matrix
         run: |
+          COMPARE_1=$(git rev-parse HEAD~1)
+          COMPARE_2=$(git rev-parse HEAD)
           DIRS=$(find . -maxdepth 1 -mindepth 1 -not -name ".*" -type d)
           FIRST=true
 
           MATRIX="{\"include\":["
           for DIR in $DIRS; do
-            if [ $FIRST = true ]; then
-              FIRST=false
-            else
-              MATRIX="$MATRIX,"
+            if ! git diff --quiet "$COMPARE_1" "$COMPARE_2" -- "$DIR"; then
+              if [ "$FIRST" = true ]; then
+                FIRST=false
+              else
+                MATRIX="$MATRIX,"
+              fi
+              MATRIX="$MATRIX{\"dir\":\"${DIR#./}\"}"
             fi
-            MATRIX="$MATRIX{\"dir\":\"${DIR#./}\"}"
           done
           MATRIX="$MATRIX]}"
 
@@ -47,39 +51,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check for changes in ${{ matrix.dir }}
-        run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "NEW_RELEASE=bypass" >> $GITHUB_ENV
-            echo "Bypassing change check due to manual run."
-          else
-            if [[ -f ${{ matrix.dir }}/docker-compose.yaml ]]; then
-              COMPARE_1=$(git show --pretty=raw ${{ github.sha }} | grep parent | sed -n 1p | sed "s/parent //g")
-              COMPARE_2=$(git show --pretty=raw ${{ github.sha }} | grep parent | sed -n 2p | sed "s/parent //g")
-
-              if git diff --quiet $COMPARE_1 $COMPARE_2 -- ${{ matrix.dir }}; then
-                echo "NEW_RELEASE=true" >> $GITHUB_ENV
-                echo "Changes detected, new release."
-              else
-                echo "NEW_RELEASE=false" >> $GITHUB_ENV
-                echo "No new release."
-              fi
-            else
-              echo "NEW_RELEASE=false" >> $GITHUB_ENV
-              echo "No docker-compose.yaml file found for ${{ matrix.dir }}, skipping."
-            fi
-          fi
-
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
+      - name: Install Python dependencies
+        run: pip install requests
+
       - name: Deploy ${{ matrix.dir }} to Portainer
+        run: python deploy.py "${{ matrix.dir }}"
         env:
           PORTAINER_API_TOKEN: ${{ secrets.PORTAINER_API_TOKEN }}
           PORTAINER_URL: ${{ vars.PORTAINER_URL }}
           DEFAULTS: ${{ vars.DEFAULTS }}
           WEBSITES: ${{ secrets.WEBSITES }}
-        run: |
-          pip install requests
-          python deploy.py ${{ matrix.dir }}
