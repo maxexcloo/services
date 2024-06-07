@@ -123,7 +123,6 @@ if __name__ == "__main__":
             params = {
                 "endpointId": item_endpoint["id"],
             }
-            print(json.dumps(data, sort_keys=True, indent=4))
             response = portainer.put(f"stacks/{id}", json=data, params=params)
             if response.status_code == 200:
                 print(f"Successfully redeployed existing Portainer stack '{item}' to endpoint '{item_endpoint['name']}'.")
