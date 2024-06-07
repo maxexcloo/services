@@ -100,10 +100,8 @@ if __name__ == "__main__":
     for stack_env in item_envs:
         stack_env_split = stack_env.rstrip().split("=")
         item_env.append({"name": stack_env_split[0], "value": stack_env_split[1]})
-    item_env.append({"name": "DOMAIN_EXTERNAL", "value": defaults["domain_external"]})
-    item_env.append({"name": "DOMAIN_INTERNAL", "value": defaults["domain_internal"]})
-    item_env.append({"name": "EMAIL", "value": defaults["email"]})
-    item_env.append({"name": "TIMEZONE", "value": defaults["timezone"]})
+    for key, value in defaults.items():
+        if isinstance(value, str): stack_env.append({"name": key.upper(), "value": str(value)})
 
     print(f"Processing {item}:")
     for item_endpoint in item_endpoints:
@@ -111,7 +109,7 @@ if __name__ == "__main__":
         for website in websites.values():
             if website["app_type"] == item and website["host"] == item_endpoint["name"]:
                 for key, value in website.items():
-                    item_env_endpoint.append({"name": key.upper(), "value": value})
+                    item_env_endpoint.append({"name": key.upper(), "value": str(value)})
 
         if any(portainer_stack["EndpointId"] == item_endpoint["id"] and portainer_stack["Name"] == item for portainer_stack in portainer_stacks):
             print(f"Exists on endpoint '{item_endpoint['name']}', redeploying...")
