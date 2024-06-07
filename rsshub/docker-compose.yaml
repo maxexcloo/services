@@ -1,0 +1,12 @@
+networks:
+  default:
+    external: true
+    name: caddy
+services:
+  rsshub:
+    image: diygod/rsshub:chromium-bundled
+    labels:
+      caddy: ${FQDN}
+      caddy.reverse_proxy: "{{upstreams 1200}}"
+    restart: unless-stopped
+
