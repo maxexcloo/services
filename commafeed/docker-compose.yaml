@@ -5,10 +5,10 @@ networks:
 services:
   commafeed:
     environment:
-      CF_APP_PUBLICURL: https://${FQDN}/
+      CF_APP_PUBLICURL: ${URL}
     image: athou/commafeed
     labels:
-      caddy: "${FQDN}"
+      caddy: ${FQDN}
       caddy.reverse_proxy: "{{upstreams 8082}}"
     restart: unless-stopped
     volumes:
