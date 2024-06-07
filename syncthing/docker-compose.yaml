@@ -1,0 +1,14 @@
+networks:
+  default:
+    external: true
+    name: caddy
+services:
+  syncthing:
+    image: syncthing/syncthing
+    labels:
+      caddy: ${WEBSITE_FQDN}
+      caddy.reverse_proxy: host.docker.internal:8384
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - /home/max.schaefer:/var/syncthing
