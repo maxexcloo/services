@@ -48,6 +48,7 @@ jobs:
     needs: generate-matrix
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
 
     steps:
@@ -63,7 +64,6 @@ jobs:
         run: pip install requests
 
       - name: Deploy ${{ matrix.dir }} to Portainer
-        continue-on-error: true
         run: python deploy.py "${{ matrix.dir }}"
         env:
           PORTAINER_API_TOKEN: ${{ secrets.PORTAINER_API_TOKEN }}
