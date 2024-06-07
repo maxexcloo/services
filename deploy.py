@@ -101,7 +101,7 @@ if __name__ == "__main__":
                 item_env.append({"name": f"DEFAULT_{key.upper()}", "value": str(value)})
         for server in servers.values():
             if server["host"] == item_endpoint["name"]:
-                for key, value in website.items():
+                for key, value in server.items():
                     item_env.append({"name": f"SERVER_{key.upper()}", "value": str(value)})
         for website in websites.values():
             if website["app_type"] == item and website["host"] == item_endpoint["name"]:
