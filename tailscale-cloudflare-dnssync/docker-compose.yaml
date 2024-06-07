@@ -1,3 +1,7 @@
+networks:
+  default:
+    external: true
+    name: caddy
 services:
   tailscale-cloudflare-dnssync:
     environment:
