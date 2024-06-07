@@ -108,10 +108,8 @@ if __name__ == "__main__":
     print(f"Processing {item}:")
     for item_endpoint in item_endpoints:
         item_env_endpoint = item_env.copy()
-        print(websites)
-        for website in websites:
-            print(website)
-            if website["app_type"] == item and website["host"] == item_endpoint["name"]:
+        for website in websites.values():
+            if value["app_type"] == item and value["host"] == item_endpoint["name"]:
                 for key, value in website.items():
                     item_env_endpoint.append({"name": key.upper(), "value": value})
 
