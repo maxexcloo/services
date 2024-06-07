@@ -40,12 +40,10 @@ jobs:
           done
           MATRIX="$MATRIX]}"
 
-          echo $MATRIX
-
           echo "MATRIX=$MATRIX" >> $GITHUB_ENV
 
   check-changes-and-deploy:
-    if: ${{ needs.generate-matrix.outputs.matrix != “” }}
+    if: ${{ needs.generate-matrix.outputs.matrix != '{"include":[]}' }}
     name: Check Changes & Deploy
     needs: generate-matrix
     runs-on: ubuntu-latest
