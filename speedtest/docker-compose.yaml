@@ -1,0 +1,19 @@
+networks:
+  default:
+    external: true
+    name: caddy
+services:
+  external:
+    image: openspeedtest/latest
+    labels:
+      caddy: speedtest.oracle.excloo.net
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+    restart: unless-stopped
+  internal:
+    image: openspeedtest/latest
+    labels:
+      caddy: speedtest.oracle.excloo.org
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+      caddy.tls.dns: cloudflare G-rQeeNfASXUCCRkgKuOqo3Dyc95njpnlhTUYFnL
+      caddy.tls.resolvers: 1.1.1.1
+    restart: unless-stopped

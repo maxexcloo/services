@@ -61,6 +61,10 @@ if __name__ == "__main__":
     item = sys.argv[1]
     item_docker_file = read_file(f"{item}/docker-compose.yaml")
     item_endpoint_names = read_file(f"{item}/endpoints.json")
+    defaults = read_json(read_env_var("DEFAULTS"))
+    servers = read_json(read_env_var("SERVERS"))
+    websites = read_json(read_env_var("WEBSITES"))
+
     portainer = APIClient(
         f"{read_env_var('PORTAINER_URL')}/api",
         {
@@ -68,9 +72,6 @@ if __name__ == "__main__":
             "X-API-Key": read_env_var("PORTAINER_API_TOKEN"),
         },
     )
-
-    defaults = read_json(read_env_var("DEFAULTS"))
-    websites = read_json(read_env_var("WEBSITES"))
 
     portainer_endpoints = []
     response = portainer.get(f"endpoints")
@@ -97,11 +98,15 @@ if __name__ == "__main__":
         item_env = []
         for key, value in defaults.items():
             if isinstance(value, str):
-                item_env.append({"name": key.upper(), "value": str(value)})
+                item_env.append({"name": f"DEFAULT_{key.upper()}", "value": str(value)})
+        for server in servers.values():
+            if server["host"] == item_endpoint["name"]:
+                for key, value in website.items():
+                    item_env.append({"name": f"SERVER_{key.upper()}", "value": str(value)})
         for website in websites.values():
             if website["app_type"] == item and website["host"] == item_endpoint["name"]:
                 for key, value in website.items():
-                    item_env.append({"name": key.upper(), "value": str(value)})
+                    item_env.append({"name": f"WEBSITE_{key.upper()}", "value": str(value)})
 
         if any(portainer_stack["EndpointId"] == item_endpoint["id"] and portainer_stack["Name"] == item for portainer_stack in portainer_stacks):
             print(f"Exists on endpoint '{item_endpoint['name']}', redeploying...")

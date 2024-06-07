@@ -11,6 +11,6 @@ services:
       LIBREDDIT_ROBOTS_DISABLE_INDEXING: on
     image: ghcr.io/kankerdev/redlib
     labels:
-      caddy: ${FQDN}
+      caddy: ${WEBSITE_FQDN}
       caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped

@@ -68,4 +68,5 @@ jobs:
           PORTAINER_API_TOKEN: ${{ secrets.PORTAINER_API_TOKEN }}
           PORTAINER_URL: ${{ vars.PORTAINER_URL }}
           DEFAULTS: ${{ vars.DEFAULTS }}
+          SERVERS: ${{ secrets.SERVERS }}
           WEBSITES: ${{ secrets.WEBSITES }}

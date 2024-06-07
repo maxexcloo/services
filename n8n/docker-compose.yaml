@@ -6,13 +6,13 @@ services:
   n8n:
     environment:
       DB_POSTGRESDB_HOST: postgres
-      DB_POSTGRESDB_PASSWORD: ${DATABASE_PASSWORD}
-      DB_POSTGRESDB_USER: n8n
+      DB_POSTGRESDB_PASSWORD: ${WEBSITE_DATABASE_PASSWORD}
+      DB_POSTGRESDB_USER: ${WEBSITE_APP_TYPE}
       DB_TYPE: postgresdb
-      GENERIC_TIMEZONE: ${TIMEZONE}
-      N8N_HOST: ${FQDN}
+      GENERIC_TIMEZONE: ${DEFAULT_TIMEZONE}
+      N8N_HOST: ${WEBSITE_FQDN}
       N8N_PROTOCOL: https
-      WEBHOOK_URL: ${URL}
+      WEBHOOK_URL: ${WEBSITE_URL}
     image: n8nio/n8n
     labels:
       caddy: ${FQDN}
@@ -22,8 +22,8 @@ services:
       - n8n_data:/home/node/.n8n
   postgres:
     environment:
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_USER: n8n
+      POSTGRES_PASSWORD: ${WEBSITE_DATABASE_PASSWORD}
+      POSTGRES_USER: ${WEBSITE_APP_TYPE}
     image: postgres:16
     restart: unless-stopped
     volumes:
