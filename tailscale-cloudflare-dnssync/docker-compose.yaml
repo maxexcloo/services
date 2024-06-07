@@ -8,8 +8,8 @@ services:
       cf-domain: ${DEFAULT_DOMAIN_INTERNAL}
       cf-key: ${SERVER_CLOUDFLARE_API_TOKEN}
       prefix: ${SECRET_PREFIX}
-      ts-clientid: ${SECRET_TS-CLIENTID}
-      ts-clientsecret: ${SECRET_TS-CLIENTSECRET}
-      ts-tailnet: ${SECRET_TS-TAILNET}
+      ts-clientid: ${SECRET_TS_CLIENTID}
+      ts-clientsecret: ${SECRET_TS_CLIENTSECRET}
+      ts-tailnet: ${SECRET_TS_TAILNET}
     image: ghcr.io/lifeismana/tailscale-cloudflare-dnssync:main
     restart: unless-stopped
