@@ -11,5 +11,5 @@ services:
       ts-clientid: kcct4j8NFu11CNTRL
       ts-clientsecret: tskey-client-kcct4j8NFu11CNTRL-VNBKjBKgQsWTYukZ1eBXqWMN4N8iNzDH
       ts-tailnet: excloo.com
-    image: ghcr.io/marc1307/tailscale-cloudflare-dnssync:main
+    image: ghcr.io/lifeismana/tailscale-cloudflare-dnssync:main
     restart: unless-stopped
