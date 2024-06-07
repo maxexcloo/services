@@ -99,7 +99,7 @@ if __name__ == "__main__":
         item_env = []
         for key, value in defaults.items():
             item_env.append({"name": f"DEFAULT_{key.upper()}", "value": str(value)})
-        for secret in secrets.values():
+        for secret in secrets:
             if secret["app_type"] == item and "host" not in secret or secret["app_type"] == item and secret["host"] == item_endpoint["name"]:
                 for key, value in secret.items():
                     item_env.append({"name": f"SECRET_{key.upper()}", "value": str(value)})
