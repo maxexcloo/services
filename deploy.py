@@ -129,7 +129,7 @@ if __name__ == "__main__":
                     response.status_code,
                 )
         else:
-            print(f"Does not exist on endpoint '{item_endpoint.name}', deploying...")
+            print(f"Does not exist on endpoint '{item_endpoint['name']}', deploying...")
             data = {
                 "env": item_env,
                 "fromAppTemplate": False,
