@@ -113,8 +113,6 @@ if __name__ == "__main__":
                 for key, value in website.items():
                     item_env_endpoint.append({"name": key.upper(), "value": value})
 
-        print(item_env_endpoint)
-
         if any(portainer_stack["EndpointId"] == item_endpoint["id"] and portainer_stack["Name"] == item for portainer_stack in portainer_stacks):
             print(f"Exists on endpoint '{item_endpoint['name']}', redeploying...")
             data = {
@@ -127,6 +125,7 @@ if __name__ == "__main__":
             params = {
                 "endpointId": item_endpoint["id"],
             }
+            print(json.dumps(data, sort_keys=True, indent=4))
             response = portainer.put(f"stacks/{id}", json=data, params=params)
             if response.status_code == 200:
                 print(f"Successfully redeployed existing Portainer stack '{item}' to endpoint '{item_endpoint['name']}'.")
