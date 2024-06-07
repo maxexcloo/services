@@ -33,12 +33,10 @@ def read_env_var(var_name):
         raise SystemExit(f"An error occurred while reading the environment variable '{var_name}': {error}")
 
 
-def read_file(file_path, readlines=False):
+def read_file(file_path):
     try:
         with open(file_path, "r") as file:
-            if readlines:
-                return file.readlines()
-            elif file_path.lower().endswith(".json"):
+            if file_path.lower().endswith(".json"):
                 return json.load(file)
             else:
                 return file.read()
@@ -63,11 +61,6 @@ if __name__ == "__main__":
     item = sys.argv[1]
     item_docker_file = read_file(f"{item}/docker-compose.yaml")
     item_endpoint_names = read_file(f"{item}/endpoints.json")
-    item_stack_envs = read_file(f"{item}/stack.env", readlines=True)
-
-    defaults = read_json(read_env_var("DEFAULTS"))
-    websites = read_json(read_env_var("WEBSITES"))
-
     portainer = APIClient(
         f"{read_env_var('PORTAINER_URL')}/api",
         {
@@ -75,6 +68,9 @@ if __name__ == "__main__":
             "X-API-Key": read_env_var("PORTAINER_API_TOKEN"),
         },
     )
+
+    defaults = read_json(read_env_var("DEFAULTS"))
+    websites = read_json(read_env_var("WEBSITES"))
 
     portainer_endpoints = []
     response = portainer.get(f"endpoints")
@@ -96,25 +92,21 @@ if __name__ == "__main__":
         if "all" in item_endpoint_names or portainer_endpoint["Name"] in item_endpoint_names
     ]
 
-    item_env = []
-    for item_stack_env in item_stack_envs:
-        if "=" in item_stack_env:
-            item_env.append({"name": item_stack_env.strip().split("=")[0], "value": item_stack_env.strip().split("=")[1]})
-    for key, value in defaults.items():
-        if isinstance(value, str): item_env.append({"name": key.upper(), "value": str(value)})
-
     print(f"Processing {item}:")
     for item_endpoint in item_endpoints:
-        item_env_endpoint = item_env.copy()
+        item_env = []
+        for key, value in defaults.items():
+            if isinstance(value, str):
+                item_env.append({"name": key.upper(), "value": str(value)})
         for website in websites.values():
             if website["app_type"] == item and website["host"] == item_endpoint["name"]:
                 for key, value in website.items():
-                    item_env_endpoint.append({"name": key.upper(), "value": str(value)})
+                    item_env.append({"name": key.upper(), "value": str(value)})
 
         if any(portainer_stack["EndpointId"] == item_endpoint["id"] and portainer_stack["Name"] == item for portainer_stack in portainer_stacks):
             print(f"Exists on endpoint '{item_endpoint['name']}', redeploying...")
             data = {
-                "env": item_env_endpoint,
+                "env": item_env,
                 "prune": True,
                 "pullImage": True,
                 "stackFileContent": item_docker_file,
@@ -134,7 +126,7 @@ if __name__ == "__main__":
         else:
             print(f"Does not exist on endpoint '{item_endpoint.name}', deploying...")
             data = {
-                "env": item_env_endpoint,
+                "env": item_env,
                 "fromAppTemplate": False,
                 "name": item,
                 "stackFileContent": item_docker_file,

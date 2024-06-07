@@ -7,7 +7,7 @@ services:
     environment:
       DB_POSTGRESDB_HOST: postgres
       DB_POSTGRESDB_PASSWORD: Yy8VwNhp93dkvY8DjQ8PhxnB
-      DB_POSTGRESDB_USER: ${DATABASE_USER}
+      DB_POSTGRESDB_USER: n8n
       DB_TYPE: postgresdb
       GENERIC_TIMEZONE: ${TIMEZONE}
       N8N_HOST: ${FQDN}
@@ -23,7 +23,7 @@ services:
   postgres:
     environment:
       POSTGRES_PASSWORD: Yy8VwNhp93dkvY8DjQ8PhxnB
-      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_USER: n8n
     image: postgres:16
     restart: unless-stopped
     volumes:
