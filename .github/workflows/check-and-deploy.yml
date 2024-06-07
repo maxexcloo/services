@@ -11,6 +11,7 @@ jobs:
     name: Generate Matrix
     outputs:
       matrix: ${{ env.MATRIX }}
+      matrix_empty: ${{ env.MATRIX_EMPTY }}
     runs-on: ubuntu-latest
 
     steps:
@@ -28,8 +29,10 @@ jobs:
           FIRST=true
 
           MATRIX="{\"include\":["
+          MATRIX_EMPTY=true
           for DIR in $DIRS; do
             if ! git diff --quiet "$COMPARE_1" "$COMPARE_2" -- "$DIR"; then
+              MATRIX_EMPTY=false
               if [ "$FIRST" = true ]; then
                 FIRST=false
               else
@@ -41,8 +44,10 @@ jobs:
           MATRIX="$MATRIX]}"
 
           echo "MATRIX=$MATRIX" >> $GITHUB_ENV
+          echo "MATRIX_EMPTY=$MATRIX_EMPTY" >> $GITHUB_ENV
 
   check-changes-and-deploy:
+    if: needs.generate-matrix.outputs.matrix_empty != 'false'
     name: Check Changes & Deploy
     needs: generate-matrix
     runs-on: ubuntu-latest
