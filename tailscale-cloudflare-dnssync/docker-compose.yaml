@@ -7,9 +7,9 @@ services:
     environment:
       cf-domain: ${DEFAULT_DOMAIN_INTERNAL}
       cf-key: ${SERVER_CLOUDFLARE_API_TOKEN}
-      prefix: ts-
-      ts-clientid: kcct4j8NFu11CNTRL
-      ts-clientsecret: tskey-client-kcct4j8NFu11CNTRL-VNBKjBKgQsWTYukZ1eBXqWMN4N8iNzDH
-      ts-tailnet: excloo.com
+      prefix: ${SECRET_PREFIX}
+      ts-clientid: ${SECRET_TS-CLIENTID}
+      ts-clientsecret: ${SECRET_TS-CLIENTSECRET}
+      ts-tailnet: ${SECRET_TS-TAILNET}
     image: ghcr.io/lifeismana/tailscale-cloudflare-dnssync:main
     restart: unless-stopped

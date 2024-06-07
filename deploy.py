@@ -61,10 +61,6 @@ if __name__ == "__main__":
     item = sys.argv[1]
     item_docker_file = read_file(f"{item}/docker-compose.yaml")
     item_endpoint_names = read_file(f"{item}/endpoints.json")
-    defaults = read_json(read_env_var("DEFAULTS"))
-    servers = read_json(read_env_var("SERVERS"))
-    websites = read_json(read_env_var("WEBSITES"))
-
     portainer = APIClient(
         f"{read_env_var('PORTAINER_URL')}/api",
         {
@@ -72,6 +68,11 @@ if __name__ == "__main__":
             "X-API-Key": read_env_var("PORTAINER_API_TOKEN"),
         },
     )
+
+    defaults = read_json(read_env_var("DEFAULTS"))
+    secrets = read_json(read_env_var("SECRETS"))
+    servers = read_json(read_env_var("SERVERS"))
+    websites = read_json(read_env_var("WEBSITES"))
 
     portainer_endpoints = []
     response = portainer.get(f"endpoints")
@@ -97,8 +98,11 @@ if __name__ == "__main__":
     for item_endpoint in item_endpoints:
         item_env = []
         for key, value in defaults.items():
-            if isinstance(value, str):
-                item_env.append({"name": f"DEFAULT_{key.upper()}", "value": str(value)})
+            item_env.append({"name": f"DEFAULT_{key.upper()}", "value": str(value)})
+        for secret in secrets.values():
+            if secret["app_type"] == item and "host" not in secret or secret["app_type"] == item and secret["host"] == item_endpoint["name"]:
+                for key, value in secret.items():
+                    item_env.append({"name": f"SECRET_{key.upper()}", "value": str(value)})
         for server in servers.values():
             if server["host"] == item_endpoint["name"]:
                 for key, value in server.items():
