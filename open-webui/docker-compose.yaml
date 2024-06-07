@@ -1,0 +1,15 @@
+networks:
+  default:
+    external: true
+    name: caddy
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui
+    labels:
+      caddy: ${WEBSITE_FQDN}
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+    restart: unless-stopped
+    volumes:
+      - open-webui_data:/app/backend/data
+volumes:
+  open-webui_data:

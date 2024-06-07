@@ -1,0 +1,40 @@
+networks:
+  default:
+    external: true
+    name: caddy
+services:
+  mariadb:
+    environment:
+      MARIADB_DATABASE: ${WEBSITE_DATABASE_USERNAME}
+      MARIADB_PASSWORD: ${WEBSITE_DATABASE_PASSWORD}
+      MARIADB_RANDOM_ROOT_PASSWORD: true
+      MARIADB_USER: ${WEBSITE_DATABASE_USERNAME}
+    image: mariadb:11
+    restart: unless-stopped
+    volumes:
+      - mariadb_data:/var/lib/mysql
+  romm:
+    environment:
+      DB_HOST: mariadb
+      DB_PASSWD: ${WEBSITE_DATABASE_PASSWORD}
+      DB_USER: ${WEBSITE_DATABASE_USERNAME}
+      ENABLE_RESCAN_ON_FILESYSTEM_CHANGE: true
+      ENABLE_SCHEDULED_RESCAN: true
+      IGDB_CLIENT_ID: 415s32hngbvhpr57we120hkx1hk2au
+      IGDB_CLIENT_SECRET: xqqtwe2f3z88s0nww0vnorwnolsis0
+      ROMM_AUTH_SECRET_KEY: ${WEBSITE_SECRET_HASH}
+      ROMM_HOST: ${WEBSITE_FQDN}
+      TZ: ${DEFAULT_TIMEZONE}
+    image: rommapp/romm
+    labels:
+      caddy: ${WEBSITE_FQDN}
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+    restart: unless-stopped
+    volumes:
+      - romm-assets:/romm/assets
+      - romm-config:/romm/config
+      - /Volumes/Games/Sync/romm-roms:/romm/library/roms
+volumes:
+  romm-assets:
+  romm-config:
+  mariadb_data:
