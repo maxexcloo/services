@@ -15,7 +15,7 @@ services:
       WEBHOOK_URL: ${WEBSITE_URL}
     image: n8nio/n8n
     labels:
-      caddy: ${FQDN}
+      caddy: ${WEBSITE_FQDN}
       caddy.reverse_proxy: "{{upstreams 5678}}"
     restart: unless-stopped
     volumes:

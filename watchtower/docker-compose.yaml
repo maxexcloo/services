@@ -1,0 +1,17 @@
+networks:
+  default:
+    external: true
+    name: caddy
+services:
+  watchtower:
+    environment:
+      TZ: ${DEFAULT_TIMEZONE}
+      WATCHTOWER_CLEANUP: true
+      WATCHTOWER_NOTIFICATION_URL: smtp://resend:${SERVER_RESEND_API_KEY}@smtp.resend.com:465/?from=${DEFAULT_EMAIL}&to=${DEFAULT_EMAIL}
+      WATCHTOWER_NOTIFICATIONS_HOSTNAME: ${SERVER_HOST}
+      WATCHTOWER_POLL_INTERVAL: 43200
+      WATCHTOWER_REMOVE_VOLUMES: true
+    image: containrrr/watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
