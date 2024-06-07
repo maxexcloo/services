@@ -63,7 +63,7 @@ if __name__ == "__main__":
     item = sys.argv[1]
     item_docker_file = read_file(f"{item}/docker-compose.yaml")
     item_endpoint_names = read_file(f"{item}/endpoints.json")
-    item_envs = read_file(f"{item}/stack.env", readlines=True)
+    item_stack_envs = read_file(f"{item}/stack.env", readlines=True)
 
     defaults = read_json(read_env_var("DEFAULTS"))
     websites = read_json(read_env_var("WEBSITES"))
@@ -97,9 +97,9 @@ if __name__ == "__main__":
     ]
 
     item_env = []
-    for stack_env in item_envs:
-        stack_env_split = stack_env.rstrip().split("=")
-        item_env.append({"name": stack_env_split[0], "value": stack_env_split[1]})
+    for item_stack_env in item_stack_envs:
+        if "=" in item_stack_env:
+            item_env.append({"name": item_stack_env.strip().split("=")[0], "value": item_stack_env.strip().split("=")[1]})
     for key, value in defaults.items():
         if isinstance(value, str): item_env.append({"name": key.upper(), "value": str(value)})
 
