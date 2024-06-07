@@ -78,10 +78,10 @@ jobs:
 
       - name: Deploy ${{ matrix.dir }} to Portainer
         env:
+          DIR: ${{ matrix.dir }}
           PORTAINER_API_TOKEN: ${{ secrets.PORTAINER_API_TOKEN }}
           PORTAINER_URL: ${{ vars.PORTAINER_URL }}
-          STACK: ${{ matrix.dir }}
-          STACKS: ${{ secrets.STACKS }}
+          WEBSITES: ${{ secrets.WEBSITES }}
         #if: env.NEW_RELEASE != 'false'
         run: |
           pip install requests
