@@ -101,7 +101,7 @@ if __name__ == "__main__":
         stack_env_split = stack_env.rstrip().split("=")
         item_env.append({"name": stack_env_split[0], "value": stack_env_split[1]})
     for key, value in defaults.items():
-        if isinstance(value, str): stack_env.append({"name": key.upper(), "value": str(value)})
+        if isinstance(value, str): item_env.append({"name": key.upper(), "value": str(value)})
 
     print(f"Processing {item}:")
     for item_endpoint in item_endpoints:
