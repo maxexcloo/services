@@ -5,10 +5,10 @@ networks:
 services:
   commafeed:
     environment:
-      CF_APP_PUBLICURL: https://reader.excloo.com/
+      CF_APP_PUBLICURL: https://${FQDN}/
     image: athou/commafeed
     labels:
-      caddy: reader.excloo.com
+      caddy: "${FQDN}"
       caddy.reverse_proxy: "{{upstreams 8082}}"
     restart: unless-stopped
     volumes:
