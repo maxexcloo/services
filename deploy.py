@@ -109,7 +109,7 @@ if __name__ == "__main__":
     for item_endpoint in item_endpoints:
         item_env_endpoint = item_env.copy()
         for website in websites:
-            if website["host"] == item_endpoint['name'] and website["type"] == item:
+            if website["host"] == item_endpoint["name"] and website["type"] == item:
                 for key, value in website.items():
                     item_env_endpoint.append({"name": key.upper(), "value": value})
 
