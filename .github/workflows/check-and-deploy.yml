@@ -57,7 +57,7 @@ jobs:
               COMPARE_1=$(git show --pretty=raw ${{ github.sha }} | grep parent | sed -n 1p | sed "s/parent //g")
               COMPARE_2=$(git show --pretty=raw ${{ github.sha }} | grep parent | sed -n 2p | sed "s/parent //g")
 
-              if git diff --quiet $COMPARE_1 $COMPARE_2 -- ${{ matrix.dir }}); then
+              if git diff --quiet $COMPARE_1 $COMPARE_2 -- ${{ matrix.dir }}; then
                 echo "NEW_RELEASE=true" >> $GITHUB_ENV
                 echo "Changes detected, new release."
               else
