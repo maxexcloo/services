@@ -11,6 +11,7 @@ services:
       AWS_SECRET_ACCESS_KEY: ${SERVER_B2_BUCKET_APPLICATION_KEY}
       BACKUP_COMPRESSION: zst
       BACKUP_CRON_EXPRESSION: "@daily"
+      BACKUP_EXCLUDE_REGEXP: '[a-f0-9]{64}\/|backingFsBlockDev$|immich_.*\/|metadata\.db$'
       BACKUP_FILENAME: daily-backup-%Y-%m-%dT%H-%M-%S.tar.zst
       BACKUP_PRUNING_PREFIX: daily-backup-
       BACKUP_RETENTION_DAYS: 7
@@ -21,6 +22,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+      - /var/lib/docker/volume:/backup:ro
   weekly:
     environment:
       AWS_ACCESS_KEY_ID: ${SERVER_B2_BUCKET_APPLICATION_KEY_ID}
@@ -29,6 +31,7 @@ services:
       AWS_SECRET_ACCESS_KEY: ${SERVER_B2_BUCKET_APPLICATION_KEY}
       BACKUP_COMPRESSION: zst
       BACKUP_CRON_EXPRESSION: "@weekly"
+      BACKUP_EXCLUDE_REGEXP: '[a-f0-9]{64}\/|backingFsBlockDev$|immich_.*\/|metadata\.db$'
       BACKUP_FILENAME: weekly-backup-%Y-%m-%dT%H-%M-%S.tar.zst
       BACKUP_PRUNING_PREFIX: weekly-backup-
       BACKUP_RETENTION_DAYS: 31
@@ -39,3 +42,4 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+      - /var/lib/docker/volume:/backup:ro
