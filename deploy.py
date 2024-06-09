@@ -128,10 +128,7 @@ if __name__ == "__main__":
             if response.status_code == 200:
                 print(f"Successfully redeployed existing Portainer stack '{item}' to endpoint '{item_endpoint['name']}'.")
             else:
-                sys.exit(
-                    f"Failed to redeploy existing Portainer stack '{item}' to endpoint '{item_endpoint['name']}':",
-                    response.status_code,
-                )
+                sys.exit(f"Failed to redeploy existing Portainer stack '{item}' to endpoint '{item_endpoint['name']}': {response.status_code}")
         else:
             print(f"Does not exist on endpoint '{item_endpoint['name']}', deploying...")
             data = {
@@ -147,7 +144,4 @@ if __name__ == "__main__":
             if response.status_code == 200:
                 print(f"Successfully deployed new Portainer stack '{item}' to endpoint '{item_endpoint['name']}'.")
             else:
-                sys.exit(
-                    f"Failed to deploy new Portainer stack '{item}' to endpoint '{item_endpoint['name']}':",
-                    response.status_code,
-                )
+                sys.exit(f"Failed to deploy new Portainer stack '{item}' to endpoint '{item_endpoint['name']}': {response.status_code}")
