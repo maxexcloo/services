@@ -17,9 +17,9 @@ services:
       caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped
     volumes:
+      - /Volumes/Media/Pictures/Pictures:/import:ro
       - immich_data:/config
       - immich_photos:/photos
-      - /Volumes/Media/Pictures/Pictures:/import:ro
   postgres:
     environment:
       POSTGRES_PASSWORD: ${WEBSITE_DATABASE_PASSWORD}

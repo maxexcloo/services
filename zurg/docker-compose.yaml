@@ -12,7 +12,7 @@ services:
       - 9999:9999
     restart: unless-stopped
     volumes:
-      #- zurg_config:/app/config.yml
+      - /Users/max.schaefer.config/zurg/config.yml:/app/config.yml
       - zurg_data:/app/data
 volumes:
   zurg_config:
