@@ -13,6 +13,9 @@ services:
       caddy.reverse_proxy: "{{upstreams 3443}}"
       caddy.reverse_proxy.transport: http
       caddy.reverse_proxy.transport.tls_insecure_skip_verify:
+    ports:
+      - 3000:3000
+      - 3443:3443
     privileged: true
     restart: unless-stopped
     volumes:
