@@ -22,7 +22,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /var/lib/docker/volume:/backup:ro
+      - /var/lib/docker/volumes:/backup:ro
   weekly:
     environment:
       AWS_ACCESS_KEY_ID: ${SERVER_B2_BUCKET_APPLICATION_KEY_ID}
@@ -42,4 +42,4 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /var/lib/docker/volume:/backup:ro
+      - /var/lib/docker/volumes:/backup:ro
