@@ -31,10 +31,10 @@ services:
       caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped
     volumes:
-      - romm-assets:/romm/assets
-      - romm-config:/romm/config
+      - romm_assets:/romm/assets
+      - romm_config:/romm/config
       - /Volumes/Games/Sync/romm-roms:/romm/library/roms
 volumes:
-  romm-assets:
-  romm-config:
+  romm_assets:
+  romm_config:
   mariadb_data:

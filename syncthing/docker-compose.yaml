@@ -9,4 +9,7 @@ services:
     network_mode: host
     restart: unless-stopped
     volumes:
-      - /home/max.schaefer:/var/syncthing
+      - syncthing_data:/var/syncthing
+      - /home/max.schaefer:/sync
+volumes:
+  syncthing_data:
