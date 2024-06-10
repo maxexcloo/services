@@ -8,7 +8,11 @@ services:
     environment:
       CRONICLE_manager: 1
       CRONICLE_secret_key: ${WEBSITE_SECRET_HASH}
+      TZ: ${DEFAULT_TIMEZONE}
     image: ghcr.io/cronicle-edge/cronicle-edge:main
+    labels:
+      caddy: ${WEBSITE_FQDN}
+      caddy.reverse_proxy: "{{upstreams 3012}}"
     restart: unless-stopped
     volumes:
       - cronicle_data:/opt/cronicle/data
