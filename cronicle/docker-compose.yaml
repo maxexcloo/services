@@ -1,0 +1,16 @@
+networks:
+  default:
+    external: true
+    name: caddy
+services:
+  cronicle:
+    entrypoint: manager
+    environment:
+      CRONICLE_manager: 1
+      CRONICLE_secret_key: ${WEBSITE_SECRET_HASH}
+    image: ghcr.io/cronicle-edge/cronicle-edge:main
+    restart: unless-stopped
+    volumes:
+      - cronicle_data:/opt/cronicle/data
+volumes:
+  cronicle_data:
