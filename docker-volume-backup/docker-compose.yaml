@@ -17,6 +17,10 @@ services:
       BACKUP_RETENTION_DAYS: 7
       GPG_PASSPHRASE: ${SECRET_GPG_PASSPHRASE}
       NOTIFICATION_URLS: smtp://resend:${SERVER_RESEND_API_KEY}@smtp.resend.com:465/?fromAddress=${DEFAULT_EMAIL}&toAddresses=${DEFAULT_EMAIL}
+      WEBDAV_PASSWORD: ${SECRET_WEBDAV_PASSWORD}
+      WEBDAV_PATH: /webdav/${SERVER_HOST}/
+      WEBDAV_URL: ${SECRET_WEBDAV_URL}
+      WEBDAV_USERNAME: ${SECRET_WEBDAV_USERNAME}
     image: offen/docker-volume-backup
     restart: unless-stopped
     volumes:
@@ -37,6 +41,10 @@ services:
       BACKUP_RETENTION_DAYS: 31
       GPG_PASSPHRASE: ${SECRET_GPG_PASSPHRASE}
       NOTIFICATION_URLS: smtp://resend:${SERVER_RESEND_API_KEY}@smtp.resend.com:465/?fromAddress=${DEFAULT_EMAIL}&toAddresses=${DEFAULT_EMAIL}
+      WEBDAV_PASSWORD: ${SECRET_WEBDAV_PASSWORD}
+      WEBDAV_PATH: /webdav/${SERVER_HOST}/
+      WEBDAV_URL: ${SECRET_WEBDAV_URL}
+      WEBDAV_USERNAME: ${SECRET_WEBDAV_USERNAME}
     image: offen/docker-volume-backup
     restart: unless-stopped
     volumes:
