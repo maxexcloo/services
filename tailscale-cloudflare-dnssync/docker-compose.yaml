@@ -5,11 +5,11 @@ networks:
 services:
   tailscale-cloudflare-dnssync:
     environment:
-      cf-domain: ${DEFAULT_DOMAIN_INTERNAL}
-      cf-key: ${SERVER_CLOUDFLARE_API_TOKEN}
-      prefix: ${SECRET_PREFIX}
-      ts-clientid: ${SECRET_TS_CLIENTID}
-      ts-clientsecret: ${SECRET_TS_CLIENTSECRET}
-      ts-tailnet: ${SECRET_TS_TAILNET}
-    image: ghcr.io/lifeismana/tailscale-cloudflare-dnssync:main
+      cf_domain: ${DEFAULT_DOMAIN_INTERNAL}
+      cf_key: ${SERVER_CLOUDFLARE_API_TOKEN}
+      cf_sub: ${SECRET_SUB}
+      ts_clientid: ${SECRET_TS_CLIENTID}
+      ts_clientsecret: ${SECRET_TS_CLIENTSECRET}
+      ts_tailnet: ${SECRET_TS_TAILNET}
+    image: ghcr.io/marc1307/tailscale-cloudflare-dnssync
     restart: unless-stopped
