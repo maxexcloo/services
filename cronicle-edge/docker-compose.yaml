@@ -9,10 +9,12 @@ services:
       CRONICLE_manager: 1
       CRONICLE_secret_key: ${WEBSITE_SECRET_HASH}
       TZ: ${DEFAULT_TIMEZONE}
-    image: ghcr.io/maxexcloo/cronicle-edge:latest
+    image: ghcr.io/maxexcloo/cronicle-edge
     labels:
       caddy: ${WEBSITE_FQDN}
       caddy.reverse_proxy: "{{upstreams 3012}}"
+      caddy.tls.dns: cloudflare ${SERVER_CLOUDFLARE_API_TOKEN}
+      caddy.tls.resolvers: 1.1.1.1
     restart: unless-stopped
     volumes:
       - cronicle_data:/opt/cronicle/data
