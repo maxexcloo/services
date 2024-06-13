@@ -8,6 +8,7 @@ services:
     environment:
       CRONICLE_secret_key: ${WEBSITE_SECRET_HASH}
       TZ: ${DEFAULT_TIMEZONE}
+    hostname: cronicle-edge
     image: ghcr.io/maxexcloo/cronicle-edge
     labels:
       caddy: ${WEBSITE_FQDN}
