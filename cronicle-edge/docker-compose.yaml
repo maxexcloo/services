@@ -6,7 +6,6 @@ services:
   cronicle-edge:
     entrypoint: manager
     environment:
-      CRONICLE_manager: 1
       CRONICLE_secret_key: ${WEBSITE_SECRET_HASH}
       TZ: ${DEFAULT_TIMEZONE}
     image: ghcr.io/maxexcloo/cronicle-edge
