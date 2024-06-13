@@ -9,7 +9,7 @@ services:
       CRONICLE_manager: 1
       CRONICLE_secret_key: ${WEBSITE_SECRET_HASH}
       TZ: ${DEFAULT_TIMEZONE}
-    image: ghcr.io/cronicle-edge/cronicle-edge:main
+    image: ghcr.io/maxexcloo/cronicle-edge:latest
     labels:
       caddy: ${WEBSITE_FQDN}
       caddy.reverse_proxy: "{{upstreams 3012}}"
