@@ -1,0 +1,24 @@
+networks:
+  default:
+    external: true
+    name: caddy
+services:
+  healthchecks:
+    environment:
+      DEBUG: False
+      DEFAULT_FROM_EMAIL: ${DEFAULT_EMAIL}
+      EMAIL_HOST_PASSWORD: ${WEBSITE_RESEND_API_KEY}
+      EMAIL_HOST_USER: resend
+      EMAIL_HOST: smtp.resend.com
+      SECRET_KEY: ${WEBSITE_SECRET_HASH}
+      SITE_NAME: ${WEBSITE_DESCRIPTION}
+      SITE_ROOT: ${WEBSITE_URL}
+    image: linuxserver/healthchecks
+    labels:
+      caddy: ${WEBSITE_FQDN}
+      caddy.reverse_proxy: "{{upstreams 8000}}"
+    restart: unless-stopped
+    volumes:
+      - healthchecks_data:/config
+volumes:
+  healthchecks_data:
