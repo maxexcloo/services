@@ -13,8 +13,6 @@ services:
       SECRET_KEY: ${WEBSITE_SECRET_HASH}
       SITE_NAME: ${WEBSITE_DESCRIPTION}
       SITE_ROOT: ${WEBSITE_URL}
-    expose:
-      - 8000
     image: linuxserver/healthchecks
     labels:
       caddy: ${WEBSITE_FQDN}
