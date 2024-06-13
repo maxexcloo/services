@@ -9,10 +9,10 @@ services:
       - redis
     environment:
       DB_DATABASE_NAME: ${WEBSITE_DATABASE_USERNAME}
-      DB_HOSTNAME: postgres
+      DB_HOSTNAME: immich-postgres-1
       DB_PASSWORD: ${WEBSITE_DATABASE_PASSWORD}
       DB_USERNAME: ${WEBSITE_DATABASE_USERNAME}
-      REDIS_HOSTNAME: redis
+      REDIS_HOSTNAME: immich-redis-1
       TZ: ${DEFAULT_TIMEZONE}
     image: ghcr.io/imagegenius/immich
     labels:

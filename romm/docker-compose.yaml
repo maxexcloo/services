@@ -17,12 +17,12 @@ services:
     depends_on:
       - mariadb
     environment:
-      DB_HOST: mariadb
+      DB_HOST: romm-mariadb-1
       DB_PASSWD: ${WEBSITE_DATABASE_PASSWORD}
       DB_USER: ${WEBSITE_DATABASE_USERNAME}
       ENABLE_RESCAN_ON_FILESYSTEM_CHANGE: true
       ENABLE_SCHEDULED_RESCAN: true
-      IGDB_CLIENT_ID: 415s32hngbvhpr57we120hkx1hk2au
+      IGDB_CLIENT_ID: 415sv32hngbvhpr57we120hkx1hk2au
       IGDB_CLIENT_SECRET: xqqtwe2f3z88s0nww0vnorwnolsis0
       ROMM_AUTH_SECRET_KEY: ${WEBSITE_SECRET_HASH}
       ROMM_HOST: ${WEBSITE_FQDN}

@@ -7,7 +7,7 @@ services:
     depends_on:
       - postgres
     environment:
-      NC_DB: pg://postgres:5432?u=${WEBSITE_DATABASE_USERNAME}&p=${WEBSITE_DATABASE_PASSWORD}&d=${WEBSITE_DATABASE_USERNAME}
+      NC_DB: pg://nocodb-postgres-1:5432?u=${WEBSITE_DATABASE_USERNAME}&p=${WEBSITE_DATABASE_PASSWORD}&d=${WEBSITE_DATABASE_USERNAME}
     image: nocodb/nocodb
     labels:
       caddy: ${WEBSITE_FQDN}

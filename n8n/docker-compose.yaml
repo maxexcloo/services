@@ -7,7 +7,7 @@ services:
     depends_on:
       - postgres
     environment:
-      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_HOST: n8n-postgres-1
       DB_POSTGRESDB_PASSWORD: ${WEBSITE_DATABASE_PASSWORD}
       DB_POSTGRESDB_USER: ${WEBSITE_DATABASE_USERNAME}
       DB_TYPE: postgresdb
