@@ -15,18 +15,16 @@ services:
       caddy.reverse_proxy: "{{upstreams 3012}}"
       caddy.tls.dns: cloudflare ${SERVER_CLOUDFLARE_API_TOKEN}
       caddy.tls.resolvers: 1.1.1.1
+    network_mode: service:tailscale
     restart: unless-stopped
     volumes:
       - cronicle_data:/opt/cronicle/data
   tailscale:
     cap_add:
-      - NET_ADMIN
-      - NET_RAW
+      - net_admin
+      - sys_module
     environment:
-      TS_ACCEPT_DNS: 1
       TS_AUTHKEY: ${WEBSITE_TAILSCALE_TAILNET_KEY}
-      TS_EXTRA_ARGS: --accept-routes
-      TS_USERSPACE: 0
     image: tailscale/tailscale
     restart: unless-stopped
     volumes:
