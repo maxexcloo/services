@@ -18,5 +18,18 @@ services:
     restart: unless-stopped
     volumes:
       - cronicle_data:/opt/cronicle/data
+  tailscale:
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      TS_ACCEPT_DNS: true
+      TS_AUTHKEY: ${WEBSITE_TAILSCALE_TAILNET_KEY}
+      TS_EXTRA_ARGS: --accept-routes
+      TS_USERSPACE: false
+    image: tailscale/tailscale
+    restart: unless-stopped
+    volumes:
+      - /dev/net/tun:/dev/net/tun
 volumes:
   cronicle_data:
