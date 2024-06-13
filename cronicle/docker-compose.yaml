@@ -3,7 +3,7 @@ networks:
     external: true
     name: caddy
 services:
-  cronicle-edge:
+  cronicle:
     entrypoint: manager
     environment:
       CRONICLE_manager: 1
