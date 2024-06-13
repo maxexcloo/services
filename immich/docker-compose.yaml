@@ -4,6 +4,9 @@ networks:
     name: caddy
 services:
   immich:
+    depends_on:
+      - postgres
+      - redis
     environment:
       DB_DATABASE_NAME: ${WEBSITE_DATABASE_USERNAME}
       DB_HOSTNAME: postgres

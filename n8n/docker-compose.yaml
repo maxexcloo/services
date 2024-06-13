@@ -4,6 +4,8 @@ networks:
     name: caddy
 services:
   n8n:
+    depends_on:
+      - postgres
     environment:
       DB_POSTGRESDB_HOST: postgres
       DB_POSTGRESDB_PASSWORD: ${WEBSITE_DATABASE_PASSWORD}

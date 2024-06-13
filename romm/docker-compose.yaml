@@ -14,6 +14,8 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
   romm:
+    depends_on:
+      - mariadb
     environment:
       DB_HOST: mariadb
       DB_PASSWD: ${WEBSITE_DATABASE_PASSWORD}
