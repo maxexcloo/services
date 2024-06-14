@@ -6,7 +6,7 @@ services:
   redlib:
     environment:
       LIBREDDIT_DEFAULT_HIDE_AWARDS: on
-      LIBREDDIT_DEFAULT_SUBSCRIPTIONS: apple+askanaustralian+ausfinance+aussiecasual+australia+catastrophicfailure+datahoarder+emulation+emulationonandroid+flipperzero+internetisbeautiful+linux+miyoomini+movies+odinhandheld+outoftheloop+piracy+retroid+roms+sbcgaming+selfhosted+sideloaded+sydney+television+trance+whatisthisthing
+      LIBREDDIT_DEFAULT_SUBSCRIPTIONS: apple+askanaustralian+ausfinance+aussiecasual+australia+catastrophicfailure+datahoarder+emulation+emulationonandroid+flipperzero+internetisbeautiful+korea+linux+living_in_korea+miyoomini+movies+odinhandheld+outoftheloop+piracy+retroid+roms+sbcgaming+selfhosted+sideloaded+steamdeck+sydney+television+trance
       LIBREDDIT_DEFAULT_USE_HLS: on
       LIBREDDIT_ROBOTS_DISABLE_INDEXING: on
     image: ghcr.io/kankerdev/redlib
