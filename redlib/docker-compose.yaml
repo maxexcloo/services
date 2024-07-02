@@ -9,7 +9,7 @@ services:
       LIBREDDIT_DEFAULT_SUBSCRIPTIONS: apple+askanaustralian+ausfinance+aussiecasual+australia+catastrophicfailure+datahoarder+emulation+emulationonandroid+flipperzero+internetisbeautiful+korea+linux+living_in_korea+miyoomini+movies+odinhandheld+outoftheloop+piracy+retroid+roms+sbcgaming+selfhosted+sideloaded+steamdeck+sydney+television+trance
       LIBREDDIT_DEFAULT_USE_HLS: on
       LIBREDDIT_ROBOTS_DISABLE_INDEXING: on
-    image: ghcr.io/kankerdev/redlib
+    image: quay.io/redlib/redlib
     labels:
       caddy: ${WEBSITE_FQDN}
       caddy.reverse_proxy: "{{upstreams 8080}}"
