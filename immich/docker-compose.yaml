@@ -17,7 +17,7 @@ services:
     image: ghcr.io/imagegenius/immich
     labels:
       caddy: ${WEBSITE_FQDN}
-      caddy.reverse_proxy: "{{upstreams 3001}}"
+      caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped
     volumes:
       - /Volumes/Media/Pictures/Pictures:/import:ro
