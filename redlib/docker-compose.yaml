@@ -6,7 +6,7 @@ services:
   redlib:
     environment:
       LIBREDDIT_DEFAULT_HIDE_AWARDS: on
-      LIBREDDIT_DEFAULT_SUBSCRIPTIONS: apple+askanaustralian+ausfinance+aussiecasual+australia+catastrophicfailure+datahoarder+emulation+emulationonandroid+esims+flipperzero+handhelds+internetisbeautiful+korea+linux+living_in_korea+miyoomini+movies+odinhandheld+outoftheloop+piracy+retroid+roms+sbcgaming+selfhosted+sideloaded+steamdeck+sydney+sysadmin+television+trance+travel
+      LIBREDDIT_DEFAULT_SUBSCRIPTIONS: apple+askanaustralian+ausfinance+aussiecasual+australia+catastrophicfailure+datahoarder+edc+emulation+emulationonandroid+esims+flashlight+flipperzero+handhelds+hardware+homelab+internetisbeautiful+korea+linux+living_in_korea+minipc+miyoomini+movies+odinhandheld+outoftheloop+piracy+retroarch+retroid+roms+sbcgaming+selfhosted+sideloaded+steamdeck+sydney+sysadmin+television+trance+travel
       LIBREDDIT_DEFAULT_USE_HLS: on
       LIBREDDIT_ROBOTS_DISABLE_INDEXING: on
     image: quay.io/redlib/redlib
