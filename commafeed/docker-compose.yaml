@@ -6,7 +6,7 @@ services:
   commafeed:
     environment:
       CF_APP_PUBLICURL: ${WEBSITE_URL}
-    image: athou/commafeed
+    image: athou/commafeed:latest-h2-jvm
     labels:
       caddy: ${WEBSITE_FQDN}
       caddy.reverse_proxy: "{{upstreams 8082}}"
