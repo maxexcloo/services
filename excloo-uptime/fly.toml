@@ -1,0 +1,10 @@
+app = "excloo-uptime"
+primary_region = "sin"
+
+[build]
+
+[http_service]
+force_https = true
+
+[[vm]]
+size = "shared-cpu-1x"
