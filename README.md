@@ -1,2 +1,2 @@
 # Services
-Docker configuration for personal infrastructure.
+Docker, Fly and OpenTofu configuration for personal infrastructure.

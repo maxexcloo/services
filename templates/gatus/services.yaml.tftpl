@@ -1,0 +1,31 @@
+alerting:
+  email:
+    default-alert:
+      description: "${gatus.description} Check Failed"
+      failure-threshold: 5
+      send-on-resolved: true
+      success-threshold: 5
+    from: "${default.email}"
+    host: "smtp.resend.com"
+    password: "$${RESEND_KEY}"
+    port: 587
+    to: "${default.email}"
+    username: "resend"
+endpoints:
+%{ for service in services ~}
+  - alerts:
+      - type: email
+    conditions:
+%{ if service.enable_ssl ~}
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+%{ endif ~}
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "${service.group}"
+    name: "${service.description}"
+    url: "${service.url}"
+%{ endfor ~}
+ui:
+  description: ""
+  header: "${gatus.description}"
+  title: "${gatus.description}"
