@@ -19,7 +19,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "CubeBackup"
-    url: "http://gen8-truenas.excloo.org:15000"
+    url: "http://gen8-truenas.excloo.org:15000/"
   - alerts:
       - type: email
     conditions:
@@ -28,7 +28,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo Chat"
-    url: "https://chat.excloo.com"
+    url: "https://chat.excloo.com/"
   - alerts:
       - type: email
     conditions:
@@ -37,7 +37,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo GitHub Readme Stats"
-    url: "https://github-readme-stats.excloo.com"
+    url: "https://github-readme-stats.excloo.com/"
   - alerts:
       - type: email
     conditions:
@@ -46,7 +46,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo N8N"
-    url: "https://n8n.excloo.com"
+    url: "https://n8n.excloo.com/"
   - alerts:
       - type: email
     conditions:
@@ -55,7 +55,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo NocoDB"
-    url: "https://nocodb.excloo.com"
+    url: "https://nocodb.excloo.com/"
   - alerts:
       - type: email
     conditions:
@@ -64,7 +64,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo Photos"
-    url: "https://photos.excloo.com"
+    url: "https://photos.excloo.com/"
   - alerts:
       - type: email
     conditions:
@@ -73,7 +73,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo Reader"
-    url: "https://reader.excloo.com"
+    url: "https://reader.excloo.com/"
   - alerts:
       - type: email
     conditions:
@@ -82,7 +82,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo Reddit"
-    url: "https://reddit.excloo.com"
+    url: "https://reddit.excloo.com/"
   - alerts:
       - type: email
     conditions:
@@ -91,7 +91,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo RSSHub"
-    url: "https://rsshub.excloo.com"
+    url: "https://rsshub.excloo.com/"
   - alerts:
       - type: email
     conditions:
@@ -100,7 +100,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo Uptime"
-    url: "https://uptime.excloo.com"
+    url: "https://uptime.excloo.com/"
   - alerts:
       - type: email
     conditions:
@@ -109,7 +109,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "File Browser (Gen8)"
-    url: "https://gen8.excloo.org:30044"
+    url: "https://gen8.excloo.org:30044/"
   - alerts:
       - type: email
     conditions:
@@ -118,7 +118,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "File Browser (Kimbap)"
-    url: "https://kimbap.excloo.org:30044"
+    url: "https://kimbap.excloo.org:30044/"
   - alerts:
       - type: email
     conditions:
@@ -127,7 +127,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Homebridge"
-    url: "https://homebridge.excloo.org"
+    url: "https://homebridge.excloo.org/"
   - alerts:
       - type: email
     conditions:
@@ -135,7 +135,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "OpenWRT (AU)"
-    url: "http://au.excloo.org:81"
+    url: "http://au.excloo.org:81/"
   - alerts:
       - type: email
     conditions:
@@ -143,7 +143,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "OpenWRT (KR)"
-    url: "http://kr.excloo.org:81"
+    url: "http://kr.excloo.org:81/"
   - alerts:
       - type: email
     conditions:
@@ -152,7 +152,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Portainer"
-    url: "https://portainer.excloo.org"
+    url: "https://portainer.excloo.org/"
   - alerts:
       - type: email
     conditions:
@@ -160,7 +160,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Syncthing (Gen8)"
-    url: "http://gen8.excloo.org:20910"
+    url: "http://gen8.excloo.org:20910/"
   - alerts:
       - type: email
     conditions:
@@ -168,7 +168,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Syncthing (Kimbap)"
-    url: "http://kimbap.excloo.org:20910"
+    url: "http://kimbap.excloo.org:20910/"
   - alerts:
       - type: email
     conditions:
@@ -176,7 +176,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Syncthing (Mini)"
-    url: "http://mini.excloo.org:8384"
+    url: "http://mini.excloo.org:8384/"
   - alerts:
       - type: email
     conditions:
@@ -185,7 +185,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Syncthing (Oracle)"
-    url: "https://syncthing.oracle.excloo.org"
+    url: "https://syncthing.oracle.excloo.org/"
   - alerts:
       - type: email
     conditions:
@@ -194,7 +194,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Syncthing (Pi)"
-    url: "https://syncthing.pi.excloo.org"
+    url: "https://syncthing.pi.excloo.org/"
   - alerts:
       - type: email
     conditions:
@@ -203,7 +203,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "TrueNAS (Gen8)"
-    url: "https://gen8.excloo.org"
+    url: "https://gen8.excloo.org/"
   - alerts:
       - type: email
     conditions:
@@ -212,7 +212,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "TrueNAS (Kimbap)"
-    url: "https://kimbap.excloo.org"
+    url: "https://kimbap.excloo.org/"
   - alerts:
       - type: email
     conditions:
@@ -221,7 +221,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Webdav"
-    url: "https://gen8.excloo.org:30035"
+    url: "https://gen8.excloo.org:30035/"
 ui:
   description: ""
   header: "Excloo Uptime"
