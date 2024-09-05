@@ -1,10 +1,3 @@
-data "onepassword_item" "service" {
-  for_each = onepassword_item.service
-
-  uuid  = each.value.uuid
-  vault = data.onepassword_vault.services.uuid
-}
-
 data "onepassword_vault" "services" {
   name = var.terraform.onepassword.vault
 }
@@ -68,11 +61,7 @@ resource "onepassword_item" "service" {
       field {
         label = "Password"
         type  = "CONCEALED"
-
-        password_recipe {
-          length  = 24
-          symbols = false
-        }
+        value = local.output_databases[each.key].password
       }
     }
   }
@@ -100,11 +89,7 @@ resource "onepassword_item" "service" {
       field {
         label = "Secret Hash"
         type  = "CONCEALED"
-
-        password_recipe {
-          length  = 64
-          symbols = false
-        }
+        value = local.output_secret_hashes[each.key].secret_hash
       }
     }
   }

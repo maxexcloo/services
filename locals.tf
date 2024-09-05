@@ -32,16 +32,10 @@ locals {
   }
 
   output_databases = {
-    for k, v in data.onepassword_item.service : k => {
-      password = [
-        for section in v.section : [
-          for field in section.field : field.value
-          if field.label == "Password"
-        ][0]
-        if section.label == "Database"
-      ][0]
+    for k, service in local.merged_services : k => {
+      password = random_password.database_sevice[k].result
     }
-    if local.merged_services[k].enable_database
+    if service.enable_database
   }
 
   output_resend = {
@@ -51,16 +45,10 @@ locals {
   }
 
   output_secret_hashes = {
-    for k, v in data.onepassword_item.service : k => {
-      password = [
-        for section in v.section : [
-          for field in section.field : field.value
-          if field.label == "Secret Hash"
-        ][0]
-        if section.label == "Secret Hash"
-      ][0]
+    for k, service in local.merged_services : k => {
+      secret_hash = random_password.secret_hash_service[k].result
     }
-    if local.merged_services[k].enable_secret_hash
+    if service.enable_secret_hash
   }
 
   output_tailscale = {

@@ -13,6 +13,11 @@ output "resend" {
   value     = local.output_resend
 }
 
+output "services" {
+  sensitive = true
+  value     = local.merged_services
+}
+
 output "secret_hashes" {
   sensitive = true
   value     = local.output_secret_hashes
