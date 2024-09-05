@@ -3,8 +3,8 @@
 
 #   agent = true
 #   host  = each.key
-#   port  = each.value.network.ssh_port
-#   user  = each.value.user.username
+#   port  = each.value.router_port
+#   user  = each.value.router_username
 
 #   commands = [
 #     "touch /etc/haproxy.infrastructure.cfg /etc/haproxy.services.cfg",
@@ -13,16 +13,7 @@
 #   ]
 
 #   file {
+#     content     = templatefile("./templates/openwrt/haproxy.cfg.tftpl", each.value)
 #     destination = "/etc/haproxy.services.cfg"
-
-#     content = templatefile(
-#       "./templates/openwrt/haproxy.cfg.tftpl",
-#       {
-#         services = {
-#           for k, v in local.filtered_services_noncloud : k => v
-#           if k != each.value.location && v.location == each.value.location
-#         }
-#       }
-#     )
 #   }
 # }

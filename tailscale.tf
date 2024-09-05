@@ -8,5 +8,5 @@ resource "tailscale_tailnet_key" "service" {
   ephemeral     = true
   preauthorized = true
   reusable      = true
-  tags          = [local.merged_tags["ephemeral"].tailscale_tag]
+  tags          = ["tag:ephemeral"]
 }

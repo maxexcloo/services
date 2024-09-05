@@ -1,3 +1,10 @@
+data "onepassword_item" "service" {
+  for_each = onepassword_item.service
+
+  uuid  = each.value.uuid
+  vault = data.onepassword_vault.services.uuid
+}
+
 data "onepassword_vault" "services" {
   name = var.terraform.onepassword.vault
 }
@@ -53,7 +60,7 @@ resource "onepassword_item" "service" {
   }
 
   dynamic "section" {
-    for_each = each.value.enable_database_password ? [true] : []
+    for_each = each.value.enable_database ? [true] : []
 
     content {
       label = "Database"

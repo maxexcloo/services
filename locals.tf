@@ -2,30 +2,22 @@ locals {
   merged_services = {
     for k, service in var.services : service.name => merge(
       {
-        enable_b2                = false
-        enable_database_password = false
-        enable_dns               = try(service.dns_content, "") != "" && try(service.dns_name, "") != "" && try(service.dns_zone, "") != "" ? true : false
-        enable_password          = false
-        enable_resend            = false
-        enable_secret_hash       = false
-        enable_ssl               = true
-        enable_tailscale         = false
-        fqdn                     = "${service.dns_name}.${service.dns_zone}"
-        group                    = "Services (${service.dns_zone})"
-        service                  = ""
-        url                      = "${try(service.enable_ssl, true) ? "https://" : "http://"}${service.dns_name}.${service.dns_zone}${try(service.port, 0) != 0 ? ":${service.port}" : ""}/"
-        username                 = null
+        enable_b2          = false
+        enable_database    = false
+        enable_dns         = try(service.dns_content, "") != "" && try(service.dns_name, "") != "" && try(service.dns_zone, "") != "" ? true : false
+        enable_password    = false
+        enable_resend      = false
+        enable_secret_hash = false
+        enable_ssl         = true
+        enable_tailscale   = false
+        fqdn               = "${service.dns_name}.${service.dns_zone}"
+        group              = "Services (${service.dns_zone})"
+        platform           = "docker"
+        service            = ""
+        url                = "${try(service.enable_ssl, true) ? "https://" : "http://"}${service.dns_name}.${service.dns_zone}${try(service.port, 0) > 0 ? ":${service.port}" : ""}/"
+        username           = null
       },
       service
-    )
-  }
-
-  merged_tags = {
-    for i, tag in var.tags : tag.name => merge(
-      {
-        tailscale_tag = "tag:${tag.name}"
-      },
-      tag
     )
   }
 
@@ -39,10 +31,36 @@ locals {
     if service.enable_b2
   }
 
+  output_databases = {
+    for k, v in data.onepassword_item.service : k => {
+      password = [
+        for section in v.section : [
+          for field in section.field : field.value
+          if field.label == "Password"
+        ][0]
+        if section.label == "Database"
+      ][0]
+    }
+    if local.merged_services[k].enable_database
+  }
+
   output_resend = {
     for k, restapi_object in restapi_object.resend_api_key_service : k => {
       api_key = jsondecode(restapi_object.create_response).token
     }
+  }
+
+  output_secret_hashes = {
+    for k, v in data.onepassword_item.service : k => {
+      password = [
+        for section in v.section : [
+          for field in section.field : field.value
+          if field.label == "Secret Hash"
+        ][0]
+        if section.label == "Secret Hash"
+      ][0]
+    }
+    if local.merged_services[k].enable_secret_hash
   }
 
   output_tailscale = {
