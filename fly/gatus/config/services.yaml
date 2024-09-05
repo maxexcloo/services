@@ -131,22 +131,6 @@ endpoints:
   - alerts:
       - type: email
     conditions:
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "OpenWRT (AU)"
-    url: "http://au.excloo.org:81/"
-  - alerts:
-      - type: email
-    conditions:
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "OpenWRT (KR)"
-    url: "http://kr.excloo.org:81/"
-  - alerts:
-      - type: email
-    conditions:
       - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
@@ -195,33 +179,6 @@ endpoints:
     group: "Services (excloo.org)"
     name: "Syncthing (Pi)"
     url: "https://syncthing.pi.excloo.org/"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "TrueNAS (Gen8)"
-    url: "https://gen8.excloo.org/"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "TrueNAS (Kimbap)"
-    url: "https://kimbap.excloo.org/"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "Webdav"
-    url: "https://gen8.excloo.org:30035/"
 ui:
   description: ""
   header: "Excloo Uptime"
