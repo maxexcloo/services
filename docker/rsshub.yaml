@@ -1,7 +1,12 @@
+env_file:
+  - path: ~/.env/_server.env
+    required: false
+  - path: ~/.env/rsshub.env
+    required: false
 networks:
   default:
     external: true
-    name: caddy
+    name: docker
 services:
   rsshub:
     image: diygod/rsshub:chromium-bundled

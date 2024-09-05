@@ -1,15 +1,18 @@
+env_file:
+  - path: ~/.env/_server.env
+    required: false
+  - path: ~/.env/syncthing.env
+    required: false
 services:
-  syncthing:
+  service:
     image: syncthing/syncthing
     labels:
       caddy: ${WEBSITE_FQDN}
       caddy.reverse_proxy: host.docker.internal:8384
-      caddy.tls.dns: cloudflare ${SERVER_CLOUDFLARE_API_TOKEN}
-      caddy.tls.resolvers: 1.1.1.1
     network_mode: host
     restart: unless-stopped
     volumes:
-      - syncthing_data:/var/syncthing
+      - data:/var/syncthing
       - /home/max.schaefer:/sync
 volumes:
-  syncthing_data:
+  data:

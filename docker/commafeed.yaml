@@ -1,9 +1,14 @@
+env_file:
+  - path: ~/.env/_server.env
+    required: false
+  - path: ~/.env/commafeed.env
+    required: false
 networks:
   default:
     external: true
-    name: caddy
+    name: docker
 services:
-  commafeed:
+  service:
     environment:
       CF_APP_PUBLICURL: ${WEBSITE_URL}
     image: athou/commafeed:latest-h2-jvm
@@ -12,6 +17,6 @@ services:
       caddy.reverse_proxy: "{{upstreams 8082}}"
     restart: unless-stopped
     volumes:
-      - commafeed_data:/commafeed/data
+      - data:/commafeed/data
 volumes:
-  commafeed_data:
+  data:

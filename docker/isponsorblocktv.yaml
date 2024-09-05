@@ -1,9 +1,14 @@
+env_file:
+  - path: ~/.env/_server.env
+    required: false
+  - path: ~/.env/isponsorblocktv.env
+    required: false
 services:
   isponsorblocktv:
     image: ghcr.io/dmunozv04/isponsorblocktv
     network_mode: host
     restart: unless-stopped
     volumes:
-      - isponsorblocktv_data:/app/data
+      - data:/app/data
 volumes:
-  isponsorblocktv_data:
+  data:

@@ -1,15 +1,20 @@
+env_file:
+  - path: ~/.env/_server.env
+    required: false
+  - path: ~/.env/caddy.env
+    required: false
 networks:
   default:
     external: true
     name: docker
 services:
-  caddy:
+  service:
     extra_hosts:
       - host.docker.internal:host-gateway
     image: ghcr.io/maxexcloo/caddy
     labels:
       caddy.email: EMAIL
-      caddy.tls.dns_challenge_override_domain: excloo.duckdns.org 
+      caddy.tls.dns_challenge_override_domain: excloo.duckdns.org
       caddy.tls.dns: duckdns TOKEN
       caddy.tls.resolvers: 1.1.1.1
     ports:
@@ -18,6 +23,6 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - caddy_data:/data
+      - data:/data
 volumes:
-  caddy_data:
+  data:

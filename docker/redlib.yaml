@@ -1,7 +1,12 @@
+env_file:
+  - path: ~/.env/_server.env
+    required: false
+  - path: ~/.env/redlib.env
+    required: false
 networks:
   default:
     external: true
-    name: caddy
+    name: docker
 services:
   redlib:
     environment:

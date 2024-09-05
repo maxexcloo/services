@@ -1,9 +1,10 @@
-networks:
-  default:
-    external: true
-    name: caddy
+env_file:
+  - path: ~/.env/_server.env
+    required: false
+  - path: ~/.env/tailscale-cloudflare-dnssync.env
+    required: false
 services:
-  tailscale-cloudflare-dnssync:
+  service:
     environment:
       cf_domain: ${DEFAULT_DOMAIN_INTERNAL}
       cf_key: ${SERVER_CLOUDFLARE_API_TOKEN}

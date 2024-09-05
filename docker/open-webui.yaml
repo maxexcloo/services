@@ -1,15 +1,20 @@
+env_file:
+  - path: ~/.env/_server.env
+    required: false
+  - path: ~/.env/open-webui.env
+    required: false
 networks:
   default:
     external: true
-    name: caddy
+    name: docker
 services:
-  open-webui:
+  service:
     image: ghcr.io/open-webui/open-webui
     labels:
       caddy: ${WEBSITE_FQDN}
       caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped
     volumes:
-      - open-webui_data:/app/backend/data
+      - data:/app/backend/data
 volumes:
-  open-webui_data:
+  data:

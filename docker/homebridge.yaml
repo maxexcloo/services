@@ -1,14 +1,17 @@
+env_file:
+  - path: ~/.env/_server.env
+    required: false
+  - path: ~/.env/homebridge.env
+    required: false
 services:
   homebridge:
     image: homebridge/homebridge
     labels:
       caddy: ${WEBSITE_FQDN}
       caddy.reverse_proxy: host.docker.internal:8581
-      caddy.tls.dns: cloudflare ${SERVER_CLOUDFLARE_API_TOKEN}
-      caddy.tls.resolvers: 1.1.1.1
     network_mode: host
     restart: unless-stopped
     volumes:
-      - homebridge_data:/homebridge
+      - data:/homebridge
 volumes:
-  homebridge_data:
+  data:
