@@ -7,7 +7,7 @@ alerting:
       success-threshold: 5
     from: "max@excloo.com"
     host: "smtp.resend.com"
-    password: "${RESEND_KEY}"
+    password: "${RESEND_API_KEY}"
     port: 587
     to: "max@excloo.com"
     username: "resend"
