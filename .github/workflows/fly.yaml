@@ -20,12 +20,11 @@ jobs:
       - name: Generate matrix
         id: generate-matrix
         run: |
-          DIRS=$(find . -maxdepth 1 -mindepth 1 -type d)
-          MATRIX=$(echo $DIRS | jq -R 'split(" ") | map({dir: .}) | {include: .}')
-          echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+          DIRS=$(find fly -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | jq -c -s -R 'split("\n")[:-1]')
+          echo "matrix=$DIRS" >> $GITHUB_OUTPUT
 
   deploy:
-    if: ${{ fromJson(needs.generate-matrix.outputs.matrix).include[0] }}
+    if: ${{ fromJson(needs.generate-matrix.outputs.matrix)[0] }}
     name: Deploy to Fly
     needs: generate-matrix
     runs-on: ubuntu-latest
@@ -40,4 +39,5 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+      matrix:
+        dir: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
