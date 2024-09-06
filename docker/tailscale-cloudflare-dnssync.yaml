@@ -1,16 +1,14 @@
 env_file:
   - path: ~/.env/_server.env
-    required: false
   - path: ~/.env/tailscale-cloudflare-dnssync.env
-    required: false
 services:
   service:
     environment:
-      cf_domain: ${DEFAULT_DOMAIN_INTERNAL}
+      cf_domain: ${SERVER_DOMAIN_INTERNAL}
       cf_key: ${SERVER_CLOUDFLARE_API_TOKEN}
       cf_sub: ${SECRET_SUB}
       ts_client_id: ${SECRET_TS_CLIENTID}
       ts_client_secret: ${SECRET_TS_CLIENTSECRET}
-      ts_tailnet: ${SECRET_TS_TAILNET}
+      ts_tailnet: ${SERVER_DOMAIN_ROOT}
     image: ghcr.io/marc1307/tailscale-cloudflare-dnssync
     restart: unless-stopped

@@ -1,8 +1,5 @@
 env_file:
-  - path: ~/.env/_server.env
-    required: false
   - path: ~/.env/commafeed.env
-    required: false
 networks:
   default:
     external: true
@@ -10,10 +7,10 @@ networks:
 services:
   service:
     environment:
-      CF_APP_PUBLICURL: ${WEBSITE_URL}
+      CF_APP_PUBLICURL: ${SERVICE_URL}
     image: athou/commafeed:latest-h2-jvm
     labels:
-      caddy: ${WEBSITE_FQDN}
+      caddy: ${SERVICE_FQDN}
       caddy.reverse_proxy: "{{upstreams 8082}}"
     restart: unless-stopped
     volumes:

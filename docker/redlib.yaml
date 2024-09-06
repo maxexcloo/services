@@ -1,8 +1,5 @@
 env_file:
-  - path: ~/.env/_server.env
-    required: false
   - path: ~/.env/redlib.env
-    required: false
 networks:
   default:
     external: true
@@ -16,6 +13,6 @@ services:
       LIBREDDIT_ROBOTS_DISABLE_INDEXING: on
     image: quay.io/redlib/redlib
     labels:
-      caddy: ${WEBSITE_FQDN}
+      caddy: ${SERVICE_FQDN}
       caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped

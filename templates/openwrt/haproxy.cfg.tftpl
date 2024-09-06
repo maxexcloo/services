@@ -9,6 +9,5 @@ frontend https
     tcp-request inspect-delay 3s
 
 %{ for service in services ~}
-    use_backend ${service.host} if { req.ssl_sni -i ${service.fqdn_external} }
-    use_backend ${service.host} if { req.ssl_sni -m sub ${service.fqdn_external} }
+    use_backend ${try(servers[service.server].host, "")} if { req.ssl_sni -i ${service.fqdn} }
 %{ endfor ~}

@@ -1,8 +1,5 @@
 env_file:
-  - path: ~/.env/_server.env
-    required: false
   - path: ~/.env/rsshub.env
-    required: false
 networks:
   default:
     external: true
@@ -11,6 +8,6 @@ services:
   rsshub:
     image: diygod/rsshub:chromium-bundled
     labels:
-      caddy: ${WEBSITE_FQDN}
+      caddy: ${SERVICE_FQDN}
       caddy.reverse_proxy: "{{upstreams 1200}}"
     restart: unless-stopped

@@ -1,13 +1,10 @@
 env_file:
-  - path: ~/.env/_server.env
-    required: false
   - path: ~/.env/syncthing.env
-    required: false
 services:
   service:
     image: syncthing/syncthing
     labels:
-      caddy: ${WEBSITE_FQDN}
+      caddy: ${SERVICE_FQDN}
       caddy.reverse_proxy: host.docker.internal:8384
     network_mode: host
     restart: unless-stopped

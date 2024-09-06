@@ -1,8 +1,5 @@
 env_file:
   - path: ~/.env/_server.env
-    required: false
-  - path: ~/.env/openspeedtest.env
-    required: false
 networks:
   default:
     external: true

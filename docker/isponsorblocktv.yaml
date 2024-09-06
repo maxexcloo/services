@@ -1,8 +1,3 @@
-env_file:
-  - path: ~/.env/_server.env
-    required: false
-  - path: ~/.env/isponsorblocktv.env
-    required: false
 services:
   isponsorblocktv:
     image: ghcr.io/dmunozv04/isponsorblocktv

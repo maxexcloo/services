@@ -1,8 +1,5 @@
 env_file:
-  - path: ~/.env/_server.env
-    required: false
   - path: ~/.env/open-webui.env
-    required: false
 networks:
   default:
     external: true
@@ -11,7 +8,7 @@ services:
   service:
     image: ghcr.io/open-webui/open-webui
     labels:
-      caddy: ${WEBSITE_FQDN}
+      caddy: ${SERVICE_FQDN}
       caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped
     volumes:

@@ -1,13 +1,10 @@
 env_file:
-  - path: ~/.env/_server.env
-    required: false
   - path: ~/.env/homebridge.env
-    required: false
 services:
-  homebridge:
+  service:
     image: homebridge/homebridge
     labels:
-      caddy: ${WEBSITE_FQDN}
+      caddy: ${SERVICE_FQDN}
       caddy.reverse_proxy: host.docker.internal:8581
     network_mode: host
     restart: unless-stopped

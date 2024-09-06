@@ -1,8 +1,5 @@
 env_file:
-  - path: ~/.env/_server.env
-    required: false
   - path: ~/.env/nocodb.env
-    required: false
 networks:
   default:
     external: true
@@ -10,8 +7,8 @@ networks:
 services:
   postgres:
     environment:
-      POSTGRES_PASSWORD: ${WEBSITE_DATABASE_PASSWORD}
-      POSTGRES_USER: ${WEBSITE_DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${SERVICE_DATABASE_PASSWORD}
+      POSTGRES_USER: nocodb
     image: postgres:16
     restart: unless-stopped
     volumes:
@@ -20,10 +17,10 @@ services:
     depends_on:
       - postgres
     environment:
-      NC_DB: pg://nocodb-postgres-1:5432?u=${WEBSITE_DATABASE_USERNAME}&p=${WEBSITE_DATABASE_PASSWORD}&d=${WEBSITE_DATABASE_USERNAME}
+      NC_DB: pg://nocodb-postgres-1:5432?u=nocodb&p=${SERVICE_DATABASE_PASSWORD}&d=nocodb
     image: nocodb/nocodb
     labels:
-      caddy: ${WEBSITE_FQDN}
+      caddy: ${SERVICE_FQDN}
       caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped
     volumes:

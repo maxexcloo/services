@@ -1,14 +1,11 @@
 env_file:
   - path: ~/.env/_server.env
-    required: false
-  - path: ~/.env/watchtower.env
-    required: false
 services:
   service:
     environment:
-      TZ: ${DEFAULT_TIMEZONE}
+      TZ: ${SERVER_TIMEZONE}
       WATCHTOWER_CLEANUP: true
-      WATCHTOWER_NOTIFICATION_URL: smtp://resend:${SERVER_RESEND_API_KEY}@smtp.resend.com:465/?from=${DEFAULT_EMAIL}&to=${DEFAULT_EMAIL}
+      WATCHTOWER_NOTIFICATION_URL: smtp://resend:${SERVER_RESEND_API_KEY}@smtp.resend.com:465/?from=${SERVER_EMAIL}&to=${SERVER_EMAIL}
       WATCHTOWER_NOTIFICATIONS_HOSTNAME: ${SERVER_HOST}
       WATCHTOWER_POLL_INTERVAL: 43200
       WATCHTOWER_REMOVE_VOLUMES: true
