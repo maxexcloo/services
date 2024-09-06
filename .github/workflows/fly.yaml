@@ -15,8 +15,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - name: Generate matrix
         id: generate-matrix
         run: |
@@ -24,7 +22,7 @@ jobs:
           echo "matrix=$DIRS" >> $GITHUB_OUTPUT
 
   deploy:
-    if: ${{ fromJson(needs.generate-matrix.outputs.matrix)[0] }}
+    if: needs.generate-matrix.outputs.matrix != '[]'
     name: Deploy to Fly
     needs: generate-matrix
     runs-on: ubuntu-latest
