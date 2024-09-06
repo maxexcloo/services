@@ -17,7 +17,7 @@ endpoints:
       - type: email
     conditions:
       - "[CONNECTED] == true"
-    group: "VMs"
+    group: "Servers (VMs)"
     name: "au-oracle"
     url: "icmp://au-oracle"
   - alerts:
