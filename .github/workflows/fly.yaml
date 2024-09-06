@@ -1,10 +1,10 @@
 name: Deploy Fly Services
 
 on:
-  workflow_dispatch:
   push:
     paths:
       - "fly/*"
+  workflow_dispatch:
 
 jobs:
   generate-matrix:
