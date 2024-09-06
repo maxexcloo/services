@@ -3,7 +3,7 @@ name: Deploy Fly Services
 on:
   push:
     paths:
-      - "fly/*"
+      - "fly/**"
   workflow_dispatch:
 
 jobs:
