@@ -10,4 +10,3 @@ RUN chmod +x /app/run.sh
 ENTRYPOINT ["/app/run.sh"]
 ENV GATUS_CONFIG_PATH=/app/config
 EXPOSE 8080
-
