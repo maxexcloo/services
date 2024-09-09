@@ -23,7 +23,7 @@ resource "github_repository_file" "services_fly_gatus_services" {
 }
 
 resource "github_repository_file" "services_docker_mapping" {
-  file                = "docker/mapping.json"
+  file                = "docker/_mapping.json"
   overwrite_on_create = true
   repository          = "Services"
 
