@@ -22,19 +22,19 @@ resource "github_repository_file" "services_fly_gatus_services" {
   )
 }
 
-resource "github_repository_file" "services_portainer" {
-  file                = "portainer.json"
+resource "github_repository_file" "services_docker_mapping" {
+  file                = "docker/mapping.json"
   overwrite_on_create = true
   repository          = "Services"
 
   content = jsonencode({
     for service_name in distinct([
       for service in local.merged_services : service.service
-      if service.platform == "docker"
+      if service.platform == "docker" && service.service != ""
     ]) :
     service_name => [
       for service in local.merged_services : service.server
-      if service.platform == "docker" && service.service == service_name && can(service.server)
+      if service.platform == "docker" && service.server != "" && service.service == service_name
     ]
   })
 }
