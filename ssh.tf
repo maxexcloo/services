@@ -56,7 +56,7 @@ resource "ssh_resource" "server_docker" {
       destination = "~/.env/${file.value.service}.env"
 
       content = join("\n", concat(
-        try(file.value.dns_name, "") != "" && try(file.value.dns_zone, "") != "" ? [
+        can(file.value.dns_name) && can(file.value.dns_zone) ? [
           "SERVICE_FQDN=\"${file.value.fqdn}\"",
           "SERVICE_URL=\"${file.value.url}\"",
         ] : [],

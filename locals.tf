@@ -5,20 +5,20 @@ locals {
         description        = ""
         enable_b2          = false
         enable_database    = false
-        enable_dns         = try(service.dns_content, "") != "" && try(service.dns_name, "") != "" && try(service.dns_zone, "") != "" ? true : false
+        enable_dns         = can(service.dns_content) && can(service.dns_name) && can(service.dns_zone) ? true : false
         enable_password    = false
         enable_resend      = false
         enable_secret_hash = false
         enable_ssl         = true
         enable_tailscale   = false
-        fqdn               = try(service.dns_name, "") != "" && try(service.dns_zone, "") != "" ? "${service.dns_name}.${service.dns_zone}" : null
-        group              = try(service.dns_zone, "") != "" ? "Services (${service.dns_zone})" : "Services (Uncategorized)"
+        fqdn               = can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : null
+        group              = can(service.dns_zone) ? "Services (${service.dns_zone})" : "Services (Uncategorized)"
         name               = ""
         platform           = "docker"
         port               = 0
         server             = ""
         service            = ""
-        url                = try(service.dns_name, "") != "" && try(service.dns_zone, "") != "" ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${service.dns_name}.${service.dns_zone}${try(service.port, 0) > 0 ? ":${service.port}" : ""}/" : null
+        url                = can(service.dns_name) && can(service.dns_zone) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${service.dns_name}.${service.dns_zone}${try(service.port, 0) > 0 ? ":${service.port}" : ""}/" : null
         username           = null
       },
       service

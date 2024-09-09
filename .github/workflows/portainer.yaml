@@ -6,6 +6,12 @@ on:
       - "docker/**"
   workflow_dispatch:
 
+env:
+  PORTAINER_URL: https://portainer.excloo.org/
+  TAILSCALE_TAG: ephemeral
+  TERRAFORM_OUTPUT: portainer.json
+  WORKING_DIRECTORY: docker
+
 jobs:
   generate-matrix:
     name: Generate Matrix
@@ -18,7 +24,7 @@ jobs:
       - name: Generate matrix
         id: generate-matrix
         run: |
-          SERVICES=$(find docker -maxdepth 1 -mindepth 1 -printf "%f\n" | sed 's/\.yaml$//' | jq -c -s -R 'split("\n")[:-1]')
+          SERVICES=$(find ${{ env.WORKING_DIRECTORY }} -maxdepth 1 -mindepth 1 -name "*.yaml" -printf "%f\n" | sed 's/\.yaml$//' | jq -c -s -R 'split("\n")[:-1]')
           echo "matrix=$SERVICES" >> $GITHUB_OUTPUT
 
   deploy:
@@ -35,11 +41,17 @@ jobs:
           python-version: "3.x"
       - name: Install Python dependencies
         run: pip install requests
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
+          tags: tag:${{ env.TAILSCALE_TAG }}
       - name: Deploy to Portainer
-        run: python portainer.py "${{ matrix.service }}"
+        run: python portainer.py "${{ env.WORKING_DIRECTORY }}/${{ matrix.service }}.yaml" "${{ env.TERRAFORM_OUTPUT }}"
         env:
           PORTAINER_API_TOKEN: ${{ secrets.PORTAINER_API_TOKEN }}
-          PORTAINER_URL: ${{ vars.PORTAINER_URL }}
+          PORTAINER_URL: ${{ env.PORTAINER_URL }}
     strategy:
       fail-fast: false
       max-parallel: 1

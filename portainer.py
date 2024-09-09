@@ -5,178 +5,129 @@ import sys
 
 
 class APIClient:
-    def __init__(self, base_url, headers):
-        self.base_url = base_url
+    def __init__(self, base_url, headers=None):
+        self.base_url = base_url.rstrip("/")
         self.session = requests.Session()
-        self.session.headers.update(headers)
+        if headers:
+            self.session.headers.update(headers)
+
+    def _make_request(self, method, endpoint, **kwargs):
+        url = f"{self.base_url}/{endpoint.lstrip('/')}"
+        return self.session.request(method, url, **kwargs)
 
     def delete(self, endpoint, **kwargs):
-        return self.session.delete(f"{self.base_url}/{endpoint}", **kwargs)
+        return self._make_request("DELETE", endpoint, **kwargs)
 
     def get(self, endpoint, **kwargs):
-        return self.session.get(f"{self.base_url}/{endpoint}", **kwargs)
+        return self._make_request("GET", endpoint, **kwargs)
 
     def post(self, endpoint, **kwargs):
-        return self.session.post(f"{self.base_url}/{endpoint}", **kwargs)
+        return self._make_request("POST", endpoint, **kwargs)
 
     def put(self, endpoint, **kwargs):
-        return self.session.put(f"{self.base_url}/{endpoint}", **kwargs)
+        return self._make_request("PUT", endpoint, **kwargs)
 
 
-def read_env_var(var_name):
+def get_env(var_name):
+    value = os.getenv(var_name)
+    if value is None:
+        raise ValueError(f"Environment variable '{var_name}' is not set.")
+    return value
+
+
+def get_portainer_data(client, endpoint):
+    response = client.get(endpoint)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        raise ValueError(f"Failed to retrieve Portainer {endpoint}: Status code {response.status_code}")
+
+
+def read_stack(path):
     try:
-        value = os.getenv(var_name)
-        if value is None:
-            raise ValueError(f"Environment variable '{var_name}' is not set.")
-        return value
-    except Exception as error:
-        raise SystemExit(
-            f"An error occurred while reading the environment variable '{var_name}': {error}"
-        )
-
-
-def read_file(file_path):
-    try:
-        with open(file_path, "r") as file:
-            if file_path.lower().endswith(".json"):
-                return json.load(file)
-            else:
-                return file.read()
+        with open(path, "r") as file:
+            return file.read()
     except FileNotFoundError:
-        raise SystemExit(f"Error: The file {file_path} was not found.")
-    except json.JSONDecodeError:
-        raise SystemExit(f"Error: The file {file_path} contains invalid JSON.")
+        raise FileNotFoundError(f"The file '{path}' was not found.")
     except Exception as e:
-        raise SystemExit(f"An unexpected error occurred: {error}")
+        raise RuntimeError(f"An unexpected error occurred while reading '{path}': {e}")
 
 
-def read_json(value):
+def read_terraform_output(path):
     try:
-        return json.loads(value)
+        with open(path, "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"The Terraform configuration file '{path}' was not found.")
     except json.JSONDecodeError:
-        raise SystemExit(f"Error: The value {value} contains invalid JSON.")
-    except Exception as error:
-        raise SystemExit(f"An unexpected error occurred: {error}")
+        raise ValueError(f"The Terraform configuration file '{path}' is not valid JSON.")
+    except Exception as e:
+        raise RuntimeError(f"An unexpected error occurred while reading '{path}': {e}")
 
 
-if __name__ == "__main__":
-    item = sys.argv[1]
-    item_docker_file = read_file(f"{item}/docker-compose.yaml")
-    item_endpoint_names = read_file(f"{item}/endpoints.json")
+def deploy_or_update_stack(portainer, portainer_stacks, endpoint, service, service_file):
+    action = None
+    existing_stack = next((stack for stack in portainer_stacks if stack["EndpointId"] == endpoint["Id"] and stack["Name"] == service), None)
+
+    if existing_stack:
+        print(f"'{service}' exists on endpoint '{endpoint['Name']}', updating...")
+        response = portainer.put(
+            f"stacks/{existing_stack['Id']}",
+            json={"prune": True, "pullImage": True, "stackFileContent": service_file},
+            params={"endpointId": endpoint["Id"]},
+        )
+        action = "updated"
+    else:
+        print(f"'{service}' does not exist on endpoint '{endpoint['Name']}', deploying...")
+        response = portainer.post(
+            "stacks/create/standalone/string",
+            json={"name": service, "stackFileContent": service_file},
+            params={"endpointId": endpoint["Id"]},
+        )
+        action = "deployed"
+
+    if response.status_code == 200:
+        print(f"Successfully {action} Portainer stack '{service}' on endpoint '{endpoint['Name']}'.")
+    else:
+        raise ValueError(f"Failed to {action} Portainer stack '{service}' on endpoint '{endpoint['Name']}': Status code {response.status_code}")
+
+
+def should_deploy_stack(endpoint, service, terraform_output):
+    return service not in terraform_output or service in terraform_output and endpoint['Name'] in terraform_output[service]
+
+def main():
+    if len(sys.argv) != 3:
+        raise ValueError("Usage: portainer.py <service> <terraform_output>")
+
+    service = sys.argv[1]
+    service_file = read_stack(service)
+    terraform_output = sys.argv[2]
+    terraform_output_file = read_terraform_output(terraform_output)
+
     portainer = APIClient(
-        f"{read_env_var('PORTAINER_URL')}/api",
-        {
+        f"{get_env('PORTAINER_URL')}/api",
+        headers={
             "Content-Type": "application/json",
-            "X-API-Key": read_env_var("PORTAINER_API_TOKEN"),
+            "X-API-Key": get_env("PORTAINER_API_TOKEN"),
         },
     )
 
-    defaults = read_json(read_env_var("DEFAULTS"))
-    secrets = read_json(read_env_var("SECRETS"))
-    servers = read_json(read_env_var("SERVERS"))
-    websites = read_json(read_env_var("WEBSITES"))
+    portainer_endpoints = get_portainer_data(portainer, "endpoints")
+    portainer_stacks = get_portainer_data(portainer, "stacks")
 
-    portainer_endpoints = []
-    response = portainer.get(f"endpoints")
-    if response.status_code == 200:
-        portainer_endpoints = response.json()
-    else:
-        raise SystemExit(
-            f"Failed to retrieve Portainer endpoints: {response.status_code}"
-        )
-
-    portainer_stacks = []
-    response = portainer.get(f"stacks")
-    if response.status_code == 200:
-        portainer_stacks = response.json()
-    else:
-        raise SystemExit(f"Failed to retrieve Portainer stacks: {response.status_code}")
-
-    item_endpoints = [
-        {"id": portainer_endpoint["Id"], "name": portainer_endpoint["Name"]}
-        for portainer_endpoint in portainer_endpoints
-        if "all" in item_endpoint_names
-        or portainer_endpoint["Name"] in item_endpoint_names
-    ]
-
-    print(f"Processing {item}:")
-    for item_endpoint in item_endpoints:
-        item_env = []
-        for key, value in defaults.items():
-            item_env.append({"name": f"DEFAULT_{key.upper()}", "value": str(value)})
-        for secret in secrets:
-            if (
-                secret["app_type"] == item
-                and "host" not in secret
-                or secret["app_type"] == item
-                and secret["host"] == item_endpoint["name"]
-            ):
-                for key, value in secret.items():
-                    item_env.append(
-                        {"name": f"SECRET_{key.upper()}", "value": str(value)}
-                    )
-        for server in servers.values():
-            if server["host"] == item_endpoint["name"]:
-                for key, value in server.items():
-                    item_env.append(
-                        {"name": f"SERVER_{key.upper()}", "value": str(value)}
-                    )
-        for website in websites.values():
-            if website["app_type"] == item and website["host"] == item_endpoint["name"]:
-                for key, value in website.items():
-                    item_env.append(
-                        {"name": f"WEBSITE_{key.upper()}", "value": str(value)}
-                    )
-
-        if any(
-            portainer_stack["EndpointId"] == item_endpoint["id"]
-            and portainer_stack["Name"] == item
-            for portainer_stack in portainer_stacks
-        ):
-            print(f"Exists on endpoint '{item_endpoint['name']}', redeploying...")
-            data = {
-                "env": item_env,
-                "prune": True,
-                "pullImage": True,
-                "stackFileContent": item_docker_file,
-            }
-            id = next(
-                portainer_stack["Id"]
-                for portainer_stack in portainer_stacks
-                if portainer_stack["EndpointId"] == item_endpoint["id"]
-                and portainer_stack["Name"] == item
-            )
-            params = {
-                "endpointId": item_endpoint["id"],
-            }
-            response = portainer.put(f"stacks/{id}", json=data, params=params)
-            if response.status_code == 200:
-                print(
-                    f"Successfully redeployed existing Portainer stack '{item}' to endpoint '{item_endpoint['name']}'."
-                )
+    for endpoint in portainer_endpoints:
+        try:
+            if should_deploy_stack(endpoint, service, terraform_output_file):
+                deploy_or_update_stack(portainer, portainer_stacks, endpoint, service, service_file)
             else:
-                sys.exit(
-                    f"Failed to redeploy existing Portainer stack '{item}' to endpoint '{item_endpoint['name']}': {response.status_code}"
-                )
-        else:
-            print(f"Does not exist on endpoint '{item_endpoint['name']}', deploying...")
-            data = {
-                "env": item_env,
-                "fromAppTemplate": False,
-                "name": item,
-                "stackFileContent": item_docker_file,
-            }
-            params = {
-                "endpointId": item_endpoint["id"],
-            }
-            response = portainer.post(
-                f"stacks/create/standalone/string", json=data, params=params
-            )
-            if response.status_code == 200:
-                print(
-                    f"Successfully deployed new Portainer stack '{item}' to endpoint '{item_endpoint['name']}'."
-                )
-            else:
-                sys.exit(
-                    f"Failed to deploy new Portainer stack '{item}' to endpoint '{item_endpoint['name']}': {response.status_code}"
-                )
+                print(f"Skipping deployment for endpoint '{endpoint['Name']}' as per Terraform output.")
+        except Exception as e:
+            print(f"Error processing endpoint '{endpoint['Name']}': {e}", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        print(f"Exception: {e}", file=sys.stderr)
+        sys.exit(1)

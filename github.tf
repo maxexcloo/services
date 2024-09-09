@@ -2,7 +2,7 @@ data "github_user" "default" {
   username = ""
 }
 
-resource "github_repository_file" "gatus_services" {
+resource "github_repository_file" "services_fly_gatus_services" {
   for_each = {
     for k, service in local.merged_services : k => service
     if service.service == "gatus"
@@ -20,4 +20,21 @@ resource "github_repository_file" "gatus_services" {
       services = local.merged_services
     }
   )
+}
+
+resource "github_repository_file" "services_portainer" {
+  file                = "portainer.json"
+  overwrite_on_create = true
+  repository          = "Services"
+
+  content = jsonencode({
+    for service_name in distinct([
+      for service in local.merged_services : service.service
+      if service.platform == "docker"
+    ]) :
+    service_name => [
+      for service in local.merged_services : service.server
+      if service.platform == "docker" && service.service == service_name && can(service.server)
+    ]
+  })
 }

@@ -6,6 +6,9 @@ on:
       - "fly/**"
   workflow_dispatch:
 
+env:
+  WORKING_DIRECTORY: fly
+
 jobs:
   generate-matrix:
     name: Generate Matrix
@@ -18,7 +21,7 @@ jobs:
       - name: Generate matrix
         id: generate-matrix
         run: |
-          SERVICES=$(find fly -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | jq -c -s -R 'split("\n")[:-1]')
+          SERVICES=$(find ${{ env.WORKING_DIRECTORY }} -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | jq -c -s -R 'split("\n")[:-1]')
           echo "matrix=$SERVICES" >> $GITHUB_OUTPUT
 
   deploy:
@@ -32,7 +35,7 @@ jobs:
       - name: Setup Fly
         uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy to Fly
-        run: flyctl deploy fly/${{ matrix.service }}
+        run: flyctl deploy "${{ env.WORKING_DIRECTORY }}/${{ matrix.service }}"
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
     strategy:
