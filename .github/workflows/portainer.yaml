@@ -1,9 +1,9 @@
-name: Deploy Fly Services
+name: Deploy Portainer Services
 
 on:
   push:
     paths:
-      - "fly/**"
+      - "docker/**"
   workflow_dispatch:
 
 jobs:
@@ -18,23 +18,28 @@ jobs:
       - name: Generate matrix
         id: generate-matrix
         run: |
-          SERVICES=$(find fly -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | jq -c -s -R 'split("\n")[:-1]')
+          SERVICES=$(find docker -maxdepth 1 -mindepth 1 -printf "%f\n" | sed 's/\.yaml$//' | jq -c -s -R 'split("\n")[:-1]')
           echo "matrix=$SERVICES" >> $GITHUB_OUTPUT
 
   deploy:
     if: needs.generate-matrix.outputs.matrix != '[]'
-    name: Deploy to Fly
+    name: Deploy to Portainer
     needs: generate-matrix
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Fly
-        uses: superfly/flyctl-actions/setup-flyctl@master
-      - name: Deploy to Fly
-        run: flyctl deploy fly/${{ matrix.service }}
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install Python dependencies
+        run: pip install requests
+      - name: Deploy to Portainer
+        run: python portainer.py "${{ matrix.service }}"
         env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          PORTAINER_API_TOKEN: ${{ secrets.PORTAINER_API_TOKEN }}
+          PORTAINER_URL: ${{ vars.PORTAINER_URL }}
     strategy:
       fail-fast: false
       max-parallel: 1
