@@ -39,16 +39,17 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
-      - name: Install Python dependencies
-        run: pip install requests
-      - name: Connect to Tailscale
+      - name: Setup Tailscale
         uses: tailscale/github-action@v2
         with:
+          hostname: github-${{ env.GITHUB_RUN_ID }}
           oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
           tags: tag:${{ env.TAILSCALE_TAG }}
       - name: Deploy to Portainer
-        run: python portainer.py "${{ env.WORKING_DIRECTORY }}/${{ matrix.service }}.yaml" "${{ env.WORKING_DIRECTORY }}/${{ env.TERRAFORM_OUTPUT }}"
+        run: |
+          pip install requests
+          python portainer.py "${{ env.WORKING_DIRECTORY }}/${{ matrix.service }}.yaml" "${{ env.WORKING_DIRECTORY }}/${{ env.TERRAFORM_OUTPUT }}"
         env:
           PORTAINER_API_TOKEN: ${{ secrets.PORTAINER_API_TOKEN }}
           PORTAINER_URL: ${{ env.PORTAINER_URL }}
