@@ -1,0 +1,43 @@
+endpoints:
+  - alerts:
+      - type: email
+    conditions:
+      - "[CONNECTED] == true"
+    group: "Routers"
+    name: "au"
+    url: "icmp://au"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CONNECTED] == true"
+    group: "Servers"
+    name: "au-gen8"
+    url: "icmp://au-gen8"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CONNECTED] == true"
+    group: "Servers"
+    name: "au-mini"
+    url: "icmp://au-mini"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CONNECTED] == true"
+    group: "Servers (VMs)"
+    name: "au-oracle"
+    url: "icmp://au-oracle"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CONNECTED] == true"
+    group: "Servers"
+    name: "au-pi"
+    url: "icmp://au-pi"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CONNECTED] == true"
+    group: "Routers"
+    name: "kr"
+    url: "icmp://kr"
