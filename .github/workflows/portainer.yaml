@@ -28,10 +28,9 @@ jobs:
       - name: Generate matrix
         id: generate-matrix
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            SERVICES=$(find ${{ env.WORKING_DIRECTORY }} -maxdepth 1 -mindepth 1 -name "*.yaml" -printf "%f\n" | sed 's/\.yaml$//' | jq -c -s -R 'split("\n")[:-1]')
-          else
-            SERVICES=$(git diff --name-only HEAD^ HEAD -- ${{ env.WORKING_DIRECTORY }} | grep '\.yaml$' | sed 's/.*\///' | sed 's/\.yaml$//' | jq -c -s -R 'split("\n")[:-1]')
+          SERVICES=$(find ${{ env.WORKING_DIRECTORY }} -maxdepth 1 -mindepth 1 -name "*.yaml" -printf "%f\n" | sed 's/\.yaml$//' | jq -c -s -R 'split("\n")[:-1]')
+          if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            SERVICES=$(echo "$SERVICES" | jq -c 'map(select(. | IN(${{ toJson(github.event.commits[0].modified) }})))')
           fi
           echo "matrix=$SERVICES" >> $GITHUB_OUTPUT
 
