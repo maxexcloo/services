@@ -1,5 +1,3 @@
-env_file:
-  - path: /home/max.schaefer/.env/open-webui.env
 networks:
   default:
     external: true

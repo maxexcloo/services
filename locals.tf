@@ -1,25 +1,43 @@
 locals {
+  filtered_portainer_endpoints = {}
+
+  filtered_portainer_stacks = merge(
+    [
+      for k, service in local.merged_services : (
+        service.server != null ?
+        { k = service }
+        :
+        { for server_name, server in var.servers :
+          "${k}_${server_name}" => merge(service, { server = server_name })
+        }
+      )
+      if service.platform == "docker"
+    ]...
+  )
+
   merged_services = {
-    for k, service in var.services : service.name => merge(
+    for k, service in var.services : k => merge(
       {
-        description        = ""
-        enable_b2          = false
-        enable_database    = false
-        enable_dns         = can(service.dns_content) && can(service.dns_name) && can(service.dns_zone) ? true : false
-        enable_password    = false
-        enable_resend      = false
-        enable_secret_hash = false
-        enable_ssl         = true
-        enable_tailscale   = false
-        fqdn               = can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : null
-        group              = can(service.dns_zone) ? "Services (${service.dns_zone})" : "Services (Uncategorized)"
-        name               = ""
-        platform           = "docker"
-        port               = 0
-        server             = ""
-        service            = ""
-        url                = can(service.dns_name) && can(service.dns_zone) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${service.dns_name}.${service.dns_zone}${try(service.port, 0) > 0 ? ":${service.port}" : ""}/" : null
-        username           = null
+        description               = ""
+        enable_b2                 = false
+        enable_database           = false
+        enable_password           = false
+        enable_resend             = false
+        enable_secret_hash        = false
+        enable_ssl                = true
+        enable_tailscale          = false
+        envs                      = {}
+        fqdn                      = can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : null
+        group                     = can(service.dns_zone) ? "Services (${service.dns_zone})" : "Services (Uncategorized)"
+        platform                  = "docker"
+        port                      = 0
+        server                    = null
+        server_enable_b2          = false
+        server_enable_resend      = false
+        server_enable_secret_hash = false
+        service                   = null
+        url                       = can(service.dns_name) && can(service.dns_zone) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${service.dns_name}.${service.dns_zone}${try(service.port, 0) > 0 ? ":${service.port}" : ""}/" : null
+        username                  = null
       },
       service
     )

@@ -4,7 +4,7 @@ resource "restapi_object" "resend_api_key_service" {
     if service.enable_resend
   }
 
-  data         = jsonencode({ name = each.value.name })
+  data         = jsonencode({ name = each.key })
   id_attribute = "id"
   path         = "/api-keys"
   provider     = restapi.resend
@@ -14,6 +14,6 @@ resource "restapi_object" "resend_api_key_service" {
     query_string = ""
     results_key  = "data"
     search_key   = "name"
-    search_value = each.value.name
+    search_value = each.key
   }
 }

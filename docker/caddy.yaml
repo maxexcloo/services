@@ -1,5 +1,3 @@
-env_file:
-  - path: ~/.env/_server.env
 networks:
   default:
     external: true
@@ -11,7 +9,7 @@ services:
     image: ghcr.io/maxexcloo/caddy
     labels:
       caddy.email: ${SERVER_EMAIL}
-      caddy.tls.dns_challenge_override_domain: ${SERVER_DUCKDNS_DOMAIN}
+      caddy.tls.dns_challenge_override_domain: ${SERVER_DOMAIN_DUCKDNS}
       caddy.tls.dns: duckdns ${SERVER_DUCKDNS_TOKEN}
       caddy.tls.resolvers: 1.1.1.1
     ports:

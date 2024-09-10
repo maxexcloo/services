@@ -4,7 +4,7 @@ resource "tailscale_tailnet_key" "service" {
     if service.enable_tailscale
   }
 
-  description   = "ephemeral-${each.value.name}"
+  description   = "ephemeral-${each.key}"
   ephemeral     = true
   preauthorized = true
   reusable      = true

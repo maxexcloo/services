@@ -1,5 +1,3 @@
-env_file:
-  - path: ~/.env/commafeed.env
 networks:
   default:
     external: true

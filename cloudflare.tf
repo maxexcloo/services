@@ -1,7 +1,7 @@
 data "cloudflare_zone" "service" {
   for_each = {
     for k, service in local.merged_services : k => service
-    if service.enable_dns
+    if can(service.dns_zone)
   }
 
   name = each.value.dns_zone
@@ -10,7 +10,7 @@ data "cloudflare_zone" "service" {
 resource "cloudflare_record" "service" {
   for_each = {
     for k, service in local.merged_services : k => service
-    if service.enable_dns
+    if can(service.dns_content) && can(service.dns_name) && can(service.dns_zone)
   }
 
   allow_overwrite = true
