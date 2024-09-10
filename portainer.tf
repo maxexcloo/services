@@ -10,11 +10,11 @@ data "restapi_object" "portainer_endpoints" {
 resource "restapi_object" "portainer_stack" {
   for_each = local.filtered_portainer_stacks
 
-  create_path   = "/stacks/create/standalone/repository"
-  path          = "/stacks"
-  provider      = restapi.portainer
-  update_path   = "/stacks/{id}/git/redeploy"
-  query_string  = "endpointId=${data.restapi_object.portainer_endpoints[each.value.server].id}"
+  create_path  = "/stacks/create/standalone/repository"
+  path         = "/stacks"
+  provider     = restapi.portainer
+  update_path  = "/stacks/{id}/git/redeploy"
+  query_string = "endpointId=${data.restapi_object.portainer_endpoints[each.value.server].id}"
 
   data = jsonencode({
     ComposeFile              = "docker/${each.value.service}.yaml",
