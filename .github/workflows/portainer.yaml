@@ -70,6 +70,10 @@ jobs:
       - name: Read Docker mapping
         id: read-docker-mapping
         run: |
+          if [ ! -f "${{ env.WORKING_DIRECTORY }}/${{ env.DOCKER_MAPPING }}" ]; then
+            echo "Docker mapping file not found. Failing the workflow."
+            exit 1
+          fi
           DOCKER_MAPPING=$(cat ${{ env.WORKING_DIRECTORY }}/${{ env.DOCKER_MAPPING }})
           echo "output=$DOCKER_MAPPING" >> $GITHUB_OUTPUT
       - name: Determine deployment actions
@@ -82,7 +86,13 @@ jobs:
           DEPLOYMENT_ACTIONS=$(echo "$PORTAINER_ENDPOINTS" | jq -c '.[]' | while read -r ENDPOINT; do
             ENDPOINT_ID=$(echo "$ENDPOINT" | jq -r '.Id')
             ENDPOINT_NAME=$(echo "$ENDPOINT" | jq -r '.Name')
-            if [ -n "$DOCKER_MAPPING" ] && echo "$DOCKER_MAPPING" | jq -e --arg endpoint "$ENDPOINT_NAME" --arg service "${{ matrix.service }}" '.[$service] | contains([$endpoint])' > /dev/null; then
+            SHOULD_DEPLOY=false
+            if [ -z "$DOCKER_MAPPING" ] || ! echo "$DOCKER_MAPPING" | jq -e --arg service "${{ matrix.service }}" '.[$service]' > /dev/null; then
+              SHOULD_DEPLOY=true
+            elif echo "$DOCKER_MAPPING" | jq -e --arg endpoint "$ENDPOINT_NAME" --arg service "${{ matrix.service }}" '.[$service] | contains([$endpoint])' > /dev/null; then
+              SHOULD_DEPLOY=true
+            fi
+            if [ "$SHOULD_DEPLOY" = true ]; then
               EXISTING_STACK=$(echo "$PORTAINER_STACKS" | jq -r --arg endpoint_id "$ENDPOINT_ID" --arg service "${{ matrix.service }}" '.[] | select(.EndpointId == ($endpoint_id | tonumber) and .Name == $service) | .Id')
               if [ -n "$EXISTING_STACK" ]; then
                 echo "{\"action\":\"update\",\"endpoint_id\":\"$ENDPOINT_ID\",\"endpoint_name\":\"$ENDPOINT_NAME\",\"stack_id\":\"$EXISTING_STACK\"}"
