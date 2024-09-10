@@ -1,4 +1,4 @@
-data "restapi_object" "portainer_endpoints" {
+data "restapi_object" "portainer_endpoint" {
   for_each = var.servers
 
   path         = "/endpoints"
@@ -14,7 +14,7 @@ resource "restapi_object" "portainer_stack" {
   path         = "/stacks"
   provider     = restapi.portainer
   update_path  = "/stacks/{id}/git/redeploy"
-  query_string = "endpointId=${data.restapi_object.portainer_endpoints[each.value.server].id}"
+  query_string = "endpointId=${data.restapi_object.portainer_endpoint[each.value.server].id}"
 
   data = jsonencode({
     ComposeFile              = "docker/${each.value.service}.yaml",
@@ -40,6 +40,7 @@ resource "restapi_object" "portainer_stack" {
           SERVER_HOST            = var.servers[each.value.server].host
           SERVER_TIMEZONE        = var.default.timezone
         },
+        each.value.envs,
         each.value.server_enable_b2 ? {
           SERVER_B2_BUCKET_APPLICATION_KEY    = var.servers[each.value.server].b2.application_key
           SERVER_B2_BUCKET_APPLICATION_SECRET = var.servers[each.value.server].b2.application_secret
@@ -51,10 +52,6 @@ resource "restapi_object" "portainer_stack" {
         } : {},
         each.value.server_enable_secret_hash ? {
           SERVER_SECRET_HASH = var.servers[each.value.server].secret_hash
-        } : {},
-        can(each.value.dns_name) && can(each.value.dns_zone) ? {
-          SERVICE_FQDN = each.value.fqdn
-          SERVICE_URL  = each.value.url
         } : {},
         each.value.enable_b2 ? {
           SERVICE_B2_BUCKET_APPLICATION_KEY    = local.output_b2[each.key].application_key
@@ -74,7 +71,12 @@ resource "restapi_object" "portainer_stack" {
         each.value.enable_tailscale ? {
           SERVICE_TAILSCALE_TAILNET_KEY = local.output_tailscale[each.key].tailnet_key
         } : {},
-        each.value.envs
+        try(each.value.fqdn) != null ? {
+          SERVICE_FQDN = each.value.fqdn
+        } : {},
+        try(each.value.url) != null ? {
+          SERVICE_URL  = each.value.url
+        } : {}
       ) : "${k}=${v}"
     ],
   })
