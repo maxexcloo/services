@@ -41,3 +41,10 @@ endpoints:
     group: "Routers"
     name: "kr"
     url: "icmp://kr"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CONNECTED] == true"
+    group: "Servers"
+    name: "kr-kimbap"
+    url: "icmp://kr-kimbap"
