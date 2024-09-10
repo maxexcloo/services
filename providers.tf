@@ -17,6 +17,16 @@ provider "onepassword" {
 }
 
 provider "restapi" {
+  alias                = "portainer"
+  uri                  = "https://portainer.excloo.org/api"
+  write_returns_object = true
+
+  headers = {
+    X-API-Key = var.terraform.portainer.api_key
+  }
+}
+
+provider "restapi" {
   alias                 = "resend"
   create_returns_object = true
   rate_limit            = 1
@@ -31,5 +41,5 @@ provider "restapi" {
 provider "tailscale" {
   oauth_client_id     = var.terraform.tailscale.oauth_client_id
   oauth_client_secret = var.terraform.tailscale.oauth_client_secret
-  tailnet             = var.terraform.tailscale.tailnet
+  tailnet             = var.default.domain_root
 }
