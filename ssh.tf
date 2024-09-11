@@ -22,10 +22,9 @@ resource "ssh_resource" "router" {
       "./templates/openwrt/haproxy.cfg.tftpl",
       {
         servers = var.servers
-
         services = {
           for k, service in local.merged_services : k => service
-          if each.key == try(var.servers[service.server].parent_name, "") && service.fqdn != null
+          if each.key == try(var.servers[service.server].parent_name, "") && service.dns_zone != var.default.domain_internal && service.fqdn != null
         }
       }
     )

@@ -19,7 +19,7 @@ provider "onepassword" {
 provider "restapi" {
   alias                = "portainer"
   id_attribute         = "Id"
-  uri                  = "https://portainer.excloo.org/api"
+  uri                  = "https://portainer.mini.excloo.org/api"
   write_returns_object = true
 
   headers = {

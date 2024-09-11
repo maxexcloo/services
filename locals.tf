@@ -1,6 +1,4 @@
 locals {
-  filtered_portainer_endpoints = {}
-
   filtered_portainer_stacks = merge(
     [
       for k, service in local.merged_services : (
@@ -19,8 +17,10 @@ locals {
     for k, service in var.services : k => merge(
       {
         description               = ""
+        dns_zone                  = ""
         enable_b2                 = false
         enable_database           = false
+        enable_dns                = can(service.dns_content) && can(service.dns_name) && can(service.dns_zone)
         enable_password           = false
         enable_resend             = false
         enable_secret_hash        = false
