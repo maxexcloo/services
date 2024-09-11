@@ -26,7 +26,7 @@ jobs:
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             SERVICES=$(find ${{ env.WORKING_DIRECTORY }} -maxdepth 1 -mindepth 1 -type d -printf "%f\n" | jq -c -s -R 'split("\n")[:-1]')
           else
-            CHANGED_DIRS=$(git diff --name-only HEAD^ HEAD -- ${{ env.WORKING_DIRECTORY }} | xargs -I {} dirname {} | sort -u | sed "s|${{ env.WORKING_DIRECTORY }}/||" | grep -v "^${{ env.WORKING_DIRECTORY }}$")
+            CHANGED_DIRS=$(git diff --name-only HEAD^ HEAD -- ${{ env.WORKING_DIRECTORY }} | xargs -I {} dirname {} | sort -u | sed -n "s|^${{ env.WORKING_DIRECTORY }}/\([^/]*\).*|\1|p" | sort -u)
             SERVICES=$(echo "$CHANGED_DIRS" | jq -c -s -R 'split("\n")[:-1]')
           fi
           echo "matrix=$SERVICES" >> $GITHUB_OUTPUT

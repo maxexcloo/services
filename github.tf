@@ -12,7 +12,7 @@ resource "github_repository_file" "services_fly_gatus_services" {
     if service.service == "gatus"
   }
 
-  file                = "fly/${each.key}/config/services.yaml"
+  file                = "fly/${replace(each.key, "fly-", "")}/config/services.yaml"
   overwrite_on_create = true
   repository          = "Services"
 
