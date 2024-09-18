@@ -143,7 +143,7 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
-    name: "File Browser (Gen8)"
+    name: "Filebrowser (Gen8)"
     url: "https://gen8.excloo.org:30044/"
   - alerts:
       - type: email
@@ -152,8 +152,8 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
-    name: "File Browser (Kimbap)"
-    url: "https://kimbap.excloo.org:30044/"
+    name: "Filebrowser (Kimbap)"
+    url: "https://kimbap.excloo.org:30051/"
   - alerts:
       - type: email
     conditions:
