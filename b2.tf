@@ -7,7 +7,7 @@ resource "b2_application_key" "service" {
   }
 
   bucket_id = b2_bucket.service[each.key].id
-  key_name  = each.value.app_name
+  key_name  = each.key
 
   capabilities = [
     "deleteFiles",

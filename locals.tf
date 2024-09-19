@@ -14,17 +14,10 @@ locals {
           {}
         )
         :
-        {}
-        # {
-        #   for k, server in var.servers : "${service.name}_${server.name}" => (
-        #     contains(keys(local.filtered_portainer_endpoints), server.name) ? (
-        #       merge(service, { server = server.name, server_id = local.filtered_portainer_endpoints[server.name]["Id"] })
-        #     )
-        #     :
-        #     null
-        #   )
-        #   if contains(keys(local.filtered_portainer_endpoints), server.name)
-        # }
+        {
+          for k, server in var.servers : "${service.name}-${server.host}" => merge(service, { server = server.host, server_id = local.filtered_portainer_endpoints[server.host]["Id"] })
+          if contains(keys(local.filtered_portainer_endpoints), server.host)
+        }
       )
       if service.platform == "docker" && service.service != null
     ]...
