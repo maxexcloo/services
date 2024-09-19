@@ -3,7 +3,7 @@ networks:
     external: true
     name: docker
 services:
-  redlib:
+  service:
     environment:
       LIBREDDIT_DEFAULT_HIDE_AWARDS: on
       LIBREDDIT_DEFAULT_SUBSCRIPTIONS: apple+askanaustralian+ausfinance+aussiecasual+australia+catastrophicfailure+datahoarder+edc+emulation+emulationonandroid+esims+flashlight+flipperzero+handhelds+hardware+homelab+homenetworking+internetisbeautiful+korea+linux+living_in_korea+living_in_korea_now+minipc+miyoomini+movies+odinhandheld+outoftheloop+piracy+retroarch+retroid+roms+sbcgaming+selfhosted+sideloaded+steamdeck+sydney+sysadmin+television+trance+travel

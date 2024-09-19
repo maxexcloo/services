@@ -3,7 +3,7 @@ networks:
     external: true
     name: docker
 services:
-  rsshub:
+  service:
     image: diygod/rsshub:chromium-bundled
     labels:
       caddy: ${SERVICE_FQDN}
