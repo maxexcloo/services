@@ -1,3 +1,7 @@
+networks:
+  default:
+    external: true
+    name: docker
 services:
   daily:
     environment:
