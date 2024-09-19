@@ -5,7 +5,13 @@ networks:
 services:
   service:
     environment:
-      CF_APP_PUBLICURL: ${SERVICE_URL}
+      COMMAFEED_PASSWORD_RECOVERY_ENABLED: true
+      QUARKUS_MAILER_FROM: ${SERVER_EMAIL}
+      QUARKUS_MAILER_HOST: smtp.resend.com
+      QUARKUS_MAILER_PASSWORD: ${SERVICE_RESEND_API_KEY}
+      QUARKUS_MAILER_PORT: 465
+      QUARKUS_MAILER_TLS: true
+      QUARKUS_MAILER_USERNAME: resend
     image: athou/commafeed:latest-h2-jvm
     labels:
       caddy: ${SERVICE_FQDN}
