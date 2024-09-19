@@ -1,15 +1,32 @@
 locals {
+  filtered_portainer_endpoints = {
+    for k, endpoint in jsondecode(data.http.portainer_endpoints.response_body) : endpoint["Name"] => endpoint
+  }
+
   filtered_portainer_stacks = merge(
     [
       for k, service in local.merged_services : (
-        service.server != null ?
-        { k = service }
+        service.server != null ? (
+          contains(keys(local.filtered_portainer_endpoints), service.server) ? {
+            (k) = merge(service, { server_id = local.filtered_portainer_endpoints[service.server]["Id"] })
+          }
+          :
+          {}
+        )
         :
-        { for server_name, server in var.servers :
-          "${k}_${server_name}" => merge(service, { server = server_name })
-        }
+        {}
+        # {
+        #   for k, server in var.servers : "${service.name}_${server.name}" => (
+        #     contains(keys(local.filtered_portainer_endpoints), server.name) ? (
+        #       merge(service, { server = server.name, server_id = local.filtered_portainer_endpoints[server.name]["Id"] })
+        #     )
+        #     :
+        #     null
+        #   )
+        #   if contains(keys(local.filtered_portainer_endpoints), server.name)
+        # }
       )
-      if service.platform == "docker"
+      if service.platform == "docker" && service.service != null
     ]...
   )
 
@@ -29,12 +46,14 @@ locals {
         envs                      = {}
         fqdn                      = can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : null
         group                     = can(service.dns_zone) ? "Services (${service.dns_zone})" : "Services (Uncategorized)"
+        name                      = k
         platform                  = "docker"
         port                      = 0
         server                    = null
         server_enable_b2          = false
         server_enable_resend      = false
         server_enable_secret_hash = false
+        server_id                 = null
         service                   = null
         url                       = can(service.dns_name) && can(service.dns_zone) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${service.dns_name}.${service.dns_zone}${try(service.port, 0) > 0 ? ":${service.port}" : ""}/" : null
         username                  = null

@@ -1,5 +1,5 @@
 data "github_repository" "default" {
-  name = basename(path.module)
+  name = var.terraform.github.repository
 }
 
 data "github_user" "default" {
@@ -14,7 +14,7 @@ resource "github_repository_file" "services_fly_gatus_services" {
 
   file                = "fly/${replace(each.key, "fly-", "")}/config/services.yaml"
   overwrite_on_create = true
-  repository          = "Services"
+  repository          = var.terraform.github.repository
 
   content = templatefile(
     "./templates/gatus/services.yaml.tftpl",
