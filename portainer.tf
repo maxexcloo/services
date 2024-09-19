@@ -40,36 +40,36 @@ resource "restapi_object" "portainer_stack" {
           SERVER_TIMEZONE        = var.default.timezone
         },
         each.value.envs,
-        each.value.server_enable_b2 ? {
+        each.value.server_enable_b2 ? sensitive({
           SERVER_B2_BUCKET_APPLICATION_KEY    = var.servers[each.value.server].b2.application_key
           SERVER_B2_BUCKET_APPLICATION_SECRET = var.servers[each.value.server].b2.application_secret
           SERVER_B2_BUCKET_BUCKET_NAME        = var.servers[each.value.server].b2.bucket_name
           SERVER_B2_BUCKET_ENDPOINT           = var.servers[each.value.server].b2.endpoint
-        } : {},
-        each.value.server_enable_resend ? {
+        }) : {},
+        each.value.server_enable_resend ? sensitive({
           SERVER_RESEND_API_KEY = var.servers[each.value.server].resend_api_key
-        } : {},
-        each.value.server_enable_secret_hash ? {
+        }) : {},
+        each.value.server_enable_secret_hash ? sensitive({
           SERVER_SECRET_HASH = var.servers[each.value.server].secret_hash
-        } : {},
-        each.value.enable_b2 ? {
+        }) : {},
+        each.value.enable_b2 ? sensitive({
           SERVICE_B2_BUCKET_APPLICATION_KEY    = local.output_b2[each.value.name].application_key
           SERVICE_B2_BUCKET_APPLICATION_SECRET = local.output_b2[each.value.name].application_secret
           SERVICE_B2_BUCKET_BUCKET_NAME        = local.output_b2[each.value.name].bucket_name
           SERVICE_B2_BUCKET_ENDPOINT           = local.output_b2[each.value.name].endpoint
-        } : {},
-        each.value.enable_database ? {
+        }) : {},
+        each.value.enable_database ? sensitive({
           SERVICE_DATABASE_PASSWORD = local.output_databases[each.value.name].password
-        } : {},
-        each.value.enable_resend ? {
+        }) : {},
+        each.value.enable_resend ? sensitive({
           SERVICE_RESEND_API_KEY = local.output_resend[each.value.name].api_key
-        } : {},
-        each.value.enable_secret_hash ? {
+        }) : {},
+        each.value.enable_secret_hash ? sensitive({
           SERVICE_SECRET_HASH = local.output_secret_hashes[each.value.name].secret_hash
-        } : {},
-        each.value.enable_tailscale ? {
+        }) : {},
+        each.value.enable_tailscale ? sensitive({
           SERVICE_TAILSCALE_TAILNET_KEY = local.output_tailscale[each.value.name].tailnet_key
-        } : {},
+        }) : {},
         each.value.fqdn != null ? {
           SERVICE_FQDN = each.value.fqdn
         } : {},
