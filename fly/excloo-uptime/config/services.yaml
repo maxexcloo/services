@@ -19,6 +19,15 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
+    name: "Excloo Books"
+    url: "https://books.excloo.com/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
     name: "Excloo Chat"
     url: "https://chat.excloo.com/"
   - alerts:
