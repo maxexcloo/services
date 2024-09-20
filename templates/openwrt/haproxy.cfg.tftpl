@@ -8,6 +8,9 @@ frontend https
     tcp-request content accept if { req.ssl_hello_type 1 }
     tcp-request inspect-delay 3s
 
+%{ for server in servers ~}
+    use_backend ${server.host} if { req.ssl_sni -i ${server.fqdn_external} } || { req.ssl_sni -m end .${server.fqdn_external} }
+%{ endfor ~}
 %{ for service in services ~}
     use_backend ${service.server} if { req.ssl_sni -i ${service.fqdn} }
 %{ endfor ~}
