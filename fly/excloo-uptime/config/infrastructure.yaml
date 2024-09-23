@@ -31,13 +31,6 @@ endpoints:
       - type: email
     conditions:
       - "[CONNECTED] == true"
-    group: "Servers"
-    name: "au-pi"
-    url: "icmp://au-pi"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CONNECTED] == true"
     group: "Routers"
     name: "kr"
     url: "icmp://kr"
