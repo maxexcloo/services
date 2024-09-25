@@ -1,0 +1,11 @@
+networks:
+  default:
+    external: true
+    name: docker
+services:
+  service:
+    image: ghcr.io/gchq/cyberchef
+    labels:
+      caddy: ${SERVICE_FQDN}
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+    restart: unless-stopped
