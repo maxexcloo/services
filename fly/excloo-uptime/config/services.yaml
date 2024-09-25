@@ -92,7 +92,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Homebridge"
-    url: "https://homebridge.pi.excloo.org/"
+    url: "https://homebridge.mini.excloo.org/"
   - alerts:
       - type: email
     conditions:
@@ -111,15 +111,6 @@ endpoints:
     group: "Services (excloo.org)"
     name: "Syncthing (Oracle)"
     url: "https://syncthing.oracle.excloo.org/"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "Syncthing (Pi)"
-    url: "https://syncthing.pi.excloo.org/"
   - alerts:
       - type: email
     conditions:
