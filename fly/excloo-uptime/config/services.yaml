@@ -100,15 +100,6 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
-    name: "Homebridge"
-    url: "https://homebridge.mini.excloo.org/"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
     name: "Portainer"
     url: "https://portainer.mini.excloo.org/"
   - alerts:
