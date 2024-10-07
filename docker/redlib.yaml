@@ -7,7 +7,7 @@ services:
     environment:
       REDLIB_DEFAULT_DISABLE_VISIT_REDDIT_CONFIRMATION: on
       REDLIB_DEFAULT_HIDE_AWARDS: on
-      REDLIB_DEFAULT_SUBSCRIPTIONS: apple+askanaustralian+ausfinance+aussiecasual+australia+catastrophicfailure+datahoarder+emulation+emulationonandroid+flashlight+flipperzero+handhelds+hardware+homelab+homenetworking+internetisbeautiful+korea+linux+living_in_korea+minipc+miyoomini+movies+odinhandheld+outoftheloop+retroarch+retroid+roms+sbcgaming+selfhosted+sideloaded+steamdeck+sydney+sysadmin+television+trance+travel
+      REDLIB_DEFAULT_SUBSCRIPTIONS: minilab+minipcs+apple+askanaustralian+ausfinance+aussiecasual+australia+catastrophicfailure+datahoarder+emulation+emulationonandroid+flashlight+flipperzero+handhelds+hardware+homelab+homenetworking+internetisbeautiful+korea+linux+living_in_korea+minipc+miyoomini+movies+odinhandheld+outoftheloop+retroarch+retroid+roms+sbcgaming+selfhosted+sideloaded+steamdeck+sydney+sysadmin+television+trance+travel
       REDLIB_DEFAULT_USE_HLS: on
       REDLIB_ROBOTS_DISABLE_INDEXING: on
       REDLIB_SFW_ONLY: on
