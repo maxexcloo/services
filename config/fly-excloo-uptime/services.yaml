@@ -36,9 +36,9 @@ endpoints:
       - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.com)"
+    group: "Services (excloo.org)"
     name: "Excloo Home"
-    url: "https://home.excloo.com/"
+    url: "https://home.excloo.org/"
   - alerts:
       - type: email
     conditions:
@@ -126,9 +126,9 @@ endpoints:
       - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
+    group: "Services (excloo.com)"
     name: "Excloo Uptime"
-    url: "https://uptime.excloo.org/"
+    url: "https://uptime.excloo.com/"
   - alerts:
       - type: email
     conditions:
