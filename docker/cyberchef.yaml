@@ -4,8 +4,8 @@ networks:
     name: docker
 services:
   service:
-    image: ghcr.io/gchq/cyberchef
+    image: mpepping/cyberchef
     labels:
       caddy: ${SERVICE_FQDN}
-      caddy.reverse_proxy: "{{upstreams 8080}}"
+      caddy.reverse_proxy: "{{upstreams 8000}}"
     restart: unless-stopped
