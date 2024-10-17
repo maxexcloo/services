@@ -12,7 +12,7 @@ resource "github_repository_file" "services_fly_gatus_services" {
     if service.service == "gatus"
   }
 
-  file                = "config/${replace(each.key, "fly-", "")}/services.yaml"
+  file                = "config/${each.key}/services.yaml"
   overwrite_on_create = true
   repository          = var.terraform.github.repository
 

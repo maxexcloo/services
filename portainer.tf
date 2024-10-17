@@ -38,6 +38,7 @@ resource "restapi_object" "portainer_stack" {
           SERVER_FQDN_INTERNAL   = var.servers[each.value.server].fqdn_internal
           SERVER_HOST            = var.servers[each.value.server].host
           SERVER_TIMEZONE        = var.default.timezone
+          SERVICE_NAME           = each.key
         },
         each.value.envs,
         each.value.server_enable_b2 ? sensitive({
