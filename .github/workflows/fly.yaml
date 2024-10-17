@@ -3,10 +3,12 @@ name: Deploy Fly Services
 on:
   push:
     paths:
+      - "config/fly-**"
       - "fly/**"
   workflow_dispatch:
 
 env:
+  CONFIG_DIRECTORY: config
   WORKING_DIRECTORY: fly
 
 jobs:
@@ -34,6 +36,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Fly
         uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Copy config
+        run: cp -R "${{ env.CONFIG_DIRECTORY }}/fly-${{ matrix.service }}" "${{ env.WORKING_DIRECTORY }}/${{ matrix.service }}/config"
       - name: Deploy to Fly
         run: flyctl deploy "${{ env.WORKING_DIRECTORY }}/${{ matrix.service }}"
         env:
