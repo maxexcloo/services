@@ -1,0 +1,18 @@
+networks:
+  default:
+    external: true
+    name: docker
+services:
+  service:
+    environment:
+      GLANCES_OPT: -w
+    image: nicolargo/glances
+    labels:
+      caddy: glances.${SERVER_FQDN_INTERNAL}
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 61208}}"
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /etc/os-release:/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock
