@@ -25,9 +25,6 @@ services:
     volumes:
       - data:/data
   service:
-    depends_on:
-      config:
-        condition: service_healthy
     image: ghcr.io/gethomepage/homepage
     labels:
       caddy: ${SERVICE_FQDN}
