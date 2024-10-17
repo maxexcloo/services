@@ -78,7 +78,7 @@ locals {
 
   output_github = {
     for k, service in local.merged_services : k => {
-      deploy_private_key = tls_private_key.github_deploy_key_service[k].private_key_pem
+      deploy_private_key = tls_private_key.github_deploy_key_service[k].private_key_openssh
       deploy_public_key  = tls_private_key.github_deploy_key_service[k].public_key_openssh
       path               = service.github_path
       url                = service.github_url
