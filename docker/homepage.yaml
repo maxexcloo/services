@@ -16,10 +16,18 @@ services:
         tail -f /dev/null
       "
     entrypoint: sh
+    healthcheck:
+      interval: 5s
+      retries: 12
+      test: ["CMD", "test", "-f", "/data/.config_ready"]
+      timeout: 5s
     image: alpine/git
     volumes:
       - data:/data
   service:
+    depends_on:
+      config:
+        condition: service_healthy
     image: ghcr.io/gethomepage/homepage
     labels:
       caddy: ${SERVICE_FQDN}

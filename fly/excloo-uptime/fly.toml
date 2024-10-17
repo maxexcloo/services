@@ -1,4 +1,4 @@
-app = "excloo-gatus"
+app = "excloo-uptime"
 primary_region = "sin"
 
 [build]
