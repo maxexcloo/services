@@ -14,7 +14,6 @@ services:
       caddy.import: internal
       caddy.reverse_proxy: "{{upstreams 8384}}"
     ports:
-      - 8384:8384
       - 22000:22000/tcp
       - 22000:22000/udp
     restart: unless-stopped
