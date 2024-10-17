@@ -1,11 +1,22 @@
+networks:
+  default:
+    external: true
+    name: docker
 services:
   service:
+    environment:
+      PGID: 1000
+      PUID: 1000
+    hostname: ${SERVER_HOST}
     image: syncthing/syncthing
     labels:
       caddy: ${SERVICE_FQDN}
       caddy.import: internal
-      caddy.reverse_proxy: host.docker.internal:8384
-    network_mode: host
+      caddy.reverse_proxy: "{{upstreams 8384}}"
+    ports:
+      - 8384:8384
+      - 22000:22000/tcp
+      - 22000:22000/udp
     restart: unless-stopped
     volumes:
       - data:/var/syncthing
