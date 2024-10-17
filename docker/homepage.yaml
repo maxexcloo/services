@@ -1,0 +1,39 @@
+networks:
+  default:
+    external: true
+    name: docker
+services:
+  config:
+    command: >
+      sh -c "
+        mkdir -p /root/.ssh &&
+        echo "${SERVICE_GITHUB_KEY}" | base64 -d > /root/.ssh/id_rsa &&
+        chmod 600 /root/.ssh/id_rsa &&
+        ssh-keyscan github.com >> /root/.ssh/known_hosts &&
+        git clone ${SERVICE_GITHUB_URL} /repo &&
+        cp -R /repo/${SERVICE_GITHUB_PATH}/* /config &&
+        touch /config/.config_ready &&
+        tail -f /dev/null
+      "
+    healthcheck:
+      interval: 5s
+      retries: 12
+      test: ["CMD", "test", "-f", "/config/.config_ready"]
+      timeout: 5s
+    image: alpine/git
+    volumes:
+      - data:/data
+  service:
+    depends_on:
+      config:
+        condition: service_healthy
+    image: ghcr.io/gethomepage/homepage
+    labels:
+      caddy: ${SERVICE_FQDN}
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+    restart: unless-stopped
+    volumes:
+      - data:/app/config
+volumes:
+  data:

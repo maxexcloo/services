@@ -8,6 +8,11 @@ output "databases" {
   value     = local.output_databases
 }
 
+output "github" {
+  sensitive = true
+  value     = local.output_github
+}
+
 output "resend" {
   sensitive = true
   value     = local.output_resend

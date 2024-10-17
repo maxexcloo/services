@@ -39,6 +39,7 @@ resource "restapi_object" "portainer_stack" {
           SERVER_HOST            = var.servers[each.value.server].host
           SERVER_TIMEZONE        = var.default.timezone
           SERVICE_NAME           = each.key
+          SERVICE_SERVICE        = each.value.service
         },
         each.value.envs,
         each.value.server_enable_b2 ? sensitive({
@@ -61,6 +62,11 @@ resource "restapi_object" "portainer_stack" {
         }) : {},
         each.value.enable_database ? sensitive({
           SERVICE_DATABASE_PASSWORD = local.output_databases[each.value.name].password
+        }) : {},
+        each.value.enable_github_deploy_key ? sensitive({
+          SERVICE_GITHUB_KEY  = base64encode(local.output_github[each.value.name].deploy_private_key)
+          SERVICE_GITHUB_PATH = local.output_github[each.value.name].path
+          SERVICE_GITHUB_URL  = local.output_github[each.value.name].url
         }) : {},
         each.value.enable_resend ? sensitive({
           SERVICE_RESEND_API_KEY = local.output_resend[each.value.name].api_key
