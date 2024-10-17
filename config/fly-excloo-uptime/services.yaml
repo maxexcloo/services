@@ -1,0 +1,194 @@
+alerting:
+  email:
+    default-alert:
+      description: "Excloo Uptime Check Failed"
+      failure-threshold: 5
+      send-on-resolved: true
+      success-threshold: 5
+    from: "max@excloo.com"
+    host: "smtp.resend.com"
+    password: "${RESEND_API_KEY}"
+    port: 587
+    to: "max@excloo.com"
+    username: "resend"
+endpoints:
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
+    name: "Excloo Books"
+    url: "https://books.excloo.com/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
+    name: "Excloo Chat"
+    url: "https://chat.excloo.com/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
+    name: "Excloo N8N"
+    url: "https://n8n.excloo.com/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
+    name: "Excloo NocoDB"
+    url: "https://nocodb.excloo.com/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
+    name: "Excloo Photos"
+    url: "https://photos.excloo.com/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
+    name: "Excloo Reader"
+    url: "https://reader.excloo.com/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
+    name: "Excloo Reddit"
+    url: "https://reddit.excloo.com/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
+    name: "Excloo RSSHub"
+    url: "https://rsshub.excloo.com/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
+    name: "Excloo Tools"
+    url: "https://tools.excloo.com/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "Homepage"
+    url: "https://homepage.mini.excloo.org/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "Portainer"
+    url: "https://portainer.mini.excloo.org/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "Syncthing (Oracle)"
+    url: "https://syncthing.oracle.excloo.org/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
+    name: "Excloo Uptime"
+    url: "https://uptime.excloo.com/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "Syncthing (Mini)"
+    url: "http://mini.excloo.org:8384/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "CubeBackup"
+    url: "http://gen8-truenas.excloo.org:15000/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "Filebrowser (Gen8)"
+    url: "https://gen8.excloo.org:30044/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "Filebrowser (Kimbap)"
+    url: "https://kimbap.excloo.org:30051/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "Syncthing (Gen8)"
+    url: "http://gen8.excloo.org:20910/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "Syncthing (Kimbap)"
+    url: "http://kimbap.excloo.org:20910/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
+    name: "Excloo GitHub Readme Stats"
+    url: "https://github-readme-stats.excloo.com/"
+ui:
+  description: ""
+  header: "Excloo Uptime"
+  title: "Excloo Uptime"
