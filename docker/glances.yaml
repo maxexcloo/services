@@ -6,6 +6,7 @@ services:
   service:
     environment:
       GLANCES_OPT: -w
+    hostname: ${SERVER_HOST}
     image: nicolargo/glances
     labels:
       caddy: glances.${SERVER_FQDN_INTERNAL}
