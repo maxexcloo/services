@@ -1,7 +1,7 @@
 alerting:
   email:
     default-alert:
-      description: "Excloo Gatus Check Failed"
+      description: "Excloo Uptime Check Failed"
       failure-threshold: 5
       send-on-resolved: true
       success-threshold: 5
@@ -30,6 +30,15 @@ endpoints:
     group: "Services (excloo.com)"
     name: "Excloo Chat"
     url: "https://chat.excloo.com/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
+    name: "Excloo Home"
+    url: "https://home.excloo.com/"
   - alerts:
       - type: email
     conditions:
@@ -100,15 +109,6 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
-    name: "Excloo Homepage"
-    url: "https://homepage.mini.excloo.org/"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
     name: "Portainer"
     url: "https://portainer.mini.excloo.org/"
   - alerts:
@@ -127,8 +127,8 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
-    name: "Excloo Gatus"
-    url: "https://gatus.excloo.com/"
+    name: "Excloo Uptime"
+    url: "https://uptime.excloo.com/"
   - alerts:
       - type: email
     conditions:
@@ -190,5 +190,5 @@ endpoints:
     url: "https://github-readme-stats.excloo.com/"
 ui:
   description: ""
-  header: "Excloo Gatus"
-  title: "Excloo Gatus"
+  header: "Excloo Uptime"
+  title: "Excloo Uptime"
