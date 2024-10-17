@@ -19,7 +19,7 @@ services:
     healthcheck:
       interval: 5s
       retries: 12
-      test: ["CMD", "test", "-f", "/config/.config_ready"]
+      test: ["CMD", "test", "-f", "/data/.config_ready"]
       timeout: 5s
     image: alpine/git
     volumes:
