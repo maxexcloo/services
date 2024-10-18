@@ -29,7 +29,7 @@ resource "github_repository_file" "services_config_gatus_services" {
   repository          = var.terraform.github.repository
 
   content = templatefile(
-    "./templates/gatus/services.yaml.tftpl",
+    "./templates/${each.value.service}/services.yaml.tftpl",
     {
       default = var.default
       gatus   = each.value
@@ -40,4 +40,40 @@ resource "github_repository_file" "services_config_gatus_services" {
       }
     }
   )
+}
+
+resource "github_repository_file" "services_config_homepage_bookmarks" {
+  for_each = {
+    for k, service in local.merged_services : k => service
+    if service.service == "homepage"
+  }
+
+  content             = templatefile("./templates/${each.value.service}/bookmarks.yaml.tftpl", { homepage = each.value })
+  file                = "config/${each.key}/bookmarks.yaml"
+  overwrite_on_create = true
+  repository          = var.terraform.github.repository
+}
+
+resource "github_repository_file" "services_config_homepage_services" {
+  for_each = {
+    for k, service in local.merged_services : k => service
+    if service.service == "homepage"
+  }
+
+  content             = templatefile("./templates/${each.value.service}/services.yaml.tftpl", { homepage = each.value })
+  file                = "config/${each.key}/services.yaml"
+  overwrite_on_create = true
+  repository          = var.terraform.github.repository
+}
+
+resource "github_repository_file" "services_config_homepage_settings" {
+  for_each = {
+    for k, service in local.merged_services : k => service
+    if service.service == "homepage"
+  }
+
+  content             = templatefile("./templates/${each.value.service}/settings.yaml.tftpl", { homepage = each.value })
+  file                = "config/${each.key}/settings.yaml"
+  overwrite_on_create = true
+  repository          = var.terraform.github.repository
 }
