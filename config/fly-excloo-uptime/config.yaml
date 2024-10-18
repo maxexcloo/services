@@ -179,7 +179,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "CubeBackup"
-    url: "http://gen8-truenas.excloo.org:15000/"
+    url: "http://gen8.excloo.org:15000/"
   - alerts:
       - type: email
     conditions:

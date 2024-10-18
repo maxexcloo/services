@@ -1,14 +1,70 @@
 - au-mini:
     - SpeedTest (External):
-        - abbr: ST
-          href: https://speedtest.mini.excloo.net
+        - href: https://speedtest.mini.excloo.net
     - SpeedTest (Internal):
-        - abbr: ST
-          href: https://speedtest.mini.excloo.org
+        - href: https://speedtest.mini.excloo.org
 - au-oracle:
     - SpeedTest (External):
-        - abbr: ST
-          href: https://speedtest.oracle.excloo.net
+        - href: https://speedtest.oracle.excloo.net
     - SpeedTest (Internal):
-        - abbr: ST
-          href: https://speedtest.oracle.excloo.org
+        - href: https://speedtest.oracle.excloo.org
+- au-mini:
+    - Excloo Books:
+        - href: https://books.excloo.com/
+- au-mini:
+    - Excloo Chat:
+        - href: https://chat.excloo.com/
+- au-oracle:
+    - Excloo N8N:
+        - href: https://n8n.excloo.com/
+- au-oracle:
+    - Excloo NocoDB:
+        - href: https://nocodb.excloo.com/
+- au-mini:
+    - Excloo Photos:
+        - href: https://photos.excloo.com/
+- au-oracle:
+    - Excloo Reader:
+        - href: https://reader.excloo.com/
+- au-oracle:
+    - Excloo Reddit:
+        - href: https://reddit.excloo.com/
+- au-oracle:
+    - Excloo RSSHub:
+        - href: https://rsshub.excloo.com/
+- au-oracle:
+    - Excloo Tools:
+        - href: https://tools.excloo.com/
+- au-mini:
+    - Home:
+        - href: https://home.excloo.org/
+- au-mini:
+    - Portainer:
+        - href: https://portainer.excloo.org/
+- au-oracle:
+    - Syncthing (Oracle):
+        - href: https://syncthing.oracle.excloo.org/
+- Fly:
+    - Excloo Uptime:
+        - href: https://uptime.excloo.com/
+- Native:
+    - Syncthing (Mini):
+        - href: http://mini.excloo.org:8384/
+- TrueNAS:
+    - CubeBackup:
+        - href: http://gen8.excloo.org:15000/
+- TrueNAS:
+    - Filebrowser (Gen8):
+        - href: https://gen8.excloo.org:30044/
+- TrueNAS:
+    - Filebrowser (Kimbap):
+        - href: https://kimbap.excloo.org:30051/
+- TrueNAS:
+    - Syncthing (Gen8):
+        - href: http://gen8.excloo.org:20910/
+- TrueNAS:
+    - Syncthing (Kimbap):
+        - href: http://kimbap.excloo.org:20910/
+- Vercel:
+    - Excloo GitHub Readme Stats:
+        - href: https://github-readme-stats.excloo.com/

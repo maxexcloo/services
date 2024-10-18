@@ -2,10 +2,29 @@
 %{ if contains(server.flags, "docker") ~}
 - ${server.host}:
     - SpeedTest (External):
-        - abbr: ST
-          href: https://speedtest.${server.fqdn_external}
+        - href: https://speedtest.${server.fqdn_external}
     - SpeedTest (Internal):
-        - abbr: ST
-          href: https://speedtest.${server.fqdn_internal}
+        - href: https://speedtest.${server.fqdn_internal}
+%{ endif ~}
+%{ endfor ~}
+%{ for service in services ~}
+%{ if ! service.enable_homepage_widget && service.fqdn != null ~}
+%{ if service.platform == "docker" && service.server != null ~}
+- ${service.server}:
+%{ endif ~}
+%{ if service.platform == "fly" ~}
+- Fly:
+%{ endif ~}
+%{ if service.platform == "native" ~}
+- Native:
+%{ endif ~}
+%{ if service.platform == "truenas" ~}
+- TrueNAS:
+%{ endif ~}
+%{ if service.platform == "vercel" ~}
+- Vercel:
+%{ endif ~}
+    - ${service.description}:
+        - href: ${service.url}
 %{ endif ~}
 %{ endfor ~}

@@ -32,6 +32,7 @@ locals {
         enable_database           = false
         enable_dns                = can(service.dns_content) && can(service.dns_name) && can(service.dns_zone)
         enable_github_deploy_key  = false
+        enable_homepage_widget    = false
         enable_password           = false
         enable_resend             = false
         enable_secret_hash        = false
@@ -54,6 +55,7 @@ locals {
         service                   = null
         url                       = can(service.dns_name) && can(service.dns_zone) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${service.dns_name}.${service.dns_zone}${try(service.port, 0) > 0 ? ":${service.port}" : ""}/" : null
         username                  = null
+        widget                    = {}
       },
       service
     )
