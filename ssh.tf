@@ -19,7 +19,7 @@ resource "ssh_resource" "router" {
     destination = "/etc/haproxy.services.cfg"
 
     content = templatefile(
-      "./templates/openwrt/haproxy.cfg.tftpl",
+      "templates/openwrt/haproxy.cfg.tftpl",
       {
         servers = {
           for k, server in var.servers : k => server
