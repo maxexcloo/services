@@ -110,7 +110,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Portainer"
-    url: "https://portainer.mini.excloo.org/"
+    url: "https://portainer.excloo.org/"
   - alerts:
       - type: email
     conditions:
