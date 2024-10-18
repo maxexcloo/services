@@ -39,10 +39,10 @@ resource "local_file" "config_gatus" {
     if service.service == "gatus"
   }
 
-  filename = "config/${each.key}/services.yaml"
+  filename = "config/${each.key}/config.yaml"
 
   content = templatefile(
-    "templates/${each.value.service}/services.yaml.tftpl",
+    "templates/${each.value.service}/config.yaml.tftpl",
     {
       default  = var.default
       gatus    = each.value
@@ -81,7 +81,7 @@ resource "local_file" "config_homepage_docker" {
   filename = "config/${each.key}/docker.yaml"
 
   content = templatefile(
-    "templates/${each.key}/docker.yaml.tftpl",
+    "templates/${each.value.service}/docker.yaml.tftpl",
     {
       servers = var.servers
       tags    = var.tags
@@ -98,7 +98,7 @@ resource "local_file" "config_homepage_kubernetes" {
   filename = "config/${each.key}/kubernetes.yaml"
 
   content = templatefile(
-    "templates/${each.key}/kubernetes.yaml.tftpl",
+    "templates/${each.value.service}/kubernetes.yaml.tftpl",
     {
       servers = var.servers
       tags    = var.tags
