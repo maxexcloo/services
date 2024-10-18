@@ -1,0 +1,11 @@
+%{ for server in servers ~}
+%{ if contains(server.flags, "docker") ~}
+- ${server.host}:
+    - SpeedTest (External):
+        - abbr: ST
+          href: https://speedtest.${server.fqdn_external}
+    - SpeedTest (Internal):
+        - abbr: ST
+          href: https://speedtest.${server.fqdn_internal}
+%{ endif ~}
+%{ endfor ~}

@@ -1,0 +1,14 @@
+- au-mini:
+    - SpeedTest (External):
+        - abbr: ST
+          href: https://speedtest.mini.excloo.net
+    - SpeedTest (Internal):
+        - abbr: ST
+          href: https://speedtest.mini.excloo.org
+- au-oracle:
+    - SpeedTest (External):
+        - abbr: ST
+          href: https://speedtest.oracle.excloo.net
+    - SpeedTest (Internal):
+        - abbr: ST
+          href: https://speedtest.oracle.excloo.org
