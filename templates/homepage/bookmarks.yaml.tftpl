@@ -1,30 +1,43 @@
 %{ for server in servers ~}
 %{ if contains(server.flags, "docker") ~}
 - ${server.host}:
-    - SpeedTest (External):
-        - href: https://speedtest.${server.fqdn_external}
-    - SpeedTest (Internal):
-        - href: https://speedtest.${server.fqdn_internal}
+  - SpeedTest (External):
+    - href: https://speedtest.${server.fqdn_external}
+  - SpeedTest (Internal):
+    - href: https://speedtest.${server.fqdn_internal}
+%{ endif ~}
+%{ for service in services ~}
+%{ if server.host == service.server && service.enable_homepage_widget == false && service.fqdn != null && service.platform == "docker" ~}
+  - ${service.description}:
+    - href: ${service.url}
 %{ endif ~}
 %{ endfor ~}
-%{ for service in services ~}
-%{ if ! service.enable_homepage_widget && service.fqdn != null ~}
-%{ if service.platform == "docker" && service.server != null ~}
-- ${service.server}:
-%{ endif ~}
-%{ if service.platform == "fly" ~}
+%{ endfor ~}
 - Fly:
+%{ for service in services ~}
+%{ if ! service.enable_homepage_widget && service.fqdn != null && service.platform == "fly" ~}
+  - ${service.description}:
+    - href: ${service.url}
 %{ endif ~}
-%{ if service.platform == "native" ~}
+%{ endfor ~}
 - Native:
+%{ for service in services ~}
+%{ if ! service.enable_homepage_widget && service.fqdn != null && service.platform == "native" ~}
+  - ${service.description}:
+    - href: ${service.url}
 %{ endif ~}
-%{ if service.platform == "truenas" ~}
+%{ endfor ~}
 - TrueNAS:
+%{ for service in services ~}
+%{ if ! service.enable_homepage_widget && service.fqdn != null && service.platform == "truenas" ~}
+  - ${service.description}:
+    - href: ${service.url}
 %{ endif ~}
-%{ if service.platform == "vercel" ~}
+%{ endfor ~}
 - Vercel:
-%{ endif ~}
-    - ${service.description}:
-        - href: ${service.url}
+%{ for service in services ~}
+%{ if ! service.enable_homepage_widget && service.fqdn != null && service.platform == "vercel" ~}
+  - ${service.description}:
+    - href: ${service.url}
 %{ endif ~}
 %{ endfor ~}

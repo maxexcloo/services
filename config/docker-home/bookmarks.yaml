@@ -1,70 +1,54 @@
 - au-mini:
-    - SpeedTest (External):
-        - href: https://speedtest.mini.excloo.net
-    - SpeedTest (Internal):
-        - href: https://speedtest.mini.excloo.org
+  - SpeedTest (External):
+    - href: https://speedtest.mini.excloo.net
+  - SpeedTest (Internal):
+    - href: https://speedtest.mini.excloo.org
+  - Excloo Books:
+    - href: https://books.excloo.com/
+  - Excloo Chat:
+    - href: https://chat.excloo.com/
+  - Excloo Photos:
+    - href: https://photos.excloo.com/
+  - Home:
+    - href: https://home.excloo.org/
+  - Portainer:
+    - href: https://portainer.excloo.org/
 - au-oracle:
-    - SpeedTest (External):
-        - href: https://speedtest.oracle.excloo.net
-    - SpeedTest (Internal):
-        - href: https://speedtest.oracle.excloo.org
-- au-mini:
-    - Excloo Books:
-        - href: https://books.excloo.com/
-- au-mini:
-    - Excloo Chat:
-        - href: https://chat.excloo.com/
-- au-oracle:
-    - Excloo N8N:
-        - href: https://n8n.excloo.com/
-- au-oracle:
-    - Excloo NocoDB:
-        - href: https://nocodb.excloo.com/
-- au-mini:
-    - Excloo Photos:
-        - href: https://photos.excloo.com/
-- au-oracle:
-    - Excloo Reader:
-        - href: https://reader.excloo.com/
-- au-oracle:
-    - Excloo Reddit:
-        - href: https://reddit.excloo.com/
-- au-oracle:
-    - Excloo RSSHub:
-        - href: https://rsshub.excloo.com/
-- au-oracle:
-    - Excloo Tools:
-        - href: https://tools.excloo.com/
-- au-mini:
-    - Home:
-        - href: https://home.excloo.org/
-- au-mini:
-    - Portainer:
-        - href: https://portainer.excloo.org/
-- au-oracle:
-    - Syncthing (Oracle):
-        - href: https://syncthing.oracle.excloo.org/
+  - SpeedTest (External):
+    - href: https://speedtest.oracle.excloo.net
+  - SpeedTest (Internal):
+    - href: https://speedtest.oracle.excloo.org
+  - Excloo N8N:
+    - href: https://n8n.excloo.com/
+  - Excloo NocoDB:
+    - href: https://nocodb.excloo.com/
+  - Excloo Reader:
+    - href: https://reader.excloo.com/
+  - Excloo Reddit:
+    - href: https://reddit.excloo.com/
+  - Excloo RSSHub:
+    - href: https://rsshub.excloo.com/
+  - Excloo Tools:
+    - href: https://tools.excloo.com/
+  - Syncthing (Oracle):
+    - href: https://syncthing.oracle.excloo.org/
 - Fly:
-    - Excloo Uptime:
-        - href: https://uptime.excloo.com/
+  - Excloo Uptime:
+    - href: https://uptime.excloo.com/
 - Native:
-    - Syncthing (Mini):
-        - href: http://mini.excloo.org:8384/
+  - Syncthing (Mini):
+    - href: http://mini.excloo.org:8384/
 - TrueNAS:
-    - CubeBackup:
-        - href: http://gen8.excloo.org:15000/
-- TrueNAS:
-    - Filebrowser (Gen8):
-        - href: https://gen8.excloo.org:30044/
-- TrueNAS:
-    - Filebrowser (Kimbap):
-        - href: https://kimbap.excloo.org:30051/
-- TrueNAS:
-    - Syncthing (Gen8):
-        - href: http://gen8.excloo.org:20910/
-- TrueNAS:
-    - Syncthing (Kimbap):
-        - href: http://kimbap.excloo.org:20910/
+  - CubeBackup:
+    - href: http://gen8.excloo.org:15000/
+  - Filebrowser (Gen8):
+    - href: https://gen8.excloo.org:30044/
+  - Filebrowser (Kimbap):
+    - href: https://kimbap.excloo.org:30051/
+  - Syncthing (Gen8):
+    - href: http://gen8.excloo.org:20910/
+  - Syncthing (Kimbap):
+    - href: http://kimbap.excloo.org:20910/
 - Vercel:
-    - Excloo GitHub Readme Stats:
-        - href: https://github-readme-stats.excloo.com/
+  - Excloo GitHub Readme Stats:
+    - href: https://github-readme-stats.excloo.com/
