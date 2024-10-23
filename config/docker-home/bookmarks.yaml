@@ -1,54 +1,66 @@
 - au-mini:
   - SpeedTest (External):
     - href: https://speedtest.mini.excloo.net
+    - icon: sh-openspeedtest
   - SpeedTest (Internal):
     - href: https://speedtest.mini.excloo.org
+    - icon: sh-openspeedtest
   - Excloo Books:
     - href: https://books.excloo.com/
+    - icon: sh-calibre-web
   - Excloo Chat:
     - href: https://chat.excloo.com/
+    - icon: sh-open-webui
   - Excloo Photos:
     - href: https://photos.excloo.com/
+    - icon: sh-immich
   - Home:
     - href: https://home.excloo.org/
+    - icon: sh-homepage
   - Portainer:
     - href: https://portainer.excloo.org/
+    - icon: sh-portainer
+  - Syncthing (Mini):
+    - href: http://mini.excloo.org:8384/
+    - icon: sh-syncthing
 - au-oracle:
   - SpeedTest (External):
     - href: https://speedtest.oracle.excloo.net
+    - icon: sh-openspeedtest
   - SpeedTest (Internal):
     - href: https://speedtest.oracle.excloo.org
+    - icon: sh-openspeedtest
   - Excloo N8N:
     - href: https://n8n.excloo.com/
+    - icon: sh-n8n
   - Excloo NocoDB:
     - href: https://nocodb.excloo.com/
+    - icon: sh-nocodb
   - Excloo Reader:
     - href: https://reader.excloo.com/
+    - icon: sh-commafeed
   - Excloo Reddit:
     - href: https://reddit.excloo.com/
+    - icon: sh-redlib
   - Excloo RSSHub:
     - href: https://rsshub.excloo.com/
+    - icon: sh-rsshub
   - Excloo Tools:
     - href: https://tools.excloo.com/
+    - icon: sh-cyberchef
   - Syncthing (Oracle):
     - href: https://syncthing.oracle.excloo.org/
-- Fly:
-  - Excloo Uptime:
-    - href: https://uptime.excloo.com/
-- Native:
-  - Syncthing (Mini):
-    - href: http://mini.excloo.org:8384/
-- TrueNAS:
-  - CubeBackup:
-    - href: http://gen8.excloo.org:15000/
-  - Filebrowser (Gen8):
-    - href: https://gen8.excloo.org:30044/
+    - icon: sh-syncthing
   - Filebrowser (Kimbap):
     - href: https://kimbap.excloo.org:30051/
-  - Syncthing (Gen8):
-    - href: http://gen8.excloo.org:20910/
+    - icon: sh-file-browser
   - Syncthing (Kimbap):
     - href: http://kimbap.excloo.org:20910/
-- Vercel:
+    - icon: sh-syncthing
+- Cloud:
+  - Excloo Uptime:
+    - href: https://uptime.excloo.com/
+    - icon: sh-gatus
   - Excloo GitHub Readme Stats:
     - href: https://github-readme-stats.excloo.com/
+    - icon: sh-github

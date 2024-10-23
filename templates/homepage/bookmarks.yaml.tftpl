@@ -3,41 +3,24 @@
 - ${server.host}:
   - SpeedTest (External):
     - href: https://speedtest.${server.fqdn_external}
+    - icon: sh-openspeedtest
   - SpeedTest (Internal):
     - href: https://speedtest.${server.fqdn_internal}
+    - icon: sh-openspeedtest
 %{ endif ~}
 %{ for service in services ~}
-%{ if server.host == service.server && service.enable_homepage_widget == false && service.fqdn != null && service.platform == "docker" ~}
+%{ if server.host == service.server && service.enable_homepage_widget == false && service.fqdn != null ~}
   - ${service.description}:
     - href: ${service.url}
+    - icon: sh-${service.icon}
 %{ endif ~}
 %{ endfor ~}
 %{ endfor ~}
-- Fly:
+- Cloud:
 %{ for service in services ~}
-%{ if ! service.enable_homepage_widget && service.fqdn != null && service.platform == "fly" ~}
+%{ if ! service.enable_homepage_widget && service.fqdn != null && service.server == null ~}
   - ${service.description}:
     - href: ${service.url}
-%{ endif ~}
-%{ endfor ~}
-- Native:
-%{ for service in services ~}
-%{ if ! service.enable_homepage_widget && service.fqdn != null && service.platform == "native" ~}
-  - ${service.description}:
-    - href: ${service.url}
-%{ endif ~}
-%{ endfor ~}
-- TrueNAS:
-%{ for service in services ~}
-%{ if ! service.enable_homepage_widget && service.fqdn != null && service.platform == "truenas" ~}
-  - ${service.description}:
-    - href: ${service.url}
-%{ endif ~}
-%{ endfor ~}
-- Vercel:
-%{ for service in services ~}
-%{ if ! service.enable_homepage_widget && service.fqdn != null && service.platform == "vercel" ~}
-  - ${service.description}:
-    - href: ${service.url}
+    - icon: sh-${service.icon}
 %{ endif ~}
 %{ endfor ~}

@@ -44,6 +44,7 @@ locals {
         github_repo               = null
         github_url                = can(service.github_repo) ? "git@github.com:${data.github_user.default.username}/${service.github_repo}.git" : null
         group                     = can(service.dns_zone) ? "Services (${service.dns_zone})" : "Services (Uncategorized)"
+        icon                      = "homepage"
         name                      = k
         platform                  = "docker"
         port                      = 0
