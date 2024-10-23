@@ -1,4 +1,3 @@
-- au:
 - au-mini:
   - OpenSpeedTest (External):
     - href: https://speedtest.mini.excloo.net
@@ -52,7 +51,6 @@
   - Syncthing (Oracle):
     - href: https://syncthing.oracle.excloo.org/
       icon: syncthing
-- kr:
 - kr-kimbap:
   - Filebrowser (Kimbap):
     - href: https://kimbap.excloo.org:30051/
