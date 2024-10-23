@@ -1,66 +1,66 @@
 - au-mini:
   - OpenSpeedTest (External):
     - href: https://speedtest.mini.excloo.net
-    - icon: openspeedtest.png
+      icon: openspeedtest
   - OpenSpeedTest (Internal):
     - href: https://speedtest.mini.excloo.org
-    - icon: openspeedtest.png
+      icon: openspeedtest
   - Excloo Books:
     - href: https://books.excloo.com/
-    - icon: calibre-web.png
+      icon: calibre-web
   - Excloo Chat:
     - href: https://chat.excloo.com/
-    - icon: open-webui.png
+      icon: open-webui
   - Excloo Photos:
     - href: https://photos.excloo.com/
-    - icon: immich.png
+      icon: immich
   - Home:
     - href: https://home.excloo.org/
-    - icon: homepage.png
+      icon: homepage
   - Portainer:
     - href: https://portainer.excloo.org/
-    - icon: portainer.png
+      icon: portainer
   - Syncthing (Mini):
     - href: http://mini.excloo.org:8384/
-    - icon: syncthing.png
+      icon: syncthing
 - au-oracle:
   - OpenSpeedTest (External):
     - href: https://speedtest.oracle.excloo.net
-    - icon: openspeedtest.png
+      icon: openspeedtest
   - OpenSpeedTest (Internal):
     - href: https://speedtest.oracle.excloo.org
-    - icon: openspeedtest.png
+      icon: openspeedtest
   - Excloo N8N:
     - href: https://n8n.excloo.com/
-    - icon: n8n.png
+      icon: n8n
   - Excloo NocoDB:
     - href: https://nocodb.excloo.com/
-    - icon: nocodb.png
+      icon: nocodb
   - Excloo Reader:
     - href: https://reader.excloo.com/
-    - icon: commafeed.png
+      icon: commafeed
   - Excloo Reddit:
     - href: https://reddit.excloo.com/
-    - icon: libreddit.png
+      icon: libreddit
   - Excloo RSSHub:
     - href: https://rsshub.excloo.com/
-    - icon: rsshub.png
+      icon: rsshub
   - Excloo Tools:
     - href: https://tools.excloo.com/
-    - icon: cyberchef.png
+      icon: cyberchef
   - Syncthing (Oracle):
     - href: https://syncthing.oracle.excloo.org/
-    - icon: syncthing.png
+      icon: syncthing
   - Filebrowser (Kimbap):
     - href: https://kimbap.excloo.org:30051/
-    - icon: file-browser.png
+      icon: file-browser
   - Syncthing (Kimbap):
     - href: http://kimbap.excloo.org:20910/
-    - icon: syncthing.png
+      icon: syncthing
 - Cloud:
   - Excloo Uptime:
     - href: https://uptime.excloo.com/
-    - icon: gatus.png
+      icon: gatus
   - Excloo GitHub Readme Stats:
     - href: https://github-readme-stats.excloo.com/
-    - icon: github.png
+      icon: github
