@@ -10,7 +10,7 @@
       icon: calibre
   - Excloo Chat:
     - href: https://chat.excloo.com/
-      icon: open-webui
+      icon: open-webui-light
   - Excloo Photos:
     - href: https://photos.excloo.com/
       icon: immich
@@ -64,4 +64,4 @@
       icon: gatus
   - Excloo GitHub Readme Stats:
     - href: https://github-readme-stats.excloo.com/
-      icon: github
+      icon: github-light
