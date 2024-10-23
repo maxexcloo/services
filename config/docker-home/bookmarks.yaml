@@ -1,3 +1,4 @@
+- au:
 - au-mini:
   - OpenSpeedTest (External):
     - href: https://speedtest.mini.excloo.net
@@ -7,7 +8,7 @@
       icon: openspeedtest
   - Excloo Books:
     - href: https://books.excloo.com/
-      icon: calibre-web
+      icon: calibre
   - Excloo Chat:
     - href: https://chat.excloo.com/
       icon: open-webui
@@ -51,9 +52,11 @@
   - Syncthing (Oracle):
     - href: https://syncthing.oracle.excloo.org/
       icon: syncthing
+- kr:
+- kr-kimbap:
   - Filebrowser (Kimbap):
     - href: https://kimbap.excloo.org:30051/
-      icon: file-browser
+      icon: filebrowser
   - Syncthing (Kimbap):
     - href: http://kimbap.excloo.org:20910/
       icon: syncthing

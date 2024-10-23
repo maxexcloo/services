@@ -1,6 +1,6 @@
 %{ for server in servers ~}
-%{ if contains(server.flags, "docker") ~}
 - ${server.host}:
+%{ if contains(server.flags, "docker") ~}
   - OpenSpeedTest (External):
     - href: https://speedtest.${server.fqdn_external}
       icon: openspeedtest
