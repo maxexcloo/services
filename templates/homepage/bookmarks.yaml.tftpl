@@ -3,16 +3,16 @@
 - ${server.host}:
   - OpenSpeedTest (External):
     - href: https://speedtest.${server.fqdn_external}
-    - icon: openspeedtest
+    - icon: openspeedtest.png
   - OpenSpeedTest (Internal):
     - href: https://speedtest.${server.fqdn_internal}
-    - icon: openspeedtest
+    - icon: openspeedtest.png
 %{ endif ~}
 %{ for service in services ~}
 %{ if service.enable_homepage_widget == false && service.fqdn != null && service.server == server.host ~}
   - ${service.description}:
     - href: ${service.url}
-    - icon: ${service.icon}
+    - icon: ${service.icon}.png
 %{ endif ~}
 %{ endfor ~}
 %{ endfor ~}
@@ -21,6 +21,6 @@
 %{ if service.enable_homepage_widget == false && service.fqdn != null && service.server == null ~}
   - ${service.description}:
     - href: ${service.url}
-    - icon: ${service.icon}
+    - icon: ${service.icon}.png
 %{ endif ~}
 %{ endfor ~}
