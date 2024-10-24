@@ -37,6 +37,13 @@ endpoints:
       - type: email
     conditions:
       - "[CONNECTED] == true"
+    group: "Servers"
+    name: "au-pie"
+    url: "icmp://au-pie"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CONNECTED] == true"
     group: "Routers"
     name: "kr"
     url: "icmp://kr"
@@ -167,6 +174,15 @@ endpoints:
   - alerts:
       - type: email
     conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "Proxmox (Pie)"
+    url: "https://kimbap.excloo.org/"
+  - alerts:
+      - type: email
+    conditions:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
@@ -175,11 +191,12 @@ endpoints:
   - alerts:
       - type: email
     conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
-    name: "CubeBackup"
-    url: "http://gen8.excloo.org:15000/"
+    name: "TrueNAS (Kimbap)"
+    url: "https://kimbap.excloo.org/"
   - alerts:
       - type: email
     conditions:
@@ -187,8 +204,16 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
-    name: "Filebrowser (Gen8)"
-    url: "https://gen8.excloo.org:30044/"
+    name: "TrueNAS (Pie TrueNAS)"
+    url: "https://pie-truenas.excloo.org/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "CubeBackup"
+    url: "http://pie-truenas.excloo.org:15000/"
   - alerts:
       - type: email
     conditions:
@@ -201,11 +226,12 @@ endpoints:
   - alerts:
       - type: email
     conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
-    name: "Syncthing (Gen8)"
-    url: "http://gen8.excloo.org:20910/"
+    name: "Filebrowser (Pie TrueNAS)"
+    url: "https://pie-truenas.excloo.org:30044/"
   - alerts:
       - type: email
     conditions:
@@ -214,6 +240,14 @@ endpoints:
     group: "Services (excloo.org)"
     name: "Syncthing (Kimbap)"
     url: "http://kimbap.excloo.org:20910/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "Syncthing (Pie TrueNAS)"
+    url: "http://pie-truenas.excloo.org:20910/"
   - alerts:
       - type: email
     conditions:

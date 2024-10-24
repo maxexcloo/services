@@ -51,6 +51,16 @@
   - Syncthing:
     - href: https://syncthing.oracle.excloo.org/
       icon: syncthing
+- Pie (AU):
+  - OpenSpeedTest (External):
+    - href: https://speedtest.pie.excloo.net
+      icon: openspeedtest
+  - OpenSpeedTest (Internal):
+    - href: https://speedtest.pie.excloo.org
+      icon: openspeedtest
+  - Proxmox:
+    - href: https://kimbap.excloo.org/
+      icon: proxmox
 - Kimbap (KR):
   - OpenSpeedTest (External):
     - href: https://speedtest.kimbap.excloo.net
@@ -58,6 +68,9 @@
   - OpenSpeedTest (Internal):
     - href: https://speedtest.kimbap.excloo.org
       icon: openspeedtest
+  - TrueNAS:
+    - href: https://kimbap.excloo.org/
+      icon: truenas
   - Filebrowser:
     - href: https://kimbap.excloo.org:30051/
       icon: filebrowser
