@@ -2,7 +2,7 @@
 %{ if contains(server.flags, "docker") ~}
 - glances:
     cputemp: true
-    label: ${server.description}
+    label: ${server.description} (${servers[server.location].description})
     uptime: true
     url: https://glances.${server.fqdn_internal}
     version: 4

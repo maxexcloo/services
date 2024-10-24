@@ -1,4 +1,4 @@
-- Mini:
+- Mini (AU):
   - OpenSpeedTest (External):
     - href: https://speedtest.mini.excloo.net
       icon: openspeedtest
@@ -23,7 +23,7 @@
   - Syncthing:
     - href: http://mini.excloo.org:8384/
       icon: syncthing
-- Oracle:
+- Oracle (AU):
   - OpenSpeedTest (External):
     - href: https://speedtest.oracle.excloo.net
       icon: openspeedtest
@@ -51,7 +51,7 @@
   - Syncthing:
     - href: https://syncthing.oracle.excloo.org/
       icon: syncthing
-- Kimbap:
+- Kimbap (KR):
   - OpenSpeedTest (External):
     - href: https://speedtest.kimbap.excloo.net
       icon: openspeedtest

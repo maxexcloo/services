@@ -1,6 +1,6 @@
 %{ for server in servers ~}
 %{ if contains(server.flags, "homepage") ~}
-- ${server.description}:
+- ${server.description} (${servers[server.location].description}):
   - OpenSpeedTest (External):
     - href: https://speedtest.${server.fqdn_external}
       icon: openspeedtest
