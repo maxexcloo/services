@@ -53,7 +53,7 @@
       icon: syncthing
 - Pie (AU):
   - Proxmox:
-    - href: https://kimbap.excloo.org/
+    - href: https://pie.excloo.org:8006/
       icon: proxmox
 - Kimbap (KR):
   - TrueNAS:

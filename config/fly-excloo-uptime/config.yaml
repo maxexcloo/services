@@ -179,7 +179,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Proxmox (Pie)"
-    url: "https://kimbap.excloo.org/"
+    url: "https://pie.excloo.org:8006/"
   - alerts:
       - type: email
     conditions:
