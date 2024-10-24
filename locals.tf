@@ -16,7 +16,7 @@ locals {
         :
         {
           for k, server in var.servers : "${service.name}-${server.host}" => merge(service, { server = server.host, server_id = local.filtered_portainer_endpoints[server.host]["Id"] })
-          if contains(keys(local.filtered_portainer_endpoints), server.host) && contains(server.flags, "caddy") != service.enable_caddy_check
+          if contains(keys(local.filtered_portainer_endpoints), server.host) && (contains(server.flags, "caddy") || contains(server.flags, "caddy") == service.enable_caddy_check)
         }
       )
       if service.platform == "docker" && service.service != null
