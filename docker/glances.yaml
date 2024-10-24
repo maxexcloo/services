@@ -13,6 +13,8 @@ services:
       caddy.import: internal
       caddy.reverse_proxy: "{{upstreams 61208}}"
     pid: host
+    ports:
+      - 61208:61208
     restart: unless-stopped
     volumes:
       - /etc/os-release:/etc/os-release:ro

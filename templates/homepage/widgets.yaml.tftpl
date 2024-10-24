@@ -4,7 +4,7 @@
     cputemp: true
     label: ${server.description} (${servers[server.location].description})
     uptime: true
-    url: https://glances.${server.fqdn_internal}
+    url: http://${server.fqdn_internal}:61208
     version: 4
 %{ endif ~}
 %{ endfor ~}
