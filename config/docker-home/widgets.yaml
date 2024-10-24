@@ -2,17 +2,17 @@
     cputemp: true
     label: Mini (AU)
     uptime: true
-    url: https://glances.mini.excloo.org
+    url: http://mini.excloo.org:61208
     version: 4
 - glances:
     cputemp: true
     label: Oracle (AU)
     uptime: true
-    url: https://glances.oracle.excloo.org
+    url: http://oracle.excloo.org:61208
     version: 4
 - glances:
     cputemp: true
     label: Kimbap (KR)
     uptime: true
-    url: https://glances.kimbap.excloo.org
+    url: http://kimbap.excloo.org:61208
     version: 4
