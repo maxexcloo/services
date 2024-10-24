@@ -1,22 +1,20 @@
 %{ for server in servers ~}
-%{ if server.tag != "router" ~}
-- ${server.host}:
-%{ endif ~}
-%{ if contains(server.flags, "docker") ~}
+%{ if contains(server.flags, "homepage") ~}
+- ${server.description}:
   - OpenSpeedTest (External):
     - href: https://speedtest.${server.fqdn_external}
       icon: openspeedtest
   - OpenSpeedTest (Internal):
     - href: https://speedtest.${server.fqdn_internal}
       icon: openspeedtest
-%{ endif ~}
 %{ for service in services ~}
 %{ if service.enable_homepage_widget == false && service.fqdn != null && service.server == server.host ~}
-  - ${service.description}:
+  - ${replace(service.description, " (${server.description})", "")}:
     - href: ${service.url}
       icon: ${service.icon}
 %{ endif ~}
 %{ endfor ~}
+%{ endif ~}
 %{ endfor ~}
 - Cloud:
 %{ for service in services ~}
