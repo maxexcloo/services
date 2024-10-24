@@ -1,12 +1,14 @@
 %{ for server in servers ~}
 %{ if contains(server.flags, "homepage") ~}
 - ${server.description} (${servers[server.location].description}):
+%{ if contains(server.flags, "caddy") ~}
   - OpenSpeedTest (External):
     - href: https://speedtest.${server.fqdn_external}
       icon: openspeedtest
   - OpenSpeedTest (Internal):
     - href: https://speedtest.${server.fqdn_internal}
       icon: openspeedtest
+%{ endif ~}
 %{ for service in services ~}
 %{ if service.enable_homepage_widget == false && service.fqdn != null && service.server == server.host ~}
   - ${replace(service.description, " (${server.description})", "")}:

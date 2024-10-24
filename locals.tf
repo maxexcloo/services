@@ -16,7 +16,7 @@ locals {
         :
         {
           for k, server in var.servers : "${service.name}-${server.host}" => merge(service, { server = server.host, server_id = local.filtered_portainer_endpoints[server.host]["Id"] })
-          if contains(keys(local.filtered_portainer_endpoints), server.host)
+          if contains(keys(local.filtered_portainer_endpoints), server.host) && contains(server.flags, "caddy") != service.enable_caddy_check
         }
       )
       if service.platform == "docker" && service.service != null
@@ -29,6 +29,7 @@ locals {
         description               = ""
         dns_zone                  = ""
         enable_b2                 = false
+        enable_caddy_check        = false
         enable_database           = false
         enable_dns                = can(service.dns_content) && can(service.dns_name) && can(service.dns_zone)
         enable_github_deploy_key  = false
