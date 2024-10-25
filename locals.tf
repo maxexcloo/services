@@ -26,8 +26,8 @@ locals {
   merged_services = {
     for k, service in var.services : k => merge(
       {
-        description               = ""
-        dns_zone                  = ""
+        description               = title(replace(k, "-", " "))
+        dns_zone                  = null
         enable_b2                 = false
         enable_caddy_check        = false
         enable_database           = false
@@ -41,21 +41,18 @@ locals {
         enable_tailscale          = false
         envs                      = {}
         fqdn                      = can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : null
-        github_path               = "config/${k}"
         github_repo               = null
-        github_url                = can(service.github_repo) ? "git@github.com:${data.github_user.default.username}/${service.github_repo}.git" : null
         group                     = can(service.dns_zone) ? "Services (${service.dns_zone})" : "Services (Uncategorized)"
         icon                      = "homepage"
         name                      = k
         platform                  = "docker"
-        port                      = 0
+        port                      = null
         server                    = null
         server_enable_b2          = false
         server_enable_resend      = false
         server_enable_secret_hash = false
-        server_id                 = null
         service                   = null
-        url                       = can(service.dns_name) && can(service.dns_zone) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${service.dns_name}.${service.dns_zone}${try(service.port, 0) > 0 ? ":${service.port}" : ""}/" : null
+        url                       = can(service.dns_name) && can(service.dns_zone) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${service.dns_name}.${service.dns_zone}${try(service.port, null) != null ? ":${service.port}" : ""}/" : null
         username                  = null
         widget                    = {}
       },
@@ -75,7 +72,7 @@ locals {
 
   output_databases = {
     for k, service in local.merged_services : k => {
-      password = random_password.database_sevice[k].result
+      password = random_password.database_service[k].result
     }
     if service.enable_database
   }
@@ -84,8 +81,8 @@ locals {
     for k, service in local.merged_services : k => {
       deploy_private_key = tls_private_key.github_deploy_key_service[k].private_key_openssh
       deploy_public_key  = tls_private_key.github_deploy_key_service[k].public_key_openssh
-      path               = service.github_path
-      url                = service.github_url
+      path               = "config/${k}"
+      url                = "git@github.com:${data.github_user.default.username}/${service.github_repo}.git"
     }
     if service.enable_github_deploy_key
   }
