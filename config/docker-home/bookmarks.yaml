@@ -56,12 +56,15 @@
     - href: https://pie.excloo.org:8006/
       icon: proxmox
 - Pie TrueNAS (AU):
+  - CubeBackup:
+    - href: http://pie-truenas.excloo.org:8888/
+      icon: google
+  - Homebridge:
+    - href: https://homebridge.excloo.org/
+      icon: homebridge
   - TrueNAS:
     - href: https://pie-truenas.excloo.org/
       icon: truenas
-  - CubeBackup:
-    - href: http://pie-truenas.excloo.org:15000/
-      icon: google
   - File Browser:
     - href: https://pie-truenas.excloo.org:30051/
       icon: filebrowser

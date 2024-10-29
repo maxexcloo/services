@@ -1,0 +1,17 @@
+networks:
+  default:
+    external: true
+    name: docker
+services:
+  service:
+    hostname: ${SERVER_HOST}
+    image: cubebackup/workspace
+    ports:
+      - 8888:80
+    restart: unless-stopped
+    volumes:
+      - /mnt/truenas/cubebackup/cfg:/opt/cubebackup/etc
+      - /mnt/truenas/cubebackup/data:/cubebackup_data
+      - /mnt/truenas/cubebackup/db:/opt/cubebackup/db
+      - /mnt/truenas/cubebackup/index:/cubebackup_index
+      - /mnt/truenas/cubebackup/log:/opt/cubebackup/log

@@ -64,6 +64,14 @@ endpoints:
   - alerts:
       - type: email
     conditions:
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "CubeBackup"
+    url: "http://pie-truenas.excloo.org:8888/"
+  - alerts:
+      - type: email
+    conditions:
       - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
@@ -158,6 +166,15 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
+    name: "Homebridge"
+    url: "https://homebridge.excloo.org/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
     name: "Portainer"
     url: "https://portainer.excloo.org/"
   - alerts:
@@ -213,14 +230,6 @@ endpoints:
     group: "Services (excloo.org)"
     name: "TrueNAS (Pie TrueNAS)"
     url: "https://pie-truenas.excloo.org/"
-  - alerts:
-      - type: email
-    conditions:
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "CubeBackup"
-    url: "http://pie-truenas.excloo.org:15000/"
   - alerts:
       - type: email
     conditions:
