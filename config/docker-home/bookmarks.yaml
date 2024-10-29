@@ -57,7 +57,7 @@
       icon: proxmox
 - Pie TrueNAS (AU):
   - CubeBackup:
-    - href: http://pie-truenas.excloo.org:8888/
+    - href: http://cubebackup.excloo.org:8888/
       icon: google
   - Homebridge:
     - href: http://homebridge.excloo.org:8581/

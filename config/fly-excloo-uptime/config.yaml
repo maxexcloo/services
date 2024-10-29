@@ -68,7 +68,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "CubeBackup"
-    url: "http://pie-truenas.excloo.org:8888/"
+    url: "http://cubebackup.excloo.org:8888/"
   - alerts:
       - type: email
     conditions:
