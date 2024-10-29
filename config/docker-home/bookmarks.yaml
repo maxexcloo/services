@@ -60,7 +60,7 @@
     - href: http://pie-truenas.excloo.org:8888/
       icon: google
   - Homebridge:
-    - href: https://homebridge.excloo.org/
+    - href: http://homebridge.excloo.org:8581/
       icon: homebridge
   - TrueNAS:
     - href: https://pie-truenas.excloo.org/

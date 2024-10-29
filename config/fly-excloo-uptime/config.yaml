@@ -162,12 +162,11 @@ endpoints:
   - alerts:
       - type: email
     conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Homebridge"
-    url: "https://homebridge.excloo.org/"
+    url: "http://homebridge.excloo.org:8581/"
   - alerts:
       - type: email
     conditions:
