@@ -12,6 +12,12 @@
     version: 4
 - glances:
     cputemp: true
+    label: Pie TrueNAS (AU)
+    uptime: true
+    url: http://pie-truenas.excloo.org:61208
+    version: 4
+- glances:
+    cputemp: true
     label: Kimbap (KR)
     uptime: true
     url: http://kimbap.excloo.org:61208

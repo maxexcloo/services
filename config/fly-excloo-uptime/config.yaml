@@ -44,6 +44,13 @@ endpoints:
       - type: email
     conditions:
       - "[CONNECTED] == true"
+    group: "Servers (VMs)"
+    name: "au-pie-truenas"
+    url: "icmp://au-pie-truenas"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CONNECTED] == true"
     group: "Routers"
     name: "kr"
     url: "icmp://kr"

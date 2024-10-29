@@ -55,6 +55,19 @@
   - Proxmox:
     - href: https://pie.excloo.org:8006/
       icon: proxmox
+- Pie TrueNAS (AU):
+  - TrueNAS:
+    - href: https://pie-truenas.excloo.org/
+      icon: truenas
+  - CubeBackup:
+    - href: http://pie-truenas.excloo.org:15000/
+      icon: google
+  - Filebrowser:
+    - href: https://pie-truenas.excloo.org:30044/
+      icon: filebrowser
+  - Syncthing:
+    - href: http://pie-truenas.excloo.org:20910/
+      icon: syncthing
 - Kimbap (KR):
   - TrueNAS:
     - href: https://kimbap.excloo.org/
