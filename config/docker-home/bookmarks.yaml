@@ -62,8 +62,8 @@
   - CubeBackup:
     - href: http://pie-truenas.excloo.org:15000/
       icon: google
-  - Filebrowser:
-    - href: https://pie-truenas.excloo.org:30044/
+  - File Browser:
+    - href: https://pie-truenas.excloo.org:30051/
       icon: filebrowser
   - Syncthing:
     - href: http://pie-truenas.excloo.org:20910/
@@ -72,7 +72,7 @@
   - TrueNAS:
     - href: https://kimbap.excloo.org/
       icon: truenas
-  - Filebrowser:
+  - File Browser:
     - href: https://kimbap.excloo.org:30051/
       icon: filebrowser
   - Syncthing:
