@@ -12,7 +12,7 @@ resource "random_password" "b2_service" {
 resource "random_password" "database_service" {
   for_each = {
     for k, service in local.merged_services : k => service
-    if service.enable_database
+    if service.enable_database_password
   }
 
   length  = 24

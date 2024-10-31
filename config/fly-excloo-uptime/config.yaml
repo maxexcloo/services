@@ -197,38 +197,11 @@ endpoints:
   - alerts:
       - type: email
     conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "Proxmox (Pie)"
-    url: "https://pie.excloo.org:8006/"
-  - alerts:
-      - type: email
-    conditions:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Syncthing (Mini)"
     url: "http://mini.excloo.org:8384/"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "TrueNAS (Kimbap)"
-    url: "https://kimbap.excloo.org/"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "TrueNAS (Pie TrueNAS)"
-    url: "https://pie-truenas.excloo.org/"
   - alerts:
       - type: email
     conditions:

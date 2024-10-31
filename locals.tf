@@ -15,8 +15,8 @@ locals {
         )
         :
         {
-          for k, server in var.servers : "${service.name}-${server.host}" => merge(service, { server = server.host, server_id = local.filtered_portainer_endpoints[server.host]["Id"] })
-          if contains(keys(local.filtered_portainer_endpoints), server.host) && (contains(server.flags, "caddy") || contains(server.flags, "caddy") == service.enable_caddy_check)
+          for k, server in var.servers : "${service.name}-${k}" => merge(service, { server = k, server_id = local.filtered_portainer_endpoints[k]["Id"] })
+          if contains(keys(local.filtered_portainer_endpoints), k) && (contains(server.flags, "caddy") || contains(server.flags, "caddy") == service.enable_caddy_check)
         }
       )
       if service.platform == "docker" && service.service != null
@@ -27,11 +27,12 @@ locals {
     for k, service in var.services : k => merge(
       {
         description               = title(replace(k, "-", " "))
-        dns_zone                  = null
+        dns_content               = can(service.dns_content) ? service.dns_content : can(service.server) ? can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external : null
+        dns_zone                  = can(service.dns_zone) ? service.dns_zone : can(service.server) ? can(service.internal) ? var.default.domain_internal : var.default.domain_external : null
         enable_b2                 = false
         enable_caddy_check        = false
-        enable_database           = false
-        enable_dns                = can(service.dns_content) && can(service.dns_name) && can(service.dns_zone)
+        enable_database_password  = false
+        enable_dns                = can(service.dns_name) && can(service.dns_zone)
         enable_github_deploy_key  = false
         enable_homepage_widget    = false
         enable_password           = false
@@ -39,22 +40,20 @@ locals {
         enable_secret_hash        = false
         enable_ssl                = true
         enable_tailscale          = false
-        envs                      = {}
-        fqdn                      = can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : null
+        fqdn                      = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external : null
         github_repo               = null
-        group                     = can(service.dns_zone) ? "Services (${service.dns_zone})" : "Services (Uncategorized)"
+        group                     = "Services (${can(service.dns_zone) ? service.dns_zone : can(service.port) && can(service.server) ? can(service.internal) ? var.default.domain_internal : var.default.domain_external : "Uncategorized"})"
         icon                      = "homepage"
+        internal                  = false
         name                      = k
         platform                  = "docker"
-        port                      = null
         server                    = null
         server_enable_b2          = false
         server_enable_resend      = false
         server_enable_secret_hash = false
         service                   = null
-        url                       = can(service.dns_name) && can(service.dns_zone) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${service.dns_name}.${service.dns_zone}${try(service.port, null) != null ? ":${service.port}" : ""}/" : null
+        url                       = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external}${can(service.port) ? ":${service.port}" : ""}/" : null
         username                  = null
-        widget                    = {}
       },
       service
     )
@@ -74,7 +73,7 @@ locals {
     for k, service in local.merged_services : k => {
       password = random_password.database_service[k].result
     }
-    if service.enable_database
+    if service.enable_database_password
   }
 
   output_github = {

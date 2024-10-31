@@ -1,4 +1,4 @@
-%{ for server in servers ~}
+%{ for k, server in servers ~}
 %{ if contains(server.flags, "homepage") ~}
 - ${server.description} (${servers[server.location].description}):
 %{ if contains(server.flags, "caddy") ~}
@@ -10,7 +10,7 @@
       icon: openspeedtest
 %{ endif ~}
 %{ for service in services ~}
-%{ if service.enable_homepage_widget == false && service.fqdn != null && service.server == server.host ~}
+%{ if service.enable_homepage_widget == false && service.fqdn != null && service.server == k ~}
   - ${replace(service.description, " (${server.description})", "")}:
     - href: ${service.url}
       icon: ${service.icon}

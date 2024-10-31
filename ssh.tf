@@ -5,7 +5,7 @@ resource "ssh_resource" "router" {
   }
 
   agent = true
-  host  = each.value.host
+  host  = each.key
   port  = each.value.ssh_port
   user  = each.value.ssh_user
 

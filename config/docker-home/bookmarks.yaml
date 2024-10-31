@@ -1,9 +1,9 @@
 - Mini (AU):
   - OpenSpeedTest (External):
-    - href: https://speedtest.mini.excloo.net
+    - href: https://speedtest.mini.au.excloo.net
       icon: openspeedtest
   - OpenSpeedTest (Internal):
-    - href: https://speedtest.mini.excloo.org
+    - href: https://speedtest.mini.au.excloo.org
       icon: openspeedtest
   - Excloo Books:
     - href: https://books.excloo.com/
@@ -25,10 +25,10 @@
       icon: syncthing
 - Oracle (AU):
   - OpenSpeedTest (External):
-    - href: https://speedtest.oracle.excloo.net
+    - href: https://speedtest.oracle.au.excloo.net
       icon: openspeedtest
   - OpenSpeedTest (Internal):
-    - href: https://speedtest.oracle.excloo.org
+    - href: https://speedtest.oracle.au.excloo.org
       icon: openspeedtest
   - Excloo N8N:
     - href: https://n8n.excloo.com/
@@ -52,9 +52,6 @@
     - href: https://syncthing.oracle.excloo.org/
       icon: syncthing
 - Pie (AU):
-  - Proxmox:
-    - href: https://pie.excloo.org:8006/
-      icon: proxmox
 - Pie TrueNAS (AU):
   - CubeBackup:
     - href: http://cubebackup.excloo.org:8888/
@@ -62,9 +59,6 @@
   - Homebridge:
     - href: http://homebridge.excloo.org:8581/
       icon: homebridge
-  - TrueNAS:
-    - href: https://pie-truenas.excloo.org/
-      icon: truenas
   - File Browser:
     - href: https://pie-truenas.excloo.org:30051/
       icon: filebrowser
@@ -72,9 +66,6 @@
     - href: http://pie-truenas.excloo.org:20910/
       icon: syncthing
 - Kimbap (KR):
-  - TrueNAS:
-    - href: https://kimbap.excloo.org/
-      icon: truenas
   - File Browser:
     - href: https://kimbap.excloo.org:30051/
       icon: filebrowser

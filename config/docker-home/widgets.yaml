@@ -1,20 +1,20 @@
 - glances:
     label: Mini (AU)
     uptime: true
-    url: http://mini.excloo.org:61208
+    url: http://mini.au.excloo.org:61208
     version: 4
 - glances:
     label: Oracle (AU)
     uptime: true
-    url: http://oracle.excloo.org:61208
+    url: http://oracle.au.excloo.org:61208
     version: 4
 - glances:
     label: Pie TrueNAS (AU)
     uptime: true
-    url: http://pie-truenas.excloo.org:61208
+    url: http://truenas.pie.au.excloo.org:61208
     version: 4
 - glances:
     label: Kimbap (KR)
     uptime: true
-    url: http://kimbap.excloo.org:61208
+    url: http://kimbap.kr.excloo.org:61208
     version: 4

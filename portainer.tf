@@ -36,12 +36,11 @@ resource "restapi_object" "portainer_stack" {
           SERVER_EMAIL           = var.default.email
           SERVER_FQDN_EXTERNAL   = var.servers[each.value.server].fqdn_external
           SERVER_FQDN_INTERNAL   = var.servers[each.value.server].fqdn_internal
-          SERVER_HOST            = var.servers[each.value.server].host
+          SERVER_HOST            = each.value.server
           SERVER_TIMEZONE        = var.default.timezone
           SERVICE_NAME           = each.key
           SERVICE_SERVICE        = each.value.service
         },
-        each.value.envs,
         each.value.server_enable_b2 ? sensitive({
           SERVER_B2_BUCKET_APPLICATION_KEY    = var.servers[each.value.server].b2.application_key
           SERVER_B2_BUCKET_APPLICATION_SECRET = var.servers[each.value.server].b2.application_secret
@@ -60,7 +59,7 @@ resource "restapi_object" "portainer_stack" {
           SERVICE_B2_BUCKET_BUCKET_NAME        = local.output_b2[each.value.name].bucket_name
           SERVICE_B2_BUCKET_ENDPOINT           = local.output_b2[each.value.name].endpoint
         }) : {},
-        each.value.enable_database ? sensitive({
+        each.value.enable_database_password ? sensitive({
           SERVICE_DATABASE_PASSWORD = local.output_databases[each.value.name].password
         }) : {},
         each.value.enable_github_deploy_key ? sensitive({

@@ -5,7 +5,7 @@ data "onepassword_vault" "services" {
 resource "onepassword_item" "service" {
   for_each = {
     for k, service in local.merged_services : k => service
-    if service.fqdn != null
+    if service.enable_password || service.enable_b2 || service.enable_database_password || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.username != null
   }
 
   category = "login"
@@ -56,7 +56,7 @@ resource "onepassword_item" "service" {
   }
 
   dynamic "section" {
-    for_each = each.value.enable_database ? [true] : []
+    for_each = each.value.enable_database_password ? [true] : []
 
     content {
       label = "Database"
