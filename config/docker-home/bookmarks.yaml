@@ -21,7 +21,7 @@
     - href: https://portainer.excloo.org/
       icon: portainer
   - Syncthing:
-    - href: http://mini.excloo.org:8384/
+    - href: http://mini.au.excloo.org:8384/
       icon: syncthing
 - Oracle (AU):
   - OpenSpeedTest (External):
@@ -54,23 +54,23 @@
 - Pie (AU):
 - Pie TrueNAS (AU):
   - CubeBackup:
-    - href: http://cubebackup.excloo.org:8888/
+    - href: http://truenas.pie.au.excloo.org:8888/
       icon: google
   - Homebridge:
-    - href: http://homebridge.excloo.org:8581/
+    - href: http://truenas.pie.au.excloo.org:8581/
       icon: homebridge
   - File Browser:
-    - href: https://pie-truenas.excloo.org:30051/
+    - href: https://truenas.pie.au.excloo.org:30051/
       icon: filebrowser
   - Syncthing:
-    - href: http://pie-truenas.excloo.org:20910/
+    - href: http://truenas.pie.au.excloo.org:20910/
       icon: syncthing
 - Kimbap (KR):
   - File Browser:
-    - href: https://kimbap.excloo.org:30051/
+    - href: https://kimbap.kr.excloo.org:30051/
       icon: filebrowser
   - Syncthing:
-    - href: http://kimbap.excloo.org:20910/
+    - href: http://kimbap.kr.excloo.org:20910/
       icon: syncthing
 - Cloud:
   - Excloo Uptime:

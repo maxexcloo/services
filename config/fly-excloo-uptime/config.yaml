@@ -68,7 +68,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "CubeBackup"
-    url: "http://cubebackup.excloo.org:8888/"
+    url: "http://truenas.pie.au.excloo.org:8888/"
   - alerts:
       - type: email
     conditions:
@@ -166,7 +166,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Homebridge"
-    url: "http://homebridge.excloo.org:8581/"
+    url: "http://truenas.pie.au.excloo.org:8581/"
   - alerts:
       - type: email
     conditions:
@@ -201,7 +201,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Syncthing (Mini)"
-    url: "http://mini.excloo.org:8384/"
+    url: "http://mini.au.excloo.org:8384/"
   - alerts:
       - type: email
     conditions:
@@ -210,7 +210,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "File Browser (Kimbap)"
-    url: "https://kimbap.excloo.org:30051/"
+    url: "https://kimbap.kr.excloo.org:30051/"
   - alerts:
       - type: email
     conditions:
@@ -219,7 +219,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "File Browser (Pie TrueNAS)"
-    url: "https://pie-truenas.excloo.org:30051/"
+    url: "https://truenas.pie.au.excloo.org:30051/"
   - alerts:
       - type: email
     conditions:
@@ -227,7 +227,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Syncthing (Kimbap)"
-    url: "http://kimbap.excloo.org:20910/"
+    url: "http://kimbap.kr.excloo.org:20910/"
   - alerts:
       - type: email
     conditions:
@@ -235,7 +235,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Syncthing (Pie TrueNAS)"
-    url: "http://pie-truenas.excloo.org:20910/"
+    url: "http://truenas.pie.au.excloo.org:20910/"
   - alerts:
       - type: email
     conditions:
