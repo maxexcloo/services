@@ -3,10 +3,7 @@ data "onepassword_vault" "services" {
 }
 
 resource "onepassword_item" "service" {
-  for_each = {
-    for k, service in local.merged_services : k => service
-    if service.enable_password || service.enable_b2 || service.enable_database_password || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.username != null
-  }
+  for_each = local.filtered_services_onepassword
 
   category = "login"
   title    = each.value.description

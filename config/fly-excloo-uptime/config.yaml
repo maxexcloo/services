@@ -22,6 +22,14 @@ endpoints:
   - alerts:
       - type: email
     conditions:
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (Servers)"
+    name: "OpenWRT (au)"
+    url: "http://au.excloo.org:81"
+  - alerts:
+      - type: email
+    conditions:
       - "[CONNECTED] == true"
     group: "Servers"
     name: "au-mini"
@@ -43,10 +51,28 @@ endpoints:
   - alerts:
       - type: email
     conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (Servers)"
+    name: "Proxmox (au-pie)"
+    url: "https://pie.au.excloo.org:8006"
+  - alerts:
+      - type: email
+    conditions:
       - "[CONNECTED] == true"
     group: "Servers (VMs)"
     name: "au-pie-truenas"
     url: "icmp://au-pie-truenas"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (Servers)"
+    name: "TrueNAS (au-pie-truenas)"
+    url: "https://truenas.pie.au.excloo.org:8443"
   - alerts:
       - type: email
     conditions:
@@ -57,10 +83,27 @@ endpoints:
   - alerts:
       - type: email
     conditions:
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (Servers)"
+    name: "OpenWRT (kr)"
+    url: "http://kr.excloo.org:81"
+  - alerts:
+      - type: email
+    conditions:
       - "[CONNECTED] == true"
     group: "Servers"
     name: "kr-kimbap"
     url: "icmp://kr-kimbap"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (Servers)"
+    name: "TrueNAS (kr-kimbap)"
+    url: "https://kimbap.kr.excloo.org:8443"
   - alerts:
       - type: email
     conditions:

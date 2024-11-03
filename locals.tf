@@ -23,6 +23,11 @@ locals {
     ]...
   )
 
+  filtered_services_onepassword = {
+    for k, service in local.merged_services : k => service
+    if service.enable_password || service.enable_b2 || service.enable_database_password || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.username != null
+  }
+
   merged_services = {
     for k, service in var.services : k => merge(
       {

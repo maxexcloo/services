@@ -20,6 +20,19 @@ endpoints:
     group: "${tags[server.tag].description}"
     name: "${k}"
     url: "icmp://${k}"
+%{ if server.service.enable_service ~}
+  - alerts:
+      - type: email
+    conditions:
+%{ if server.service.enable_ssl ~}
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+%{ endif ~}
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (Servers)"
+    name: "${server.service.description} (${k})"
+    url: "${server.service.enable_ssl ? "https://" : "http://"}${server.fqdn_internal}${server.service.port == 80 || server.service.port == 443 ? "" : ":${server.service.port}"}"
+%{ endif ~}
 %{ endfor ~}
 %{ for service in services ~}
 %{ if service.fqdn != null ~}
