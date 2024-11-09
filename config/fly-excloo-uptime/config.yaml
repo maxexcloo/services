@@ -192,7 +192,7 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
-    name: "Home"
+    name: "Excloo Home"
     url: "https://home.excloo.org/"
   - alerts:
       - type: email
