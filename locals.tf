@@ -3,7 +3,12 @@ locals {
     for k, endpoint in jsondecode(data.http.portainer_endpoints.response_body) : endpoint["Name"] => endpoint
   }
 
-  filtered_portainer_stacks = merge(
+  filtered_services_onepassword = {
+    for k, service in local.merged_services : k => service
+    if service.enable_password || service.enable_b2 || service.enable_database_password || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.username != null
+  }
+
+  merged_portainer_stacks = merge(
     [
       for k, service in local.merged_services : (
         service.server != null ? (
@@ -23,22 +28,17 @@ locals {
     ]...
   )
 
-  filtered_services_onepassword = {
-    for k, service in local.merged_services : k => service
-    if service.enable_password || service.enable_b2 || service.enable_database_password || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.username != null
-  }
-
   merged_services = {
     for k, service in var.services : k => merge(
       {
         description               = title(replace(k, "-", " "))
-        dns_content               = can(service.dns_content) ? service.dns_content : can(service.server) ? can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external : null
-        dns_zone                  = can(service.dns_zone) ? service.dns_zone : can(service.server) ? can(service.internal) ? var.default.domain_internal : var.default.domain_external : null
+        dns_content               = try(service.dns_content, can(service.server) ? can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external : null)
+        dns_zone                  = try(service.dns_zone, can(service.server) ? can(service.internal) ? var.default.domain_internal : var.default.domain_external : null)
         enable_b2                 = false
         enable_caddy_check        = false
         enable_database_password  = false
         enable_dns                = can(service.dns_name) && can(service.dns_zone)
-        enable_dns_proxy               = false
+        enable_dns_proxy          = false
         enable_github_deploy_key  = false
         enable_homepage_widget    = false
         enable_password           = false
@@ -48,7 +48,7 @@ locals {
         enable_tailscale          = false
         fqdn                      = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external : null
         github_repo               = null
-        group                     = "Services (${can(service.dns_zone) ? service.dns_zone : can(service.port) && can(service.server) ? can(service.internal) ? var.default.domain_internal : var.default.domain_external : "Uncategorized"})"
+        group                     = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? can(service.internal) ? var.default.domain_internal : var.default.domain_external : "Uncategorized")})"
         icon                      = "homepage"
         internal                  = false
         name                      = k

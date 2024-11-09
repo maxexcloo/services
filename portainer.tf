@@ -7,7 +7,7 @@ data "http" "portainer_endpoints" {
 }
 
 resource "restapi_object" "portainer_stack" {
-  for_each = local.filtered_portainer_stacks
+  for_each = local.merged_portainer_stacks
 
   create_path  = "/stacks/create/standalone/repository"
   path         = "/stacks"
