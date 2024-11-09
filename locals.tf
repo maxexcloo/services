@@ -33,12 +33,12 @@ locals {
       {
         description               = title(replace(k, "-", " "))
         dns_content               = can(service.dns_content) ? service.dns_content : can(service.server) ? can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external : null
-        dns_proxied               = false
         dns_zone                  = can(service.dns_zone) ? service.dns_zone : can(service.server) ? can(service.internal) ? var.default.domain_internal : var.default.domain_external : null
         enable_b2                 = false
         enable_caddy_check        = false
         enable_database_password  = false
         enable_dns                = can(service.dns_name) && can(service.dns_zone)
+        enable_dns_proxy               = false
         enable_github_deploy_key  = false
         enable_homepage_widget    = false
         enable_password           = false
