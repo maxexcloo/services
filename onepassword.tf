@@ -28,14 +28,14 @@ resource "onepassword_item" "service" {
 
       field {
         label = "Application Key"
-        type  = "STRING"
+        type  = "CONCEALED"
         value = local.output_b2[each.key].application_key
       }
 
       field {
-        label = "Application Secret"
-        type  = "CONCEALED"
-        value = local.output_b2[each.key].application_secret
+        label = "Application Key ID"
+        type  = "STRING"
+        value = local.output_b2[each.key].application_key_id
       }
 
       field {
@@ -61,7 +61,7 @@ resource "onepassword_item" "service" {
       field {
         label = "Password"
         type  = "CONCEALED"
-        value = local.output_databases[each.key].password
+        value = local.output_database_passwords[each.key]
       }
     }
   }
@@ -75,7 +75,7 @@ resource "onepassword_item" "service" {
       field {
         label = "API Key"
         type  = "CONCEALED"
-        value = local.output_resend[each.key].api_key
+        value = local.output_resend_api_keys[each.key]
       }
     }
   }
@@ -89,7 +89,7 @@ resource "onepassword_item" "service" {
       field {
         label = "Secret Hash"
         type  = "CONCEALED"
-        value = local.output_secret_hashes[each.key].secret_hash
+        value = local.output_secret_hashes[each.key]
       }
     }
   }
@@ -103,7 +103,7 @@ resource "onepassword_item" "service" {
       field {
         label = "Tailnet Key"
         type  = "CONCEALED"
-        value = local.output_tailscale[each.key].tailnet_key
+        value = local.output_tailscale_tailnet_keys[each.key]
       }
     }
   }

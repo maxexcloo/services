@@ -1,12 +1,9 @@
 data "b2_account_info" "default" {}
 
 resource "b2_application_key" "service" {
-  for_each = {
-    for k, service in local.merged_services : k => service
-    if service.enable_b2
-  }
+  for_each = b2_bucket.service
 
-  bucket_id = b2_bucket.service[each.key].id
+  bucket_id = each.value.id
   key_name  = each.key
 
   capabilities = [

@@ -33,6 +33,7 @@ locals {
       {
         description               = title(replace(k, "-", " "))
         dns_content               = can(service.dns_content) ? service.dns_content : can(service.server) ? can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external : null
+        dns_proxied               = false
         dns_zone                  = can(service.dns_zone) ? service.dns_zone : can(service.server) ? can(service.internal) ? var.default.domain_internal : var.default.domain_external : null
         enable_b2                 = false
         enable_caddy_check        = false
@@ -65,48 +66,36 @@ locals {
   }
 
   output_b2 = {
-    for k, service in local.merged_services : k => {
-      application_key    = b2_application_key.service[k].application_key_id
-      application_secret = b2_application_key.service[k].application_key
-      bucket_name        = b2_bucket.service[k].bucket_name
+    for k, b2_bucket in b2_bucket.service : k => {
+      application_key    = b2_application_key.service[k].application_key
+      application_key_id = b2_application_key.service[k].application_key_id
+      bucket_name        = b2_bucket.bucket_name
       endpoint           = replace(data.b2_account_info.default.s3_api_url, "https://", "")
     }
-    if service.enable_b2
   }
 
-  output_databases = {
-    for k, service in local.merged_services : k => {
-      password = random_password.database_service[k].result
-    }
-    if service.enable_database_password
+  output_database_passwords = {
+    for k, random_password in random_password.database_service : k => random_password.result
   }
 
   output_github = {
-    for k, service in local.merged_services : k => {
-      deploy_private_key = tls_private_key.github_deploy_key_service[k].private_key_openssh
-      deploy_public_key  = tls_private_key.github_deploy_key_service[k].public_key_openssh
+    for k, tls_private_key in tls_private_key.github_deploy_key_service : k => {
+      deploy_private_key = tls_private_key.private_key_openssh
+      deploy_public_key  = tls_private_key.public_key_openssh
       path               = "config/${k}"
-      url                = "git@github.com:${data.github_user.default.username}/${service.github_repo}.git"
+      url                = "git@github.com:${data.github_user.default.username}/${local.merged_services[k].github_repo}.git"
     }
-    if service.enable_github_deploy_key
   }
 
-  output_resend = {
-    for k, restapi_object in restapi_object.resend_api_key_service : k => {
-      api_key = jsondecode(restapi_object.create_response).token
-    }
+  output_resend_api_keys = {
+    for k, restapi_object in restapi_object.resend_api_key_service : k => jsondecode(restapi_object.create_response).token
   }
 
   output_secret_hashes = {
-    for k, service in local.merged_services : k => {
-      secret_hash = random_password.secret_hash_service[k].result
-    }
-    if service.enable_secret_hash
+    for k, random_password in random_password.secret_hash_service : k => random_password.result
   }
 
-  output_tailscale = {
-    for k, tailscale_tailnet_key in tailscale_tailnet_key.service : k => {
-      tailnet_key = tailscale_tailnet_key.key
-    }
+  output_tailscale_tailnet_keys = {
+    for k, tailscale_tailnet_key in tailscale_tailnet_key.service : k => tailscale_tailnet_key.key
   }
 }

@@ -5,7 +5,7 @@ output "b2" {
 
 output "databases" {
   sensitive = true
-  value     = local.output_databases
+  value     = local.output_database_passwords
 }
 
 output "github" {
@@ -15,7 +15,7 @@ output "github" {
 
 output "resend" {
   sensitive = true
-  value     = local.output_resend
+  value     = local.output_resend_api_keys
 }
 
 output "services" {
@@ -28,9 +28,9 @@ output "secret_hashes" {
   value     = local.output_secret_hashes
 }
 
-output "tailscale" {
+output "tailscale_tailnet_keys" {
   sensitive = true
-  value     = local.output_tailscale
+  value     = local.output_tailscale_tailnet_keys
 }
 
 resource "local_file" "config_gatus" {

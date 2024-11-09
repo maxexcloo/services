@@ -22,14 +22,6 @@ endpoints:
   - alerts:
       - type: email
     conditions:
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (Servers)"
-    name: "OpenWRT (au)"
-    url: "http://au.excloo.org:81"
-  - alerts:
-      - type: email
-    conditions:
       - "[CONNECTED] == true"
     group: "Servers (Physical)"
     name: "au-mini"

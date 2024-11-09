@@ -24,9 +24,6 @@ terraform {
     restapi = {
       source = "mastercard/restapi"
     }
-    ssh = {
-      source = "loafoe/ssh"
-    }
     tailscale = {
       source = "tailscale/tailscale"
     }

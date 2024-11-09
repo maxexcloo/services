@@ -31,7 +31,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (Servers)"
     name: "${server.service.description} (${k})"
-    url: "${server.service.enable_ssl ? "https://" : "http://"}${server.fqdn_internal}${server.service.port == 80 || server.service.port == 443 ? "" : ":${server.service.port}"}"
+    url: "${server.service.url}"
 %{ endif ~}
 %{ endfor ~}
 %{ for service in services ~}
