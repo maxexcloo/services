@@ -1,5 +1,6 @@
 %{ for k, server in servers ~}
 %{ if contains(server.flags, "homepage") ~}
+%{ if contains(server.flags, "caddy") || length([for service in services: service if service.enable_homepage_widget == false && service.fqdn != null && service.server == k]) > 0 ~}
 - ${server.description} (${servers[server.location].description}):
 %{ if contains(server.flags, "caddy") ~}
   - OpenSpeedTest (External):
@@ -13,9 +14,10 @@
 %{ if service.enable_homepage_widget == false && service.fqdn != null && service.server == k ~}
   - ${replace(service.description, " (${server.description})", "")}:
     - href: ${service.url}
-      icon: ${service.icon}
+      icon: ${service.homepage_icon}
 %{ endif ~}
 %{ endfor ~}
+%{ endif ~}
 %{ endif ~}
 %{ endfor ~}
 - Cloud:
@@ -23,6 +25,6 @@
 %{ if service.enable_homepage_widget == false && service.fqdn != null && service.server == null ~}
   - ${service.description}:
     - href: ${service.url}
-      icon: ${service.icon}
+      icon: ${service.homepage_icon}
 %{ endif ~}
 %{ endfor ~}

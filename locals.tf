@@ -49,7 +49,8 @@ locals {
         fqdn                      = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external : null
         github_repo               = null
         group                     = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? can(service.internal) ? var.default.domain_internal : var.default.domain_external : "Uncategorized")})"
-        icon                      = "homepage"
+        homepage_icon             = "homepage"
+        homepage_widget           = {}
         internal                  = false
         name                      = k
         platform                  = "docker"

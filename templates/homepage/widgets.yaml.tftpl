@@ -3,7 +3,7 @@
 - glances:
     label: ${server.description} (${servers[server.location].description})
     uptime: true
-    url: http://${server.fqdn_internal}:61208
+    url: ${contains(server.flags, "caddy") ? "https://glances.${server.fqdn_internal}" : "http://${server.fqdn_internal}:61208"}
     version: 4
 %{ endif ~}
 %{ endfor ~}

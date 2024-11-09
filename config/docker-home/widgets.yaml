@@ -1,12 +1,12 @@
 - glances:
     label: Mini (AU)
     uptime: true
-    url: http://mini.au.excloo.org:61208
+    url: https://glances.mini.au.excloo.org
     version: 4
 - glances:
     label: Oracle (AU)
     uptime: true
-    url: http://oracle.au.excloo.org:61208
+    url: https://glances.oracle.au.excloo.org
     version: 4
 - glances:
     label: Pie TrueNAS (AU)
