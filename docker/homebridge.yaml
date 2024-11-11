@@ -1,5 +1,7 @@
 services:
   service:
+    environment:
+      DISABLE_AVAHI: 1
     image: homebridge/homebridge
     network_mode: host
     restart: unless-stopped
