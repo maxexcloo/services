@@ -48,7 +48,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (Servers)"
     name: "Proxmox (au-pie)"
-    url: "https://pie.au.excloo.org:8006"
+    url: "https://pie.au.excloo.org:8006/"
   - alerts:
       - type: email
     conditions:
@@ -64,7 +64,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (Servers)"
     name: "TrueNAS (au-pie-truenas)"
-    url: "https://truenas.pie.au.excloo.org:8443"
+    url: "https://truenas.pie.au.excloo.org:8443/"
   - alerts:
       - type: email
     conditions:
@@ -79,7 +79,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (Servers)"
     name: "OpenWRT (kr)"
-    url: "http://kr.excloo.org:81"
+    url: "http://kr.excloo.org:81/"
   - alerts:
       - type: email
     conditions:
@@ -95,7 +95,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (Servers)"
     name: "TrueNAS (kr-kimbap)"
-    url: "https://kimbap.kr.excloo.org:8443"
+    url: "https://kimbap.kr.excloo.org:8443/"
   - alerts:
       - type: email
     conditions:

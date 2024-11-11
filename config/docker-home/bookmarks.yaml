@@ -1,80 +1,102 @@
-- Mini (AU):
+- Cloud:
+  - Excloo GitHub Readme Stats:
+    - href: https://github-readme-stats.excloo.com/
+      icon: github-light
+  - Excloo Uptime:
+    - href: https://uptime.excloo.com/
+      icon: gatus
+- Kimbap (KR):
+  - File Browser (Kimbap):
+    - href: https://kimbap.kr.excloo.org:30051/
+      icon: filebrowser
   - OpenSpeedTest (External):
-    - href: https://speedtest.mini.au.excloo.net
+    - href: https://speedtest.kimbap.kr.excloo.net/
       icon: openspeedtest
   - OpenSpeedTest (Internal):
-    - href: https://speedtest.mini.au.excloo.org
+    - href: https://speedtest.kimbap.kr.excloo.org/
       icon: openspeedtest
+  - Syncthing (Kimbap):
+    - href: http://kimbap.kr.excloo.org:20910/
+      icon: syncthing
+  - TrueNAS:
+    - href: https://kimbap.kr.excloo.org:8443/
+      icon: truenas
+- Mini (AU):
   - Excloo Books:
     - href: https://books.excloo.com/
       icon: calibre
   - Excloo Chat:
     - href: https://chat.excloo.com/
       icon: open-webui-light
-  - Excloo Photos:
-    - href: https://photos.excloo.com/
-      icon: immich
   - Excloo Home:
     - href: https://home.excloo.org/
       icon: homepage
+  - Excloo Photos:
+    - href: https://photos.excloo.com/
+      icon: immich
+  - OpenSpeedTest (External):
+    - href: https://speedtest.mini.au.excloo.net/
+      icon: openspeedtest
+  - OpenSpeedTest (Internal):
+    - href: https://speedtest.mini.au.excloo.org/
+      icon: openspeedtest
   - Portainer:
     - href: https://portainer.excloo.org/
       icon: portainer
-  - Syncthing:
+  - Syncthing (Mini):
     - href: http://mini.au.excloo.org:8384/
       icon: syncthing
 - Oracle (AU):
-  - OpenSpeedTest (External):
-    - href: https://speedtest.oracle.au.excloo.net
-      icon: openspeedtest
-  - OpenSpeedTest (Internal):
-    - href: https://speedtest.oracle.au.excloo.org
-      icon: openspeedtest
   - Excloo N8N:
     - href: https://n8n.excloo.com/
       icon: n8n
   - Excloo NocoDB:
     - href: https://nocodb.excloo.com/
       icon: nocodb
+  - Excloo RSSHub:
+    - href: https://rsshub.excloo.com/
+      icon: rsshub
   - Excloo Reader:
     - href: https://reader.excloo.com/
       icon: commafeed
   - Excloo Reddit:
     - href: https://reddit.excloo.com/
       icon: libreddit
-  - Excloo RSSHub:
-    - href: https://rsshub.excloo.com/
-      icon: rsshub
   - Excloo Tools:
     - href: https://tools.excloo.com/
       icon: cyberchef
-  - Syncthing:
+  - OpenSpeedTest (External):
+    - href: https://speedtest.oracle.au.excloo.net/
+      icon: openspeedtest
+  - OpenSpeedTest (Internal):
+    - href: https://speedtest.oracle.au.excloo.org/
+      icon: openspeedtest
+  - Syncthing (Oracle):
     - href: https://syncthing.oracle.excloo.org/
       icon: syncthing
+- Pie (AU):
+  - Proxmox:
+    - href: https://pie.au.excloo.org:8006/
+      icon: proxmox
 - Pie TrueNAS (AU):
   - CubeBackup:
     - href: http://truenas.pie.au.excloo.org:8888/
       icon: google
+  - File Browser (Pie TrueNAS):
+    - href: https://truenas.pie.au.excloo.org:30051/
+      icon: filebrowser
   - Homebridge:
     - href: http://truenas.pie.au.excloo.org:8581/
       icon: homebridge
-  - File Browser:
-    - href: https://truenas.pie.au.excloo.org:30051/
-      icon: filebrowser
-  - Syncthing:
+  - OpenSpeedTest (External):
+    - href: https://speedtest.truenas.pie.au.excloo.net/
+      icon: openspeedtest
+  - OpenSpeedTest (Internal):
+    - href: https://speedtest.truenas.pie.au.excloo.org/
+      icon: openspeedtest
+  - Syncthing (Pie TrueNAS):
     - href: http://truenas.pie.au.excloo.org:20910/
       icon: syncthing
-- Kimbap (KR):
-  - File Browser:
-    - href: https://kimbap.kr.excloo.org:30051/
-      icon: filebrowser
-  - Syncthing:
-    - href: http://kimbap.kr.excloo.org:20910/
-      icon: syncthing
-- Cloud:
-  - Excloo Uptime:
-    - href: https://uptime.excloo.com/
-      icon: gatus
-  - Excloo GitHub Readme Stats:
-    - href: https://github-readme-stats.excloo.com/
-      icon: github-light
+  - TrueNAS:
+    - href: https://truenas.pie.au.excloo.org:8443/
+      icon: truenas

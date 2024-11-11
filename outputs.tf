@@ -59,17 +59,8 @@ resource "local_file" "config_homepage_bookmarks" {
     if service.service == "homepage"
   }
 
+  content  = templatefile("templates/${each.value.service}/bookmarks.yaml.tftpl", { bookmarks = local.merged_homepage_bookmarks })
   filename = "config/${each.key}/bookmarks.yaml"
-
-  content = templatefile(
-    "templates/${each.value.service}/bookmarks.yaml.tftpl",
-    {
-      homepage = each.value
-      servers  = var.servers
-      services = local.merged_services
-      tags     = var.tags
-    }
-  )
 }
 
 resource "local_file" "config_homepage_docker" {
@@ -78,15 +69,8 @@ resource "local_file" "config_homepage_docker" {
     if service.service == "homepage"
   }
 
+  content  = templatefile("templates/${each.value.service}/docker.yaml.tftpl", {})
   filename = "config/${each.key}/docker.yaml"
-
-  content = templatefile(
-    "templates/${each.value.service}/docker.yaml.tftpl",
-    {
-      servers = var.servers
-      tags    = var.tags
-    }
-  )
 }
 
 resource "local_file" "config_homepage_kubernetes" {
@@ -95,15 +79,8 @@ resource "local_file" "config_homepage_kubernetes" {
     if service.service == "homepage"
   }
 
+  content  = templatefile("templates/${each.value.service}/kubernetes.yaml.tftpl", {})
   filename = "config/${each.key}/kubernetes.yaml"
-
-  content = templatefile(
-    "templates/${each.value.service}/kubernetes.yaml.tftpl",
-    {
-      servers = var.servers
-      tags    = var.tags
-    }
-  )
 }
 
 resource "local_file" "config_homepage_services" {
@@ -111,17 +88,9 @@ resource "local_file" "config_homepage_services" {
     for k, service in local.merged_services : k => service
     if service.service == "homepage"
   }
-  filename = "config/${each.key}/services.yaml"
 
-  content = templatefile(
-    "templates/${each.value.service}/services.yaml.tftpl",
-    {
-      homepage = each.value
-      servers  = var.servers
-      services = local.merged_services
-      tags     = var.tags
-    }
-  )
+  content  = templatefile("templates/${each.value.service}/services.yaml.tftpl", {})
+  filename = "config/${each.key}/services.yaml"
 }
 
 resource "local_file" "config_homepage_settings" {
@@ -140,13 +109,6 @@ resource "local_file" "config_homepage_widgets" {
     if service.service == "homepage"
   }
 
+  content  = templatefile("templates/${each.value.service}/widgets.yaml.tftpl", { widgets = local.merged_homepage_widgets })
   filename = "config/${each.key}/widgets.yaml"
-
-  content = templatefile(
-    "templates/${each.value.service}/widgets.yaml.tftpl",
-    {
-      servers = var.servers
-      tags    = var.tags
-    }
-  )
 }

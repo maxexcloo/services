@@ -1,9 +1,8 @@
-%{ for server in servers ~}
-%{ if contains(server.flags, "docker") ~}
-- glances:
-    label: ${server.description} (${servers[server.location].description})
-    uptime: true
-    url: ${contains(server.flags, "caddy") ? "https://glances.${server.fqdn_internal}" : "http://${server.fqdn_internal}:61208"}
-    version: 4
-%{ endif ~}
+%{ for server in widgets ~}
+%{ for widget, variables in server ~}
+- ${widget}:
+%{ for k, v in variables ~}
+    ${k}: ${v}
+%{ endfor ~}
+%{ endfor ~}
 %{ endfor ~}

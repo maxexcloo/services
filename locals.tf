@@ -8,6 +8,60 @@ locals {
     if service.enable_password || service.enable_b2 || service.enable_database_password || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.username != null
   }
 
+  merged_homepage_bookmarks = merge(
+    {
+      for k, server in var.servers : "${server.description} (${upper(server.location)})" => merge(
+        contains(server.flags, "docker") ? {
+          "OpenSpeedTest (External)" = {
+            href = "https://speedtest.${server.fqdn_external}/"
+            icon = "openspeedtest"
+          }
+          "OpenSpeedTest (Internal)" = {
+            href = "https://speedtest.${server.fqdn_internal}/"
+            icon = "openspeedtest"
+          }
+        } : {},
+        server.service.enable ? {
+          (server.service.description) = {
+            href = server.service.url
+            icon = server.service.icon
+          }
+        } : {},
+        {
+          for service in local.merged_services : service.description => {
+            href = service.url
+            icon = service.icon
+          }
+          if service.fqdn != null && service.server == k
+        }
+      )
+      if contains(server.flags, "homepage")
+    },
+    {
+      "Cloud" = {
+        for service in local.merged_services : service.description => {
+          href = service.url
+          icon = service.icon
+        }
+        if service.fqdn != null && service.server == null
+      }
+    }
+  )
+
+  merged_homepage_widgets = {
+    for k, server in var.servers : k => merge(
+      contains(server.flags, "docker") ? {
+        glances = {
+          label   = "${server.description} (${upper(server.location)})"
+          uptime  = true
+          url     = "https://glances.${server.fqdn_internal}"
+          version = 4
+        }
+      } : {}
+    )
+    if contains(server.flags, "homepage")
+  }
+
   merged_portainer_stacks = merge(
     [
       for k, service in local.merged_services : (
@@ -21,7 +75,7 @@ locals {
         :
         {
           for k, server in var.servers : "${service.name}-${k}" => merge(service, { server = k, server_id = local.filtered_portainer_endpoints[k]["Id"] })
-          if contains(keys(local.filtered_portainer_endpoints), k) && (contains(server.flags, "caddy") || contains(server.flags, "caddy") == service.enable_caddy_check)
+          if contains(keys(local.filtered_portainer_endpoints), k)
         }
       )
       if service.platform == "docker" && service.service != null
@@ -35,12 +89,10 @@ locals {
         dns_content               = try(service.dns_content, can(service.server) ? can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external : null)
         dns_zone                  = try(service.dns_zone, can(service.server) ? can(service.internal) ? var.default.domain_internal : var.default.domain_external : null)
         enable_b2                 = false
-        enable_caddy_check        = false
+        enable_cloudflare_proxy   = false
         enable_database_password  = false
         enable_dns                = can(service.dns_name) && can(service.dns_zone)
-        enable_dns_proxy          = false
         enable_github_deploy_key  = false
-        enable_homepage_widget    = false
         enable_password           = false
         enable_resend             = false
         enable_secret_hash        = false
@@ -49,8 +101,7 @@ locals {
         fqdn                      = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external : null
         github_repo               = null
         group                     = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? can(service.internal) ? var.default.domain_internal : var.default.domain_external : "Uncategorized")})"
-        homepage_icon             = "homepage"
-        homepage_widget           = {}
+        icon                      = "homepage"
         internal                  = false
         name                      = k
         platform                  = "docker"

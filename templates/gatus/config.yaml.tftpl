@@ -20,7 +20,7 @@ endpoints:
     group: "${tags[server.tag].description}"
     name: "${k}"
     url: "icmp://${k}"
-%{ if server.service.enable_service ~}
+%{ if server.service.enable ~}
   - alerts:
       - type: email
     conditions:
