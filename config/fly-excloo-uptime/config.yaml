@@ -99,11 +99,12 @@ endpoints:
   - alerts:
       - type: email
     conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "CubeBackup"
-    url: "http://truenas.pie.au.excloo.org:8888/"
+    url: "https://cubebackup.excloo.org/"
   - alerts:
       - type: email
     conditions:
@@ -197,11 +198,12 @@ endpoints:
   - alerts:
       - type: email
     conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Homebridge"
-    url: "http://truenas.pie.au.excloo.org:8581/"
+    url: "https://homebridge.excloo.org/"
   - alerts:
       - type: email
     conditions:

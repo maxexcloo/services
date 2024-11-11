@@ -80,13 +80,13 @@
       icon: proxmox
 - Pie TrueNAS (AU):
   - CubeBackup:
-    - href: http://truenas.pie.au.excloo.org:8888/
+    - href: https://cubebackup.excloo.org/
       icon: google
   - File Browser (Pie TrueNAS):
     - href: https://truenas.pie.au.excloo.org:30051/
       icon: filebrowser
   - Homebridge:
-    - href: http://truenas.pie.au.excloo.org:8581/
+    - href: https://homebridge.excloo.org/
       icon: homebridge
   - OpenSpeedTest (External):
     - href: https://speedtest.truenas.pie.au.excloo.net/

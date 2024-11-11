@@ -6,8 +6,10 @@ services:
   service:
     hostname: ${SERVER_HOST}
     image: cubebackup/workspace
-    ports:
-      - 8888:80
+    labels:
+      caddy: ${SERVICE_FQDN}
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams}}"
     restart: unless-stopped
     volumes:
       - /mnt/truenas/cubebackup/cfg:/opt/cubebackup/etc
