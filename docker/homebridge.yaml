@@ -3,7 +3,11 @@ services:
     image: homebridge/homebridge
     network_mode: host
     restart: unless-stopped
+    security_opt:
+      - apparmor:unconfined
     volumes:
+      - /var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket
+      - /var/run/dbus:/var/run/dbus
       - data:/homebridge
 volumes:
   data:
