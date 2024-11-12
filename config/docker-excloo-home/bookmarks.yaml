@@ -69,6 +69,10 @@
   - Proxmox:
     - href: https://pie.au.excloo.org:8006/
       icon: proxmox
+- Pie HAOS (AU):
+  - Home Assistant:
+    - href: http://haos.pie.au.excloo.org:8123/
+      icon: home-assistant
 - Pie TrueNAS (AU):
   - CubeBackup:
     - href: https://cubebackup.excloo.org/

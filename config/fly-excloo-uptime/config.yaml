@@ -54,6 +54,21 @@ endpoints:
     conditions:
       - "[CONNECTED] == true"
     group: "Servers (VMs)"
+    name: "au-pie-haos (Pie HAOS)"
+    url: "icmp://au-pie-haos"
+  - alerts:
+      - type: email
+    conditions:
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (Servers)"
+    name: "Home Assistant (au-pie-haos)"
+    url: "http://haos.pie.au.excloo.org:8123/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CONNECTED] == true"
+    group: "Servers (VMs)"
     name: "au-pie-truenas (Pie TrueNAS)"
     url: "icmp://au-pie-truenas"
   - alerts:
