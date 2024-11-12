@@ -18,7 +18,7 @@ locals {
           }
         } : {},
         contains(server.flags, "docker") ? {
-          "Speedtest (Internal)" = {
+          "Speedtest${!contains(server.flags, "cloudflare_proxy") ? " (Internal)" : ""}" = {
             href = "https://speedtest.${server.fqdn_internal}/"
             icon = "openspeedtest"
           }

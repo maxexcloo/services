@@ -6,13 +6,13 @@
     - href: https://uptime.excloo.com/
       icon: gatus
 - Kimbap TrueNAS (KR):
-  - File Browser (Kimbap):
+  - File Browser:
     - href: https://kimbap.kr.excloo.org:30051/
       icon: filebrowser
-  - Speedtest (Internal):
+  - Speedtest:
     - href: https://speedtest.kimbap.kr.excloo.org/
       icon: openspeedtest
-  - Syncthing (Kimbap):
+  - Syncthing:
     - href: http://kimbap.kr.excloo.org:20910/
       icon: syncthing
   - TrueNAS:
@@ -34,10 +34,10 @@
   - Portainer:
     - href: https://portainer.excloo.org/
       icon: portainer
-  - Speedtest (Internal):
+  - Speedtest:
     - href: https://speedtest.mini.au.excloo.org/
       icon: openspeedtest
-  - Syncthing (Mini):
+  - Syncthing:
     - href: http://mini.au.excloo.org:8384/
       icon: syncthing
 - Oracle (AU):
@@ -73,13 +73,13 @@
   - CubeBackup:
     - href: https://cubebackup.excloo.org/
       icon: google
-  - File Browser (Pie TrueNAS):
+  - File Browser:
     - href: https://truenas.pie.au.excloo.org:30051/
       icon: filebrowser
-  - Speedtest (Internal):
+  - Speedtest:
     - href: https://speedtest.truenas.pie.au.excloo.org/
       icon: openspeedtest
-  - Syncthing (Pie TrueNAS):
+  - Syncthing:
     - href: http://truenas.pie.au.excloo.org:20910/
       icon: syncthing
   - TrueNAS:
