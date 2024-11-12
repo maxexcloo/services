@@ -11,12 +11,14 @@ locals {
   merged_homepage_bookmarks = merge(
     {
       for k, server in var.servers : "${server.description} (${upper(server.location)})" => merge(
-        contains(server.flags, "docker") ? {
-          "OpenSpeedTest (External)" = {
+        !contains(server.flags, "cloudflare_proxy") && contains(server.flags, "docker") ? {
+          "Speedtest (External)" = {
             href = "https://speedtest.${server.fqdn_external}/"
             icon = "openspeedtest"
           }
-          "OpenSpeedTest (Internal)" = {
+        } : {},
+        contains(server.flags, "docker") ? {
+          "Speedtest (Internal)" = {
             href = "https://speedtest.${server.fqdn_internal}/"
             icon = "openspeedtest"
           }
@@ -89,7 +91,6 @@ locals {
         dns_content               = try(service.dns_content, can(service.server) ? can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external : null)
         dns_zone                  = try(service.dns_zone, can(service.server) ? can(service.internal) ? var.default.domain_internal : var.default.domain_external : null)
         enable_b2                 = false
-        enable_cloudflare_proxy   = false
         enable_database_password  = false
         enable_dns                = can(service.dns_name) && can(service.dns_zone)
         enable_github_deploy_key  = false
@@ -106,9 +107,11 @@ locals {
         name                      = k
         platform                  = "docker"
         server                    = null
+        server_cloudflare_tunnel  = try(var.servers[service.server].cloudflare_tunnel, null)
         server_enable_b2          = false
         server_enable_resend      = false
         server_enable_secret_hash = false
+        server_flags              = try(var.servers[service.server].flags, [])
         service                   = null
         url                       = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external}${can(service.port) ? ":${service.port}" : ""}/" : null
         username                  = null

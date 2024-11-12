@@ -5,14 +5,11 @@
   - Excloo Uptime:
     - href: https://uptime.excloo.com/
       icon: gatus
-- Kimbap (KR):
+- Kimbap TrueNAS (KR):
   - File Browser (Kimbap):
     - href: https://kimbap.kr.excloo.org:30051/
       icon: filebrowser
-  - OpenSpeedTest (External):
-    - href: https://speedtest.kimbap.kr.excloo.net/
-      icon: openspeedtest
-  - OpenSpeedTest (Internal):
+  - Speedtest (Internal):
     - href: https://speedtest.kimbap.kr.excloo.org/
       icon: openspeedtest
   - Syncthing (Kimbap):
@@ -34,15 +31,12 @@
   - Excloo Photos:
     - href: https://photos.excloo.com/
       icon: immich
-  - OpenSpeedTest (External):
-    - href: https://speedtest.mini.au.excloo.net/
-      icon: openspeedtest
-  - OpenSpeedTest (Internal):
-    - href: https://speedtest.mini.au.excloo.org/
-      icon: openspeedtest
   - Portainer:
     - href: https://portainer.excloo.org/
       icon: portainer
+  - Speedtest (Internal):
+    - href: https://speedtest.mini.au.excloo.org/
+      icon: openspeedtest
   - Syncthing (Mini):
     - href: http://mini.au.excloo.org:8384/
       icon: syncthing
@@ -65,15 +59,12 @@
   - Excloo Tools:
     - href: https://tools.excloo.com/
       icon: cyberchef
-  - OpenSpeedTest (External):
+  - Speedtest (External):
     - href: https://speedtest.oracle.au.excloo.net/
       icon: openspeedtest
-  - OpenSpeedTest (Internal):
+  - Speedtest (Internal):
     - href: https://speedtest.oracle.au.excloo.org/
       icon: openspeedtest
-  - Syncthing (Oracle):
-    - href: https://syncthing.oracle.excloo.org/
-      icon: syncthing
 - Pie (AU):
   - Proxmox:
     - href: https://pie.au.excloo.org:8006/
@@ -85,13 +76,7 @@
   - File Browser (Pie TrueNAS):
     - href: https://truenas.pie.au.excloo.org:30051/
       icon: filebrowser
-  - Homebridge:
-    - href: https://homebridge.excloo.org/
-      icon: homebridge
-  - OpenSpeedTest (External):
-    - href: https://speedtest.truenas.pie.au.excloo.net/
-      icon: openspeedtest
-  - OpenSpeedTest (Internal):
+  - Speedtest (Internal):
     - href: https://speedtest.truenas.pie.au.excloo.org/
       icon: openspeedtest
   - Syncthing (Pie TrueNAS):
