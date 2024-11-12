@@ -45,7 +45,7 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "${service.group}"
-    name: "${service.description} (${can(service.server) ? service.server : service.platform})"
+    name: "${service.description} (${service.server != null ? service.server : service.platform})"
     url: "${service.url}"
 %{ endif ~}
 %{ endfor ~}

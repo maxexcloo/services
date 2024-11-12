@@ -17,28 +17,28 @@ endpoints:
     conditions:
       - "[CONNECTED] == true"
     group: "Routers"
-    name: "AU (au)"
+    name: "au (AU)"
     url: "icmp://au"
   - alerts:
       - type: email
     conditions:
       - "[CONNECTED] == true"
     group: "Servers (Physical)"
-    name: "Mini (au-mini)"
+    name: "au-mini (Mini)"
     url: "icmp://au-mini"
   - alerts:
       - type: email
     conditions:
       - "[CONNECTED] == true"
     group: "Servers (VMs)"
-    name: "Oracle (au-oracle)"
+    name: "au-oracle (Oracle)"
     url: "icmp://au-oracle"
   - alerts:
       - type: email
     conditions:
       - "[CONNECTED] == true"
     group: "Servers (Physical)"
-    name: "Pie (au-pie)"
+    name: "au-pie (Pie)"
     url: "icmp://au-pie"
   - alerts:
       - type: email
@@ -54,7 +54,7 @@ endpoints:
     conditions:
       - "[CONNECTED] == true"
     group: "Servers (VMs)"
-    name: "Pie TrueNAS (au-pie-truenas)"
+    name: "au-pie-truenas (Pie TrueNAS)"
     url: "icmp://au-pie-truenas"
   - alerts:
       - type: email
@@ -70,7 +70,7 @@ endpoints:
     conditions:
       - "[CONNECTED] == true"
     group: "Routers"
-    name: "KR (kr)"
+    name: "kr (KR)"
     url: "icmp://kr"
   - alerts:
       - type: email
@@ -85,7 +85,7 @@ endpoints:
     conditions:
       - "[CONNECTED] == true"
     group: "Servers (Physical)"
-    name: "Kimbap TrueNAS (kr-kimbap)"
+    name: "kr-kimbap (Kimbap TrueNAS)"
     url: "icmp://kr-kimbap"
   - alerts:
       - type: email
@@ -211,7 +211,7 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
-    name: "Excloo Uptime"
+    name: "Excloo Uptime (fly)"
     url: "https://uptime.excloo.com/"
   - alerts:
       - type: email
@@ -262,7 +262,7 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
-    name: "Excloo GitHub Readme Stats"
+    name: "Excloo GitHub Readme Stats (vercel)"
     url: "https://github-readme-stats.excloo.com/"
 ui:
   description: ""
