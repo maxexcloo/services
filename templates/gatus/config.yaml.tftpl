@@ -18,7 +18,7 @@ endpoints:
     conditions:
       - "[CONNECTED] == true"
     group: "${tags[server.tag].description}"
-    name: "${server.description} (${k})"
+    name: "${k} (${server.description})"
     url: "icmp://${k}"
 %{ if server.service.enable ~}
   - alerts:
@@ -45,7 +45,7 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "${service.group}"
-    name: "${service.description}${try(" (${service.server})", "")}"
+    name: "${service.description} (${can(service.server) ? service.server : service.platform})"
     url: "${service.url}"
 %{ endif ~}
 %{ endfor ~}
