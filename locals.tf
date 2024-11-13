@@ -88,8 +88,8 @@ locals {
     for k, service in var.services : k => merge(
       {
         description               = title(replace(k, "-", " "))
-        dns_content               = try(service.dns_content, can(service.server) ? can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external : null)
-        dns_zone                  = try(service.dns_zone, can(service.server) ? can(service.internal) ? var.default.domain_internal : var.default.domain_external : null)
+        dns_content               = try(service.dns_content, can(service.server) ? try(service.dns_zone, "") != var.default.domain_internal ? var.servers[service.server].fqdn_external : var.servers[service.server].fqdn_internal : null)
+        dns_zone                  = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null)
         enable_b2                 = false
         enable_database_password  = false
         enable_dns                = can(service.dns_name) && can(service.dns_zone)
@@ -99,9 +99,9 @@ locals {
         enable_secret_hash        = false
         enable_ssl                = true
         enable_tailscale          = false
-        fqdn                      = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external : null
+        fqdn                      = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal : null
         github_repo               = null
-        group                     = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? can(service.internal) ? var.default.domain_internal : var.default.domain_external : "Uncategorized")})"
+        group                     = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? var.default.domain_internal : "Uncategorized")})"
         icon                      = "homepage"
         internal                  = false
         name                      = k
@@ -113,7 +113,7 @@ locals {
         server_enable_secret_hash = false
         server_flags              = try(var.servers[service.server].flags, [])
         service                   = null
-        url                       = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : can(service.internal) ? var.servers[service.server].fqdn_internal : var.servers[service.server].fqdn_external}${can(service.port) ? ":${service.port}" : ""}/" : null
+        url                       = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal}${can(service.port) ? ":${service.port}" : ""}/" : null
         username                  = null
       },
       service

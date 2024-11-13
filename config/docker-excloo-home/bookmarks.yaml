@@ -20,16 +20,16 @@
       icon: truenas
 - Mini (AU):
   - Excloo Books:
-    - href: https://books.excloo.com/
+    - href: https://books.excloo.org/
       icon: calibre
   - Excloo Chat:
-    - href: https://chat.excloo.com/
+    - href: https://chat.excloo.org/
       icon: open-webui-light
   - Excloo Home:
     - href: https://home.excloo.org/
       icon: homepage
   - Excloo Photos:
-    - href: https://photos.excloo.com/
+    - href: https://photos.excloo.org/
       icon: immich
   - Portainer:
     - href: https://portainer.excloo.org/
@@ -45,10 +45,10 @@
     - href: https://n8n.excloo.com/
       icon: n8n
   - Excloo NocoDB:
-    - href: https://nocodb.excloo.com/
+    - href: https://nocodb.excloo.org/
       icon: nocodb
   - Excloo RSSHub:
-    - href: https://rsshub.excloo.com/
+    - href: https://rsshub.excloo.org/
       icon: rsshub
   - Excloo Reader:
     - href: https://reader.excloo.com/

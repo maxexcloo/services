@@ -127,18 +127,18 @@ endpoints:
       - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.com)"
+    group: "Services (excloo.org)"
     name: "Excloo Books (au-mini)"
-    url: "https://books.excloo.com/"
+    url: "https://books.excloo.org/"
   - alerts:
       - type: email
     conditions:
       - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.com)"
+    group: "Services (excloo.org)"
     name: "Excloo Chat (au-mini)"
-    url: "https://chat.excloo.com/"
+    url: "https://chat.excloo.org/"
   - alerts:
       - type: email
     conditions:
@@ -163,18 +163,18 @@ endpoints:
       - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.com)"
+    group: "Services (excloo.org)"
     name: "Excloo NocoDB (au-oracle)"
-    url: "https://nocodb.excloo.com/"
+    url: "https://nocodb.excloo.org/"
   - alerts:
       - type: email
     conditions:
       - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.com)"
+    group: "Services (excloo.org)"
     name: "Excloo Photos (au-mini)"
-    url: "https://photos.excloo.com/"
+    url: "https://photos.excloo.org/"
   - alerts:
       - type: email
     conditions:
@@ -199,9 +199,9 @@ endpoints:
       - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.com)"
+    group: "Services (excloo.org)"
     name: "Excloo RSSHub (au-oracle)"
-    url: "https://rsshub.excloo.com/"
+    url: "https://rsshub.excloo.org/"
   - alerts:
       - type: email
     conditions:

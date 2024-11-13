@@ -3,7 +3,6 @@ services:
     image: homebridge/homebridge
     labels:
       caddy: ${SERVICE_FQDN}
-      caddy.import: internal
       caddy.reverse_proxy: "{{upstreams 8581}}"
     network_mode: host
     restart: unless-stopped
