@@ -7,6 +7,7 @@ services:
     image: ghcr.io/open-webui/open-webui
     labels:
       caddy: ${SERVICE_FQDN}
+      caddy.import: ${SERVICE_INTERNAL}
       caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped
     volumes:

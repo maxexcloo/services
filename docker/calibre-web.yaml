@@ -11,6 +11,7 @@ services:
     image: linuxserver/calibre-web
     labels:
       caddy: ${SERVICE_FQDN}
+      caddy.import: ${SERVICE_INTERNAL}
       caddy.reverse_proxy: "{{upstreams 8083}}"
     restart: unless-stopped
     volumes:

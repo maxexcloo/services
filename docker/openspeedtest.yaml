@@ -13,5 +13,6 @@ services:
     image: openspeedtest/latest
     labels:
       caddy: speedtest.${SERVER_FQDN_INTERNAL}
+      caddy.import: ${SERVICE_INTERNAL}
       caddy.reverse_proxy: "{{upstreams 3000}}"
     restart: unless-stopped

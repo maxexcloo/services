@@ -8,6 +8,7 @@ services:
     image: cubebackup/workspace
     labels:
       caddy: ${SERVICE_FQDN}
+      caddy.import: ${SERVICE_INTERNAL}
       caddy.reverse_proxy: "{{upstreams}}"
     restart: unless-stopped
     volumes:

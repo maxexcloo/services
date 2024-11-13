@@ -26,6 +26,7 @@ services:
     image: n8nio/n8n
     labels:
       caddy: ${SERVICE_FQDN}
+      caddy.import: ${SERVICE_INTERNAL}
       caddy.reverse_proxy: "{{upstreams 5678}}"
     restart: unless-stopped
     volumes:
