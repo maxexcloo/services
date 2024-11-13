@@ -10,7 +10,7 @@ services:
     image: nicolargo/glances
     labels:
       caddy: glances.${SERVER_FQDN_INTERNAL}
-      caddy.import: ${SERVICE_INTERNAL}
+      caddy.import: ${SERVICE_ZONE}
       caddy.reverse_proxy: "{{upstreams 61208}}"
     pid: host
     ports:

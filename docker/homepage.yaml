@@ -31,7 +31,7 @@ services:
     image: ghcr.io/gethomepage/homepage
     labels:
       caddy: ${SERVICE_FQDN}
-      caddy.import: ${SERVICE_INTERNAL}
+      caddy.import: ${SERVICE_ZONE}
       caddy.reverse_proxy: "{{upstreams 3000}}"
     restart: unless-stopped
     volumes:

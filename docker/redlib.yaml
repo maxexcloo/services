@@ -11,6 +11,6 @@ services:
     image: quay.io/redlib/redlib
     labels:
       caddy: ${SERVICE_FQDN}
-      caddy.import: ${SERVICE_INTERNAL}
+      caddy.import: ${SERVICE_ZONE}
       caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped

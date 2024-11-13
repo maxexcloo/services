@@ -72,9 +72,6 @@ resource "restapi_object" "portainer_stack" {
           SERVICE_GITHUB_PATH = local.output_github[each.value.name].path
           SERVICE_GITHUB_URL  = local.output_github[each.value.name].url
         }) : {},
-        each.value.dns_zone == var.default.domain_internal && each.value.enable_dns ? {
-          SERVICE_INTERNAL = "internal"
-        } : {},
         each.value.enable_resend ? sensitive({
           SERVICE_RESEND_API_KEY = local.output_resend_api_keys[each.value.name]
         }) : {},
@@ -86,6 +83,9 @@ resource "restapi_object" "portainer_stack" {
         }) : {},
         each.value.url != null ? {
           SERVICE_URL = each.value.url
+        } : {},
+        each.value.enable_dns ? {
+          SERVICE_ZONE = each.value.dns_zone != var.default.domain_internal ? "external" : "internal"
         } : {}
       ) : { name = k, value = v }
     ],
