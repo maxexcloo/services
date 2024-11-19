@@ -132,7 +132,7 @@ locals {
   output_config = merge(
     {
       for k, service in local.merged_services : k => {
-        "/.config/glances/glances.conf" = templatefile("templates/${service.service}/glances.conf.tftpl", { password = local.output_secret_hashes[k] })
+        "/root/.config/glances/glances.conf" = templatefile("templates/${service.service}/glances.conf.tftpl", { password = local.output_secret_hashes[k] })
       }
       if service.enable_secret_hash && service.service == "glances"
     },

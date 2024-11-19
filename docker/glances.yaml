@@ -11,7 +11,7 @@ services:
       - data:/root/.config/glances
   service:
     environment:
-      GLANCES_OPT: -u ${SERVER_HOST} -w --username
+      GLANCES_OPT: -u ${SERVER_HOST} -w
     hostname: ${SERVER_HOST}
     image: nicolargo/glances
     labels:
