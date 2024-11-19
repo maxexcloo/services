@@ -54,10 +54,12 @@ locals {
     for k, server in var.servers : k => merge(
       contains(server.flags, "docker") ? {
         glances = {
-          label   = "${server.description} (${upper(server.location)})"
-          uptime  = true
-          url     = "https://glances.${server.fqdn_internal}"
-          version = 4
+          label    = "${server.description} (${upper(server.location)})"
+          password = local.output_secret_hashes["docker-glances"]
+          uptime   = true
+          url      = "https://glances.${server.fqdn_internal}"
+          username = k
+          version  = 4
         }
       } : {}
     )
@@ -87,20 +89,18 @@ locals {
   merged_services = {
     for k, service in var.services : k => merge(
       {
-        description               = title(replace(k, "-", " "))
+        description               = title(replace(replace(k, "${try(service.platform, "docker")}-", ""), "-", " "))
         dns_content               = try(service.dns_content, can(service.server) ? try(service.dns_zone, "") != var.default.domain_internal ? var.servers[service.server].fqdn_external : var.servers[service.server].fqdn_internal : null)
         dns_zone                  = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null)
         enable_b2                 = false
         enable_database_password  = false
         enable_dns                = can(service.dns_name) && can(service.dns_zone)
-        enable_github_deploy_key  = false
         enable_password           = false
         enable_resend             = false
         enable_secret_hash        = false
         enable_ssl                = true
         enable_tailscale          = false
         fqdn                      = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal : null
-        github_repo               = null
         group                     = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? var.default.domain_internal : "Uncategorized")})"
         icon                      = "homepage"
         internal                  = false
@@ -129,17 +129,22 @@ locals {
     }
   }
 
+  output_config = merge(
+    {
+      for k, service in local.merged_services : k => {
+        "/app/config/bookmarks.yaml"  = templatefile("templates/${service.service}/bookmarks.yaml.tftpl", { bookmarks = local.merged_homepage_bookmarks })
+        "/app/config/docker.yaml"     = templatefile("templates/${service.service}/docker.yaml.tftpl", {})
+        "/app/config/kubernetes.yaml" = templatefile("templates/${service.service}/kubernetes.yaml.tftpl", {})
+        "/app/config/services.yaml"   = templatefile("templates/${service.service}/services.yaml.tftpl", {})
+        "/app/config/settings.yaml"   = templatefile("templates/${service.service}/settings.yaml.tftpl", { homepage = service })
+        "/app/config/widgets.yaml"    = templatefile("templates/${service.service}/widgets.yaml.tftpl", { widgets = local.merged_homepage_widgets })
+      }
+      if service.service == "homepage"
+    }
+  )
+
   output_database_passwords = {
     for k, random_password in random_password.database_service : k => random_password.result
-  }
-
-  output_github = {
-    for k, tls_private_key in tls_private_key.github_deploy_key_service : k => {
-      deploy_private_key = tls_private_key.private_key_openssh
-      deploy_public_key  = tls_private_key.public_key_openssh
-      path               = "config/${k}"
-      url                = "git@github.com:${data.github_user.default.username}/${local.merged_services[k].github_repo}.git"
-    }
   }
 
   output_resend_api_keys = {

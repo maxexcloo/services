@@ -5,7 +5,7 @@ networks:
 services:
   service:
     environment:
-      GLANCES_OPT: -w
+      GLANCES_OPT: -w --password ${SERVICE_SECRET_HASH} --username ${SERVER_HOST}
     hostname: ${SERVER_HOST}
     image: nicolargo/glances
     labels:

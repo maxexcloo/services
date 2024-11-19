@@ -4,30 +4,15 @@ networks:
     name: docker
 services:
   config:
-    command: >
-      -c "
-        mkdir -p /root/.ssh &&
-        echo "${SERVICE_GITHUB_KEY}" | base64 -d > /root/.ssh/id_ed25519 &&
-        chmod 600 /root/.ssh/id_ed25519 &&
-        ssh-keyscan github.com >> /root/.ssh/known_hosts &&
-        git clone ${SERVICE_GITHUB_URL} /repo &&
-        cp -R /repo/${SERVICE_GITHUB_PATH}/* /data &&
-        touch /data/.config_ready &&
-        tail -f /dev/null
-      "
-    entrypoint: sh
-    healthcheck:
-      interval: 5s
-      retries: 12
-      test: ["CMD", "test", "-f", "/data/.config_ready"]
-      timeout: 5s
-    image: alpine/git
+    command: sh -c "for FILE in $$(env | grep '^SERVICE_CONFIG_.*_PATH=' | cut -d = -f 1); do mkdir -p /data/$${!FILE%/*}; echo \"$${!FILE%_PATH}_CONTENT\" | base64 -d > /data/$${!FILE}; done"
+    environment: true
+    image: alpine
     volumes:
-      - data:/data
+      - data:/app/config
   service:
     depends_on:
       config:
-        condition: service_healthy
+        condition: service_completed_successfully
     image: ghcr.io/gethomepage/homepage
     labels:
       caddy: ${SERVICE_FQDN}

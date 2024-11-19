@@ -30,14 +30,12 @@ resource "restapi_object" "portainer_stack" {
     Env = [
       for k, v in merge(
         {
-          SERVER_DOMAIN_EXTERNAL = var.default.domain_external
-          SERVER_DOMAIN_INTERNAL = var.default.domain_internal
-          SERVER_DOMAIN_ROOT     = var.default.domain_root
-          SERVER_EMAIL           = var.default.email
-          SERVER_FQDN_EXTERNAL   = var.servers[each.value.server].fqdn_external
-          SERVER_FQDN_INTERNAL   = var.servers[each.value.server].fqdn_internal
-          SERVER_HOST            = each.value.server
-          SERVER_TIMEZONE        = var.default.timezone
+          SERVER_DOMAIN_ROOT   = var.default.domain_root
+          SERVER_EMAIL         = var.default.email
+          SERVER_FQDN_EXTERNAL = var.servers[each.value.server].fqdn_external
+          SERVER_FQDN_INTERNAL = var.servers[each.value.server].fqdn_internal
+          SERVER_HOST          = each.value.server
+          SERVER_TIMEZONE      = var.default.timezone
         },
         each.value.server_enable_b2 ? sensitive({
           SERVER_B2_BUCKET_APPLICATION_KEY    = var.servers[each.value.server].b2.application_key
@@ -51,10 +49,14 @@ resource "restapi_object" "portainer_stack" {
         each.value.server_enable_secret_hash ? sensitive({
           SERVER_SECRET_HASH = var.servers[each.value.server].secret_hash
         }) : {},
-        {
-          SERVICE_NAME    = each.key
-          SERVICE_SERVICE = each.value.service
-        },
+        can(local.output_config[each.value.name]) ? sensitive(
+          merge([
+            for k, v in local.output_config[each.value.name] : {
+              "SERVICE_CONFIG_${index(keys(local.output_config[each.value.name]), k)}_CONTENT" = base64encode(v)
+              "SERVICE_CONFIG_${index(keys(local.output_config[each.value.name]), k)}_PATH"    = k
+            }
+          ]...)
+        ) : {},
         each.value.enable_b2 ? sensitive({
           SERVICE_B2_BUCKET_APPLICATION_KEY    = local.output_b2[each.value.name].application_key
           SERVICE_B2_BUCKET_APPLICATION_KEY_ID = local.output_b2[each.value.name].application_key_id
@@ -67,11 +69,6 @@ resource "restapi_object" "portainer_stack" {
         each.value.fqdn != null ? {
           SERVICE_FQDN = each.value.fqdn
         } : {},
-        each.value.enable_github_deploy_key ? sensitive({
-          SERVICE_GITHUB_KEY  = base64encode(local.output_github[each.value.name].deploy_private_key)
-          SERVICE_GITHUB_PATH = local.output_github[each.value.name].path
-          SERVICE_GITHUB_URL  = local.output_github[each.value.name].url
-        }) : {},
         each.value.enable_resend ? sensitive({
           SERVICE_RESEND_API_KEY = local.output_resend_api_keys[each.value.name]
         }) : {},
