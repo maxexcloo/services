@@ -58,7 +58,7 @@ locals {
           password = local.output_secret_hashes["docker-glances"]
           uptime   = true
           url      = "https://glances.${server.fqdn_internal}"
-          username = k
+          username = "glances"
           version  = 4
         }
       } : {}
@@ -132,7 +132,7 @@ locals {
   output_config = merge(
     {
       for k, service in local.merged_services : k => {
-        "/root/.config/glances/glances.conf" = templatefile("templates/${service.service}/glances.conf.tftpl", { password = local.output_secret_hashes[k] })
+        "/etc/glances/glances.conf" = templatefile("templates/${service.service}/glances.conf.tftpl", { password = local.output_secret_hashes[k] })
       }
       if service.enable_secret_hash && service.service == "glances"
     },

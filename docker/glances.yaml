@@ -8,7 +8,7 @@ services:
     env_file: ../stack.env
     image: bash
     volumes:
-      - data:/root/.config/glances
+      - data:/etc/glances
   service:
     environment:
       GLANCES_OPT: -w
@@ -23,7 +23,7 @@ services:
       - 61208:61208
     restart: unless-stopped
     volumes:
-      - data:/root/.config/glances
+      - data:/etc/glances
       - /etc/os-release:/etc/os-release:ro
       - /var/run/docker.sock:/var/run/docker.sock
 volumes:
