@@ -15,17 +15,17 @@ resource "restapi_object" "portainer_stack" {
   update_path  = "/stacks/{id}/git/redeploy"
   query_string = "endpointId=${each.value.server_id}"
 
-  data = jsonencode({
-    ComposeFile              = "docker/${each.value.service}.yaml",
-    Name                     = each.value.service,
-    RepositoryAuthentication = true,
-    RepositoryPassword       = var.terraform.portainer.github_token,
-    RepositoryURL            = data.github_repository.default.html_url,
+  data = nonsensitive(jsonencode({
+    ComposeFile              = "docker/${each.value.service}.yaml"
+    Name                     = each.value.service
+    RepositoryAuthentication = true
+    RepositoryPassword       = var.terraform.portainer.github_token
+    RepositoryURL            = data.github_repository.default.html_url
     RepositoryUsername       = data.github_user.default.username
 
     AutoUpdate = {
       Interval = "5m"
-    },
+    }
 
     Env = [
       for k, v in merge(
@@ -51,7 +51,7 @@ resource "restapi_object" "portainer_stack" {
         }) : {},
         merge([
           for k, v in try(local.output_config[each.value.name], {}) : sensitive({
-            "SERVICE_CONFIG_${index(keys(local.output_config[each.value.name]), k)}_CONTENT" = base64encode(v)
+            "SERVICE_CONFIG_${index(keys(local.output_config[each.value.name]), k)}_CONTENT" = base64gzip(v)
             "SERVICE_CONFIG_${index(keys(local.output_config[each.value.name]), k)}_PATH"    = k
           })
         ]...),
@@ -83,6 +83,6 @@ resource "restapi_object" "portainer_stack" {
           SERVICE_ZONE = each.value.dns_zone != var.default.domain_internal ? "external" : "internal"
         } : {}
       ) : { name = k, value = v }
-    ],
-  })
+    ]
+  }))
 }
