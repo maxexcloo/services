@@ -9,17 +9,17 @@ services:
     image: bash
     volumes:
       - data:/app/config
-  service:
-    depends_on:
-      config:
-        condition: service_completed_successfully
-    image: ghcr.io/gethomepage/homepage
-    labels:
-      caddy: ${SERVICE_FQDN}
-      caddy.import: ${SERVICE_ZONE}
-      caddy.reverse_proxy: "{{upstreams 3000}}"
-    restart: unless-stopped
-    volumes:
-      - data:/app/config
+  # service:
+  #   depends_on:
+  #     config:
+  #       condition: service_completed_successfully
+  #   image: ghcr.io/gethomepage/homepage
+  #   labels:
+  #     caddy: ${SERVICE_FQDN}
+  #     caddy.import: ${SERVICE_ZONE}
+  #     caddy.reverse_proxy: "{{upstreams 3000}}"
+  #   restart: unless-stopped
+  #   volumes:
+  #     - data:/app/config
 volumes:
   data:
