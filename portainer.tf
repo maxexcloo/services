@@ -49,14 +49,12 @@ resource "restapi_object" "portainer_stack" {
         each.value.server_enable_secret_hash ? sensitive({
           SERVER_SECRET_HASH = var.servers[each.value.server].secret_hash
         }) : {},
-        can(local.output_config[each.value.name]) ? sensitive(
-          merge([
-            for k, v in local.output_config[each.value.name] : {
-              "SERVICE_CONFIG_${index(keys(local.output_config[each.value.name]), k)}_CONTENT" = base64encode(v)
-              "SERVICE_CONFIG_${index(keys(local.output_config[each.value.name]), k)}_PATH"    = k
-            }
-          ]...)
-        ) : {},
+        merge([
+          for k, v in try(local.output_config[each.value.name], {}) : sensitive({
+            "SERVICE_CONFIG_${index(keys(local.output_config[each.value.name]), k)}_CONTENT" = base64encode(v)
+            "SERVICE_CONFIG_${index(keys(local.output_config[each.value.name]), k)}_PATH"    = k
+          })
+        ]...),
         each.value.enable_b2 ? sensitive({
           SERVICE_B2_BUCKET_APPLICATION_KEY    = local.output_b2[each.value.name].application_key
           SERVICE_B2_BUCKET_APPLICATION_KEY_ID = local.output_b2[each.value.name].application_key_id
