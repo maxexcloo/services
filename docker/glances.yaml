@@ -3,9 +3,15 @@ networks:
     external: true
     name: docker
 services:
+  config:
+    command: bash -c "for FILE in $$(env | grep '^SERVICE_CONFIG_.*_PATH=' | cut -d = -f 1); do mkdir -p /data/$$(dirname $${!FILE}); CONTENT_VAR="$${FILE%_PATH}_CONTENT"; echo \"$${!CONTENT_VAR}\" | base64 -d | gunzip > $${!FILE}; done"
+    env_file: ../stack.env
+    image: bash
+    volumes:
+      - data:/root/.config/glances
   service:
     environment:
-      GLANCES_OPT: -w --password ${SERVICE_SECRET_HASH} --username ${SERVER_HOST}
+      GLANCES_OPT: -u ${SERVER_HOST} -w --username
     hostname: ${SERVER_HOST}
     image: nicolargo/glances
     labels:
@@ -17,5 +23,8 @@ services:
       - 61208:61208
     restart: unless-stopped
     volumes:
+      - data:/root/.config/glances
       - /etc/os-release:/etc/os-release:ro
       - /var/run/docker.sock:/var/run/docker.sock
+volumes:
+  data:
