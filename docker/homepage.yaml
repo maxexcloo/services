@@ -4,22 +4,22 @@ networks:
     name: docker
 services:
   config:
-    command: bash -c "for FILE in $$(env | grep '^SERVICE_CONFIG_.*_PATH=' | cut -d = -f 1); do mkdir -p /data/$${!FILE%/*}; echo \"$${!FILE%_PATH}_CONTENT\" | base64 -d | gunzip > /data/$${!FILE}; done; sleep infinity"
+    command: bash -c "for FILE in $$(env | grep '^SERVICE_CONFIG_.*_PATH=' | cut -d = -f 1); do mkdir -p /data/$$(dirname $${!FILE}); CONTENT_VAR="$${FILE%_PATH}_CONTENT"; echo \"$${!CONTENT_VAR}\" | base64 -d | gunzip > /data/$${!FILE}; done"
     env_file: ../stack.env
     image: bash
     volumes:
       - data:/app/config
-  # service:
-  #   depends_on:
-  #     config:
-  #       condition: service_completed_successfully
-  #   image: ghcr.io/gethomepage/homepage
-  #   labels:
-  #     caddy: ${SERVICE_FQDN}
-  #     caddy.import: ${SERVICE_ZONE}
-  #     caddy.reverse_proxy: "{{upstreams 3000}}"
-  #   restart: unless-stopped
-  #   volumes:
-  #     - data:/app/config
+  service:
+    depends_on:
+      config:
+        condition: service_completed_successfully
+    image: ghcr.io/gethomepage/homepage
+    labels:
+      caddy: ${SERVICE_FQDN}
+      caddy.import: ${SERVICE_ZONE}
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+    restart: unless-stopped
+    volumes:
+      - data:/app/config
 volumes:
   data:
