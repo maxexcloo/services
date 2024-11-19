@@ -5,17 +5,7 @@ networks:
 services:
   config:
     command: sh -c 'for FILE in $$(env | grep "^SERVICE_CONFIG_.*_PATH=" | cut -d = -f 1); do eval "v=\$$$$FILE;c=\$${FILE%_PATH}_CONTENT"; mkdir -p /data/$${v%/*}; eval "echo \$$c" | base64 -d | gunzip > /data/$$v; done'
-    environment:
-      - SERVICE_CONFIG_1_CONTENT
-      - SERVICE_CONFIG_1_PATH
-      - SERVICE_CONFIG_2_CONTENT
-      - SERVICE_CONFIG_2_PATH
-      - SERVICE_CONFIG_3_CONTENT
-      - SERVICE_CONFIG_3_PATH
-      - SERVICE_CONFIG_4_CONTENT
-      - SERVICE_CONFIG_4_PATH
-      - SERVICE_CONFIG_5_CONTENT
-      - SERVICE_CONFIG_5_PATH
+    env_file: stack.env
     image: alpine
     volumes:
       - data:/app/config
