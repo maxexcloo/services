@@ -4,7 +4,7 @@ networks:
     name: docker
 services:
   config:
-    command: bash -c "for FILE in $$(env | grep '^SERVICE_CONFIG_.*_PATH=' | cut -d = -f 1); do mkdir -p /data/$${!FILE%/*}; echo \"$${!FILE%_PATH}_CONTENT\" | base64 -d | gunzip > /data/$${!FILE}; done"
+    command: bash -c "for FILE in $$(env | grep '^SERVICE_CONFIG_.*_PATH=' | cut -d = -f 1); do mkdir -p /data/$${!FILE%/*}; echo \"$${!FILE%_PATH}_CONTENT\" | base64 -d | gunzip > /data/$${!FILE}; done; sleep infinity"
     env_file: ../stack.env
     image: bash
     volumes:
