@@ -3,6 +3,18 @@ networks:
     external: true
     name: docker
 services:
+  cloudflare-warp:
+    image: caomingjun/warp
+    restart: unless-stopped
+    environment:
+      WARP_SLEEP: 2
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv4.conf.all.src_valid_mark=1
+    volumes:
+      - cloudflare-warp:/var/lib/cloudflare-warp
   service:
     environment:
       REDLIB_DEFAULT_HIDE_AWARDS: on
@@ -13,4 +25,7 @@ services:
       caddy: ${SERVICE_FQDN}
       caddy.import: ${SERVICE_ZONE}
       caddy.reverse_proxy: "{{upstreams 8080}}"
+    network_mode: service:cloudflare-warp
     restart: unless-stopped
+volumes:
+  cloudflare-warp:
