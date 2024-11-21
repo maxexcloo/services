@@ -24,7 +24,7 @@ services:
     labels:
       caddy: ${SERVICE_FQDN}
       caddy.import: ${SERVICE_ZONE}
-      caddy.reverse_proxy: "{{upstreams 8080}}"
+      caddy.reverse_proxy: "{{upstreams cloudflare-warp:8080}}"
     network_mode: service:cloudflare-warp
     restart: unless-stopped
 volumes:
