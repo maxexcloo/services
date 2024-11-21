@@ -6,8 +6,6 @@ services:
   cloudflare:
     cap_add:
       - NET_ADMIN
-    environment:
-      WARP_SLEEP: 2
     image: caomingjun/warp
     labels:
       caddy: ${SERVICE_FQDN}
@@ -21,7 +19,6 @@ services:
       - cloudflare:/var/lib/cloudflare-warp
   service:
     environment:
-      REDLIB_DEFAULT_HIDE_AWARDS: on
       REDLIB_DEFAULT_SUBSCRIPTIONS: kobo+ubiquiti+smarthome+homekit+games+trimui+homeassistant+apple+askanaustralian+ausfinance+aussiefrugal+australia+catastrophicfailure+datahoarder+emulation+emulationonandroid+flashlight+flipperzero+handhelds+hardware+homelab+homenetworking+internetisbeautiful+korea+linux+living_in_korea+minilab+minimalism+minipc+minipcs+miyoomini+movies+odinhandheld+outoftheloop+programmerhumor+retroarch+retroid+roms+sbcgaming+selfhosted+sideloaded+space+steamdeck+sydney+sysadmin+television+thatlookedexpensive+trance+travel
       REDLIB_ROBOTS_DISABLE_INDEXING: on
     image: quay.io/redlib/redlib
