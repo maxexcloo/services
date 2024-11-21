@@ -9,6 +9,10 @@ services:
     environment:
       WARP_SLEEP: 2
     image: caomingjun/warp
+    labels:
+      caddy: ${SERVICE_FQDN}
+      caddy.import: ${SERVICE_ZONE}
+      caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
@@ -21,10 +25,6 @@ services:
       REDLIB_DEFAULT_SUBSCRIPTIONS: kobo+ubiquiti+smarthome+homekit+games+trimui+homeassistant+apple+askanaustralian+ausfinance+aussiefrugal+australia+catastrophicfailure+datahoarder+emulation+emulationonandroid+flashlight+flipperzero+handhelds+hardware+homelab+homenetworking+internetisbeautiful+korea+linux+living_in_korea+minilab+minimalism+minipc+minipcs+miyoomini+movies+odinhandheld+outoftheloop+programmerhumor+retroarch+retroid+roms+sbcgaming+selfhosted+sideloaded+space+steamdeck+sydney+sysadmin+television+thatlookedexpensive+trance+travel
       REDLIB_ROBOTS_DISABLE_INDEXING: on
     image: quay.io/redlib/redlib
-    labels:
-      caddy: ${SERVICE_FQDN}
-      caddy.import: ${SERVICE_ZONE}
-      caddy.reverse_proxy: "{{upstreams cloudflare:8080}}"
     network_mode: service:cloudflare
     restart: unless-stopped
 volumes:
