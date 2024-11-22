@@ -22,6 +22,15 @@ endpoints:
   - alerts:
       - type: email
     conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (Servers)"
+    name: "UniFi (au)"
+    url: "https://au.excloo.org/"
+  - alerts:
+      - type: email
+    conditions:
       - "[CONNECTED] == true"
     group: "Servers (Physical)"
     name: "au-mini (Mini)"

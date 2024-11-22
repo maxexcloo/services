@@ -23,18 +23,18 @@ locals {
             icon = "openspeedtest"
           }
         } : {},
-        server.service.enable ? {
-          (server.service.description) = {
-            href = server.service.url
-            icon = server.service.icon
-          }
-        } : {},
         {
           for service in local.merged_services : service.description => {
             href = service.url
             icon = service.icon
           }
           if service.fqdn != null && service.server == k
+        },
+        {
+          for service in server.services : service.description => {
+            href = service.url
+            icon = service.icon
+          }
         }
       )
       if contains(server.flags, "homepage")
@@ -60,6 +60,14 @@ locals {
           url      = "https://glances.${server.fqdn_internal}"
           username = "glances"
           version  = 4
+        }
+      } : {},
+      contains(server.flags, "unifi") ? {
+        unifi_console = {
+          password = server.secret_hash
+          site     = server.description
+          url      = server.fqdn_internal
+          username = "Homepage"
         }
       } : {}
     )
