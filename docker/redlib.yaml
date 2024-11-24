@@ -15,8 +15,6 @@ services:
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
       - net.ipv6.conf.all.disable_ipv6=0
-    volumes:
-      - cloudflare:/var/lib/cloudflare-warp
   service:
     environment:
       REDLIB_DEFAULT_SUBSCRIPTIONS: kobo+ubiquiti+smarthome+homekit+games+trimui+homeassistant+apple+askanaustralian+ausfinance+aussiefrugal+australia+catastrophicfailure+datahoarder+emulation+emulationonandroid+flashlight+flipperzero+handhelds+hardware+homelab+homenetworking+internetisbeautiful+korea+linux+living_in_korea+minilab+minimalism+minipc+minipcs+miyoomini+movies+odinhandheld+outoftheloop+programmerhumor+retroarch+retroid+roms+sbcgaming+selfhosted+sideloaded+space+steamdeck+sydney+sysadmin+television+thatlookedexpensive+trance+travel
@@ -24,5 +22,3 @@ services:
     image: quay.io/redlib/redlib
     network_mode: service:cloudflare
     restart: unless-stopped
-volumes:
-  cloudflare:
