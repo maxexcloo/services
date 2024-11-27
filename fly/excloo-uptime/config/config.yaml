@@ -226,9 +226,9 @@ endpoints:
       - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.com)"
+    group: "Services (excloo.org)"
     name: "Excloo Tools (au-oracle)"
-    url: "https://tools.excloo.com/"
+    url: "https://tools.excloo.org/"
   - alerts:
       - type: email
     conditions:
