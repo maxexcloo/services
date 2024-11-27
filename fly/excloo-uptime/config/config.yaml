@@ -145,9 +145,9 @@ endpoints:
       - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.com)"
+    group: "Services (excloo.org)"
     name: "Excloo Convert (au-oracle)"
-    url: "https://convert.excloo.com/"
+    url: "https://convert.excloo.org/"
   - alerts:
       - type: email
     conditions:
@@ -175,6 +175,15 @@ endpoints:
     group: "Services (excloo.org)"
     name: "Excloo NocoDB (au-oracle)"
     url: "https://nocodb.excloo.org/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "Excloo PDF (au-oracle)"
+    url: "https://pdf.excloo.org/"
   - alerts:
       - type: email
     conditions:

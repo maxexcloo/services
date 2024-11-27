@@ -1,0 +1,25 @@
+networks:
+  default:
+    external: true
+    name: docker
+services:
+  service:
+    environment:
+      DOCKER_ENABLE_SECURITY: true
+      INSTALL_BOOK_AND_ADVANCED_HTML_OPS: true
+      LANGS: en_GB
+      SECURITY_ENABLE_LOGIN: true
+    image: stirlingtools/stirling-pdf
+    labels:
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+    restart: unless-stopped
+    volumes:
+      - customfiles:/customFiles
+      - data:/configs
+      - tessdata:/usr/share/tessdata
+volumes:
+  customfiles:
+  data:
+  tessdata:

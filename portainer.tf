@@ -14,7 +14,7 @@ resource "restapi_object" "portainer_stack" {
   provider     = restapi.portainer
   query_string = "endpointId=${each.value.server_id}"
 
-  data = nonsensitive(jsonencode({
+  data = jsonencode({
     name = each.value.service
 
     stackfilecontent = templatefile("docker/${each.value.service}.yaml.tftpl", {
@@ -27,5 +27,5 @@ resource "restapi_object" "portainer_stack" {
       service                = each.value
       tailscale_tailnet_keys = local.output_tailscale_tailnet_keys
     })
-  }))
+  })
 }
