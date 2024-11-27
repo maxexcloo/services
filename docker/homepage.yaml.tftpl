@@ -4,8 +4,7 @@ networks:
     name: docker
 services:
   config:
-    command: bash -c "for FILE in $$(env | grep '^SERVICE_CONFIG_.*_PATH=' | cut -d = -f 1); do mkdir -p /data/$$(dirname $${!FILE}); CONTENT_VAR="$${FILE%_PATH}_CONTENT"; echo \"$${!CONTENT_VAR}\" | base64 -d | gunzip > $${!FILE}; done"
-    env_file: ../stack.env
+    command: bash -c "${config_command}"
     image: bash
     volumes:
       - data:/app/config
@@ -15,8 +14,8 @@ services:
         condition: service_completed_successfully
     image: ghcr.io/gethomepage/homepage
     labels:
-      caddy: ${SERVICE_FQDN}
-      caddy.import: ${SERVICE_ZONE}
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 3000}}"
     restart: unless-stopped
     volumes:

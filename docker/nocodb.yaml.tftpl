@@ -5,7 +5,7 @@ networks:
 services:
   postgres:
     environment:
-      POSTGRES_PASSWORD: ${SERVICE_DATABASE_PASSWORD}
+      POSTGRES_PASSWORD: ${database_passwords[service.name]}
       POSTGRES_USER: nocodb
     image: postgres:16
     restart: unless-stopped
@@ -15,11 +15,11 @@ services:
     depends_on:
       - postgres
     environment:
-      NC_DB: pg://nocodb-postgres-1:5432?u=nocodb&p=${SERVICE_DATABASE_PASSWORD}&d=nocodb
+      NC_DB: pg://nocodb-postgres-1:5432?u=nocodb&p=${database_passwords[service.name]}&d=nocodb
     image: nocodb/nocodb
     labels:
-      caddy: ${SERVICE_FQDN}
-      caddy.import: ${SERVICE_ZONE}
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped
     volumes:

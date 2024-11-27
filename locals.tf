@@ -54,12 +54,10 @@ locals {
     for k, server in var.servers : k => merge(
       contains(server.flags, "docker") ? {
         glances = {
-          label    = "${server.description} (${upper(server.location)})"
-          password = local.output_secret_hashes["docker-glances"]
-          uptime   = true
-          url      = "https://glances.${server.fqdn_internal}"
-          username = "glances"
-          version  = 4
+          label   = "${server.description} (${upper(server.location)})"
+          uptime  = true
+          url     = "https://glances.${server.fqdn_internal}"
+          version = 4
         }
       } : {},
       contains(server.flags, "unifi") ? {
@@ -79,14 +77,14 @@ locals {
       for k, service in local.merged_services : (
         service.server != null ? (
           contains(keys(local.filtered_portainer_endpoints), service.server) ? {
-            (k) = merge(service, { server_id = local.filtered_portainer_endpoints[service.server]["Id"] })
+            (k) = merge(service, { server_id = local.filtered_portainer_endpoints[service.server]["Id"], zone = service.dns_zone != var.default.domain_internal ? "external" : "internal" })
           }
           :
           {}
         )
         :
         {
-          for k, server in var.servers : "${service.name}-${k}" => merge(service, { server = k, server_id = local.filtered_portainer_endpoints[k]["Id"] })
+          for k, server in var.servers : "${service.name}-${k}" => merge(service, { server = k, server_id = local.filtered_portainer_endpoints[k]["Id"], zone = service.dns_zone != var.default.domain_internal ? "external" : "internal" })
           if contains(keys(local.filtered_portainer_endpoints), k)
         }
       )

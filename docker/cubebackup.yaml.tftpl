@@ -4,11 +4,11 @@ networks:
     name: docker
 services:
   service:
-    hostname: ${SERVER_HOST}
+    hostname: ${service.server}
     image: cubebackup/workspace
     labels:
-      caddy: ${SERVICE_FQDN}
-      caddy.import: ${SERVICE_ZONE}
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams}}"
     restart: unless-stopped
     volumes:

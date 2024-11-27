@@ -6,7 +6,7 @@ services:
   service:
     image: diygod/rsshub:chromium-bundled
     labels:
-      caddy: ${SERVICE_FQDN}
-      caddy.import: ${SERVICE_ZONE}
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 1200}}"
     restart: unless-stopped

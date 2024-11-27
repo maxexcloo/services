@@ -5,18 +5,18 @@ networks:
 services:
   daily:
     environment:
-      AWS_ACCESS_KEY_ID: ${SERVER_B2_BUCKET_APPLICATION_KEY_ID}
-      AWS_ENDPOINT: ${SERVER_B2_BUCKET_ENDPOINT}
-      AWS_S3_BUCKET_NAME: ${SERVER_B2_BUCKET_BUCKET_NAME}
-      AWS_SECRET_ACCESS_KEY: ${SERVER_B2_BUCKET_APPLICATION_KEY}
+      AWS_ACCESS_KEY_ID: ${servers[service.server].b2.application_key_id}
+      AWS_ENDPOINT: ${servers[service.server].b2.endpoint}
+      AWS_S3_BUCKET_NAME: ${servers[service.server].b2.bucket_name}
+      AWS_SECRET_ACCESS_KEY: ${servers[service.server].b2.application_key}
       BACKUP_COMPRESSION: zst
       BACKUP_CRON_EXPRESSION: "@daily"
       BACKUP_EXCLUDE_REGEXP: '[a-f0-9]{64}\/|backingFsBlockDev$|immich_.*\/|metadata\.db$'
       BACKUP_FILENAME: docker-backup-daily-%Y-%m-%dT%H-%M-%S.tar.zst
       BACKUP_PRUNING_PREFIX: docker-backup-daily-
       BACKUP_RETENTION_DAYS: 7
-      GPG_PASSPHRASE: ${SERVER_SECRET_HASH}
-      NOTIFICATION_URLS: smtp://resend:${SERVER_RESEND_API_KEY}@smtp.resend.com:465/?fromAddress=${SERVER_EMAIL}&toAddresses=${SERVER_EMAIL}
+      GPG_PASSPHRASE: ${servers[service.server].secret_hash}
+      NOTIFICATION_URLS: smtp://resend:${servers[service.server].resend_api_key}@smtp.resend.com:465/?fromAddress=${default.email}&toAddresses=${default.email}
     image: offen/docker-volume-backup
     restart: unless-stopped
     volumes:
@@ -25,18 +25,18 @@ services:
       - /var/lib/docker/volumes:/backup:ro
   weekly:
     environment:
-      AWS_ACCESS_KEY_ID: ${SERVER_B2_BUCKET_APPLICATION_KEY_ID}
-      AWS_ENDPOINT: ${SERVER_B2_BUCKET_ENDPOINT}
-      AWS_S3_BUCKET_NAME: ${SERVER_B2_BUCKET_BUCKET_NAME}
-      AWS_SECRET_ACCESS_KEY: ${SERVER_B2_BUCKET_APPLICATION_KEY}
+      AWS_ACCESS_KEY_ID: ${servers[service.server].b2.application_key_id}
+      AWS_ENDPOINT: ${servers[service.server].b2.endpoint}
+      AWS_S3_BUCKET_NAME: ${servers[service.server].b2.bucket_name}
+      AWS_SECRET_ACCESS_KEY: ${servers[service.server].b2.application_key}
       BACKUP_COMPRESSION: zst
       BACKUP_CRON_EXPRESSION: "@weekly"
       BACKUP_EXCLUDE_REGEXP: '[a-f0-9]{64}\/|backingFsBlockDev$|immich_.*\/|metadata\.db$'
       BACKUP_FILENAME: docker-backup-weekly-%Y-%m-%dT%H-%M-%S.tar.zst
       BACKUP_PRUNING_PREFIX: docker-backup-weekly-
       BACKUP_RETENTION_DAYS: 31
-      GPG_PASSPHRASE: ${SERVER_SECRET_HASH}
-      NOTIFICATION_URLS: smtp://resend:${SERVER_RESEND_API_KEY}@smtp.resend.com:465/?fromAddress=${SERVER_EMAIL}&toAddresses=${SERVER_EMAIL}
+      GPG_PASSPHRASE: ${servers[service.server].secret_hash}
+      NOTIFICATION_URLS: smtp://resend:${servers[service.server].resend_api_key}@smtp.resend.com:465/?fromAddress=${default.email}&toAddresses=${default.email}
     image: offen/docker-volume-backup
     restart: unless-stopped
     volumes:

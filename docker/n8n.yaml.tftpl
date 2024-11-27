@@ -5,7 +5,7 @@ networks:
 services:
   postgres:
     environment:
-      POSTGRES_PASSWORD: ${SERVICE_DATABASE_PASSWORD}
+      POSTGRES_PASSWORD: ${database_passwords[service.name]}
       POSTGRES_USER: n8n
     image: postgres:16
     restart: unless-stopped
@@ -16,17 +16,17 @@ services:
       - postgres
     environment:
       DB_POSTGRESDB_HOST: n8n-postgres-1
-      DB_POSTGRESDB_PASSWORD: ${SERVICE_DATABASE_PASSWORD}
+      DB_POSTGRESDB_PASSWORD: ${database_passwords[service.name]}
       DB_POSTGRESDB_USER: n8n
       DB_TYPE: postgresdb
-      GENERIC_TIMEZONE: ${SERVER_TIMEZONE}
-      N8N_HOST: ${SERVICE_FQDN}
+      GENERIC_TIMEZONE: ${default.timezone}
+      N8N_HOST: ${service.fqdn}
       N8N_PROTOCOL: https
-      WEBHOOK_URL: ${SERVICE_URL}
+      WEBHOOK_URL: ${service.url}
     image: n8nio/n8n
     labels:
-      caddy: ${SERVICE_FQDN}
-      caddy.import: ${SERVICE_ZONE}
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 5678}}"
     restart: unless-stopped
     volumes:

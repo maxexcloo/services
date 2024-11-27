@@ -5,7 +5,7 @@ networks:
 services:
   postgres:
     environment:
-      POSTGRES_PASSWORD: ${SERVICE_DATABASE_PASSWORD}
+      POSTGRES_PASSWORD: ${database_passwords[service.name]}
       POSTGRES_USER: immich
     image: tensorchord/pgvecto-rs:pg16-v0.2.1
     restart: unless-stopped
@@ -21,14 +21,14 @@ services:
     environment:
       DB_DATABASE_NAME: immich
       DB_HOSTNAME: immich-postgres-1
-      DB_PASSWORD: ${SERVICE_DATABASE_PASSWORD}
+      DB_PASSWORD: ${database_passwords[service.name]}
       DB_USERNAME: immich
       REDIS_HOSTNAME: immich-redis-1
-      TZ: ${SERVER_TIMEZONE}
+      TZ: ${default.timezone}
     image: ghcr.io/imagegenius/immich
     labels:
-      caddy: ${SERVICE_FQDN}
-      caddy.import: ${SERVICE_ZONE}
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped
     volumes:

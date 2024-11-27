@@ -7,11 +7,11 @@ services:
     environment:
       DOCKER_MODS: linuxserver/mods:universal-calibre
       OAUTHLIB_RELAX_TOKEN_SCOPE: 1
-      TZ: ${SERVER_TIMEZONE}
+      TZ: ${default.timezone}
     image: linuxserver/calibre-web
     labels:
-      caddy: ${SERVICE_FQDN}
-      caddy.import: ${SERVICE_ZONE}
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 8083}}"
     restart: unless-stopped
     volumes:
