@@ -18,9 +18,9 @@ resource "restapi_object" "portainer_stack" {
     name = each.value.service
 
     stackfilecontent = templatefile("docker/${each.value.service}.yaml.tftpl", {
-      config_command         = join("; ", [for k, config in try(local.output_config[each.value.name], {}) : "echo '${base64gzip(config)}' | base64 -d | gunzip > ${k}"])
       database_passwords     = local.output_database_passwords
       default                = var.default
+      init_command           = join("; ", [for k, config in try(local.output_config[each.value.name], {}) : "echo '${base64gzip(config)}' | base64 -d | gunzip > ${k}"])
       resend_api_keys        = local.output_resend_api_keys
       secret_hashes          = local.output_secret_hashes
       servers                = var.servers

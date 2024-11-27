@@ -3,22 +3,16 @@ networks:
     external: true
     name: docker
 services:
-  init:
-    command: bash -c "${init_command}"
-    image: bash
-    volumes:
-      - data:/app/config
   service:
-    depends_on:
-      init:
-        condition: service_completed_successfully
-    image: ghcr.io/gethomepage/homepage
+    environment:
+      JWT_SECRET: ${secret_hashes[service.name]}
+    image: ghcr.io/c4illin/convertx
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 3000}}"
     restart: unless-stopped
     volumes:
-      - data:/app/config
+      - data:/app/data
 volumes:
   data:

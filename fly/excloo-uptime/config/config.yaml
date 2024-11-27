@@ -127,9 +127,9 @@ endpoints:
       - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
+    group: "Services (excloo.com)"
     name: "Excloo Books (au-mini)"
-    url: "https://books.excloo.org/"
+    url: "https://books.excloo.com/"
   - alerts:
       - type: email
     conditions:
@@ -139,6 +139,15 @@ endpoints:
     group: "Services (excloo.org)"
     name: "Excloo Chat (au-mini)"
     url: "https://chat.excloo.org/"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
+    name: "Excloo Convert (au-oracle)"
+    url: "https://convert.excloo.com/"
   - alerts:
       - type: email
     conditions:
