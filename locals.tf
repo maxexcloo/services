@@ -69,12 +69,23 @@ locals {
         "/app/config/services.yaml" = templatefile("templates/${service.service}/services.yaml.tftpl", {
           services = merge(
             {
-              for k, server in var.servers : "${contains(server.flags, "docker") ? "" : "​"}${server.title} (${upper(server.location)})" => merge(
+              for k, server in var.servers : "${contains(server.flags, "docker") ? "" : "​"}${k} (${server.title})" => merge(
                 contains(server.flags, "docker") ? {
-                  "Glances" = {
-                    icon = "glances"
+                  "CPU" = {
+                    href = "https://glances.${server.fqdn_internal}"
                     widget = {
-                      metric  = "info"
+                      metric  = "cpu"
+                      type    = "glances"
+                      url     = "https://glances.${server.fqdn_internal}"
+                      version = 4
+                    }
+                  }
+                } : {},
+                contains(server.flags, "docker") ? {
+                  "Memory" = {
+                    href = "https://glances.${server.fqdn_internal}"
+                    widget = {
+                      metric  = "memory"
                       type    = "glances"
                       url     = "https://glances.${server.fqdn_internal}"
                       version = 4
@@ -83,6 +94,7 @@ locals {
                 } : {},
                 contains(keys(local.filtered_portainer_endpoints), k) ? {
                   "Portainer" = {
+                    href = var.terraform.portainer.url
                     icon = "portainer"
                     widget = {
                       env  = local.filtered_portainer_endpoints[k]["Id"]
