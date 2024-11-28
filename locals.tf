@@ -92,6 +92,16 @@ locals {
                     }
                   }
                 } : {},
+                contains(server.flags, "docker") ? {
+                  "Watchtower" = {
+                    icon = "watchtower"
+                    widget = {
+                      key  = server.secret_hash
+                      type = "watchtower"
+                      url  = "https://watchtower.${server.fqdn_internal}"
+                    }
+                  }
+                } : {},
                 !contains(server.flags, "cloudflare_proxy") && contains(server.flags, "docker") ? {
                   "​Speedtest (External)" = {
                     href        = "https://speedtest.${server.fqdn_external}/"
@@ -134,7 +144,7 @@ locals {
                   siteMonitor = service.url
                   widget      = jsondecode(templatestring(jsonencode(service.widget), { default = var.default, service = service }))
                 }
-                if service.fqdn != null && service.server == null
+                if service.platform == "cloud" || service.fqdn != null && service.server == null
               }
             }
           )

@@ -7,11 +7,17 @@ services:
     environment:
       TZ: ${default.timezone}
       WATCHTOWER_CLEANUP: true
+      WATCHTOWER_HTTP_API_METRICS: true
+      WATCHTOWER_HTTP_API_TOKEN: ${server.secret_hash}
       WATCHTOWER_NOTIFICATION_URL: smtp://resend:${server.resend_api_key}@smtp.resend.com:465/?from=${default.email}&to=${default.email}
       WATCHTOWER_NOTIFICATIONS_HOSTNAME: ${service.server}
       WATCHTOWER_POLL_INTERVAL: 43200
       WATCHTOWER_REMOVE_VOLUMES: true
     image: containrrr/watchtower
+    labels:
+      caddy: watchtower.${server.fqdn_internal}
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 8080}}"
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

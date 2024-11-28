@@ -3,7 +3,7 @@
 - ${server}:
 %{ for service, variables in services ~}
   - ${service}:
-      ${jsonencode(variables)}
+      ${indent(6, yamlencode(variables))}
 %{ endfor ~}
 %{ endif ~}
 %{ endfor ~}
