@@ -23,6 +23,10 @@ endpoints:
 %{ for service in server.services ~}
   - alerts:
       - type: email
+%{ if service.enable_ssl_validation == false ~}
+    client:
+      insecure: true
+%{ endif ~}
     conditions:
 %{ if service.enable_ssl && service.enable_ssl_validation ~}
       - "[CERTIFICATE_EXPIRATION] > 48h"
@@ -38,6 +42,10 @@ endpoints:
 %{ if service.fqdn != null ~}
   - alerts:
       - type: email
+%{ if service.enable_ssl_validation == false ~}
+    client:
+      insecure: true
+%{ endif ~}
     conditions:
 %{ if service.enable_ssl && service.enable_ssl_validation ~}
       - "[CERTIFICATE_EXPIRATION] > 48h"
