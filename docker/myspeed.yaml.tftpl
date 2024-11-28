@@ -1,0 +1,16 @@
+networks:
+  default:
+    external: true
+    name: docker
+services:
+  service:
+    image: germannewsmaker/myspeed
+    labels:
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
+      caddy.reverse_proxy: "{{upstreams 5216}}"
+    restart: unless-stopped
+    volumes:
+      - data:/myspeed/data
+volumes:
+  data:

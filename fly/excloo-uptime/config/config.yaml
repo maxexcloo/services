@@ -255,8 +255,8 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
-    name: "Portainer (au-mini)"
-    url: "https://portainer.excloo.org"
+    name: "MySpeed (au-mini)"
+    url: "https://myspeed.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -264,8 +264,8 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
-    name: "Speedtest Tracker (au-mini)"
-    url: "https://speedtest-tracker.excloo.org"
+    name: "Portainer (au-mini)"
+    url: "https://portainer.excloo.org"
   - alerts:
       - type: email
     conditions:
