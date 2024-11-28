@@ -19,7 +19,7 @@ provider "onepassword" {
 provider "restapi" {
   alias                = "portainer"
   id_attribute         = "Id"
-  uri                  = var.terraform.portainer.url
+  uri                  = "${var.terraform.portainer.url}/api"
   write_returns_object = true
 
   headers = {
@@ -31,7 +31,7 @@ provider "restapi" {
   alias                 = "resend"
   create_returns_object = true
   rate_limit            = 1
-  uri                   = "https://api.resend.com"
+  uri                   = var.terraform.resend.url
 
   headers = {
     "Authorization" = "Bearer ${var.terraform.resend.api_key}",

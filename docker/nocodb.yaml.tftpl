@@ -5,7 +5,7 @@ networks:
 services:
   postgres:
     environment:
-      POSTGRES_PASSWORD: ${database_passwords[service.name]}
+      POSTGRES_PASSWORD: ${service.database_password}
       POSTGRES_USER: nocodb
     image: postgres:16
     restart: unless-stopped
@@ -15,7 +15,7 @@ services:
     depends_on:
       - postgres
     environment:
-      NC_DB: pg://nocodb-postgres-1:5432?u=nocodb&p=${database_passwords[service.name]}&d=nocodb
+      NC_DB: pg://nocodb-postgres-1:5432?u=nocodb&p=${service.database_password}&d=nocodb
     image: nocodb/nocodb
     labels:
       caddy: ${service.fqdn}

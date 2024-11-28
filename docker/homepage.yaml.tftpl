@@ -4,7 +4,7 @@ networks:
     name: docker
 services:
   init:
-    command: bash -c "${init_command}"
+    command: bash -c "${config}"
     image: bash
     volumes:
       - data:/app/config

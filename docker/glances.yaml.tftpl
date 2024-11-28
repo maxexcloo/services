@@ -9,7 +9,7 @@ services:
     hostname: ${service.server}
     image: nicolargo/glances
     labels:
-      caddy: glances.${servers[service.server].fqdn_internal}
+      caddy: glances.${server.fqdn_internal}
       caddy.import: internal
       caddy.reverse_proxy: "{{upstreams 61208}}"
     pid: host

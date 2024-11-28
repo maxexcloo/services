@@ -22,6 +22,14 @@ endpoints:
   - alerts:
       - type: email
     conditions:
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (Servers)"
+    name: "UniFi (au)"
+    url: "https://au.excloo.org/"
+  - alerts:
+      - type: email
+    conditions:
       - "[CONNECTED] == true"
     group: "Servers (Physical)"
     name: "au-mini (Mini)"
@@ -120,7 +128,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "CubeBackup (au-pie-truenas)"
-    url: "https://cubebackup.excloo.org/"
+    url: "https://cubebackup.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -129,7 +137,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo Books (au-mini)"
-    url: "https://books.excloo.com/"
+    url: "https://books.excloo.com"
   - alerts:
       - type: email
     conditions:
@@ -138,7 +146,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Excloo Chat (au-mini)"
-    url: "https://chat.excloo.org/"
+    url: "https://chat.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -147,7 +155,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Excloo Convert (au-oracle)"
-    url: "https://convert.excloo.org/"
+    url: "https://convert.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -156,7 +164,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Excloo Home (au-mini)"
-    url: "https://home.excloo.org/"
+    url: "https://home.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -165,7 +173,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo N8N (au-oracle)"
-    url: "https://n8n.excloo.com/"
+    url: "https://n8n.excloo.com"
   - alerts:
       - type: email
     conditions:
@@ -174,7 +182,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Excloo NocoDB (au-oracle)"
-    url: "https://nocodb.excloo.org/"
+    url: "https://nocodb.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -183,7 +191,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Excloo PDF (au-oracle)"
-    url: "https://pdf.excloo.org/"
+    url: "https://pdf.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -192,7 +200,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Excloo Photos (au-mini)"
-    url: "https://photos.excloo.org/"
+    url: "https://photos.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -201,7 +209,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo Reader (au-oracle)"
-    url: "https://reader.excloo.com/"
+    url: "https://reader.excloo.com"
   - alerts:
       - type: email
     conditions:
@@ -210,7 +218,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo Reddit (au-oracle)"
-    url: "https://reddit.excloo.com/"
+    url: "https://reddit.excloo.com"
   - alerts:
       - type: email
     conditions:
@@ -219,7 +227,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Excloo RSSHub (au-oracle)"
-    url: "https://rsshub.excloo.org/"
+    url: "https://rsshub.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -228,7 +236,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Excloo Tools (au-oracle)"
-    url: "https://tools.excloo.org/"
+    url: "https://tools.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -237,7 +245,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Portainer (au-mini)"
-    url: "https://portainer.excloo.org/"
+    url: "https://portainer.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -246,7 +254,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo Uptime (fly)"
-    url: "https://uptime.excloo.com/"
+    url: "https://uptime.excloo.com"
   - alerts:
       - type: email
     conditions:
@@ -254,7 +262,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Syncthing (au-mini)"
-    url: "http://mini.au.excloo.org:8384/"
+    url: "http://mini.au.excloo.org:8384"
   - alerts:
       - type: email
     conditions:
@@ -263,7 +271,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "File Browser (kr-kimbap)"
-    url: "https://kimbap.kr.excloo.org:30051/"
+    url: "https://kimbap.kr.excloo.org:30051"
   - alerts:
       - type: email
     conditions:
@@ -272,7 +280,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "File Browser (au-pie-truenas)"
-    url: "https://truenas.pie.au.excloo.org:30051/"
+    url: "https://truenas.pie.au.excloo.org:30051"
   - alerts:
       - type: email
     conditions:
@@ -280,7 +288,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Syncthing (kr-kimbap)"
-    url: "http://kimbap.kr.excloo.org:20910/"
+    url: "http://kimbap.kr.excloo.org:20910"
   - alerts:
       - type: email
     conditions:
@@ -288,7 +296,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Syncthing (au-pie-truenas)"
-    url: "http://truenas.pie.au.excloo.org:20910/"
+    url: "http://truenas.pie.au.excloo.org:20910"
   - alerts:
       - type: email
     conditions:
@@ -297,7 +305,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
     name: "Excloo GitHub Readme Stats (vercel)"
-    url: "https://github-readme-stats.excloo.com/"
+    url: "https://github-readme-stats.excloo.com"
 ui:
   description: ""
   header: "Excloo Uptime"

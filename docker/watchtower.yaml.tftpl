@@ -7,7 +7,7 @@ services:
     environment:
       TZ: ${default.timezone}
       WATCHTOWER_CLEANUP: true
-      WATCHTOWER_NOTIFICATION_URL: smtp://resend:${servers[service.server].resend_api_key}@smtp.resend.com:465/?from=${default.email}&to=${default.email}
+      WATCHTOWER_NOTIFICATION_URL: smtp://resend:${server.resend_api_key}@smtp.resend.com:465/?from=${default.email}&to=${default.email}
       WATCHTOWER_NOTIFICATIONS_HOSTNAME: ${service.server}
       WATCHTOWER_POLL_INTERVAL: 43200
       WATCHTOWER_REMOVE_VOLUMES: true

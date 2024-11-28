@@ -3,10 +3,13 @@ data "onepassword_vault" "services" {
 }
 
 resource "onepassword_item" "service" {
-  for_each = local.filtered_services_onepassword
+  for_each = {
+    for k, service in local.merged_services : k => service
+    if service.enable_password || service.enable_b2 || service.enable_database_password || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.username != null
+  }
 
   category = "login"
-  title    = "${each.value.description} (${each.value.server != null ? each.value.server : each.value.platform})"
+  title    = "${each.value.title} (${each.value.server != null ? each.value.server : each.value.platform})"
   url      = each.value.url
   username = each.value.username
   vault    = data.onepassword_vault.services.uuid

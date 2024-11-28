@@ -5,7 +5,7 @@ networks:
 services:
   service:
     environment:
-      JWT_SECRET: ${secret_hashes[service.name]}
+      JWT_SECRET: ${service.secret_hash}
     image: ghcr.io/c4illin/convertx
     labels:
       caddy: ${service.fqdn}

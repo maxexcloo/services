@@ -5,7 +5,7 @@ networks:
 services:
   postgres:
     environment:
-      POSTGRES_PASSWORD: ${database_passwords[service.name]}
+      POSTGRES_PASSWORD: ${service.database_password}
       POSTGRES_USER: n8n
     image: postgres:16
     restart: unless-stopped
@@ -16,7 +16,7 @@ services:
       - postgres
     environment:
       DB_POSTGRESDB_HOST: n8n-postgres-1
-      DB_POSTGRESDB_PASSWORD: ${database_passwords[service.name]}
+      DB_POSTGRESDB_PASSWORD: ${service.database_password}
       DB_POSTGRESDB_USER: n8n
       DB_TYPE: postgresdb
       GENERIC_TIMEZONE: ${default.timezone}

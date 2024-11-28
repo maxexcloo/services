@@ -1,7 +1,7 @@
 alerting:
   email:
     default-alert:
-      description: "${gatus.description} Check Failed"
+      description: "${gatus.title} Check Failed"
       failure-threshold: 5
       send-on-resolved: true
       success-threshold: 5
@@ -17,20 +17,20 @@ endpoints:
       - type: email
     conditions:
       - "[CONNECTED] == true"
-    group: "${tags[server.tag].description}"
-    name: "${k} (${server.description})"
+    group: "${tags[server.tag].title}"
+    name: "${k} (${server.title})"
     url: "icmp://${k}"
 %{ for service in server.services ~}
   - alerts:
       - type: email
     conditions:
-%{ if service.enable_ssl ~}
+%{ if service.enable_ssl && service.enable_ssl_validation ~}
       - "[CERTIFICATE_EXPIRATION] > 48h"
 %{ endif ~}
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (Servers)"
-    name: "${service.description} (${k})"
+    name: "${service.title} (${k})"
     url: "${service.url}"
 %{ endfor ~}
 %{ endfor ~}
@@ -39,17 +39,17 @@ endpoints:
   - alerts:
       - type: email
     conditions:
-%{ if service.enable_ssl ~}
+%{ if service.enable_ssl && service.enable_ssl_validation ~}
       - "[CERTIFICATE_EXPIRATION] > 48h"
 %{ endif ~}
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "${service.group}"
-    name: "${service.description} (${service.server != null ? service.server : service.platform})"
+    name: "${service.title} (${service.server != null ? service.server : service.platform})"
     url: "${service.url}"
 %{ endif ~}
 %{ endfor ~}
 ui:
-  description: ""
-  header: "${gatus.description}"
-  title: "${gatus.description}"
+  description: "${gatus.description}"
+  header: "${gatus.title}"
+  title: "${gatus.title}"

@@ -5,7 +5,7 @@ networks:
 services:
   postgres:
     environment:
-      POSTGRES_PASSWORD: ${database_passwords[service.name]}
+      POSTGRES_PASSWORD: ${service.database_password}
       POSTGRES_USER: immich
     image: tensorchord/pgvecto-rs:pg16-v0.2.1
     restart: unless-stopped
@@ -21,7 +21,7 @@ services:
     environment:
       DB_DATABASE_NAME: immich
       DB_HOSTNAME: immich-postgres-1
-      DB_PASSWORD: ${database_passwords[service.name]}
+      DB_PASSWORD: ${service.database_password}
       DB_USERNAME: immich
       REDIS_HOSTNAME: immich-redis-1
       TZ: ${default.timezone}
