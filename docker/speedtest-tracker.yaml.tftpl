@@ -1,0 +1,23 @@
+networks:
+  default:
+    external: true
+    name: docker
+services:
+  service:
+    environment:
+      APP_KEY: base64:bwgOP8euf2TTfQIMmlJ4OPe81KxfQX9gUA8hBK1MUqY=
+      APP_TIMEZONE: ${default.timezone}
+      APP_URL: ${service.url}
+      DISPLAY_TIMEZONE: ${default.timezone}
+      PUBLIC_DASHBOARD: true
+      SPEEDTEST_SCHEDULE: 0 * * * *
+    image: linuxserver/speedtest-tracker
+    labels:
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
+      caddy.reverse_proxy: "{{upstreams 80}}"
+    restart: unless-stopped
+    volumes:
+      - data:/config
+volumes:
+  data:

@@ -94,7 +94,7 @@ locals {
                 } : {},
                 contains(keys(local.filtered_portainer_endpoints), k) ? {
                   "Portainer" = {
-                    href = var.terraform.portainer.url
+                    href = "${var.terraform.portainer.url}/#!/${local.filtered_portainer_endpoints[k]["Id"]}/docker/dashboard"
                     icon = "portainer"
                     widget = {
                       env  = local.filtered_portainer_endpoints[k]["Id"]

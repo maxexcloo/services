@@ -246,8 +246,26 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
+    name: "Grafana (au-pie-truenas)"
+    url: "https://grafana.excloo.org"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
     name: "Portainer (au-mini)"
     url: "https://portainer.excloo.org"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "Speedtest Tracker (au-mini)"
+    url: "https://speedtest-tracker.excloo.org"
   - alerts:
       - type: email
     conditions:
