@@ -6,7 +6,7 @@ services:
   postgres:
     environment:
       POSTGRES_PASSWORD: ${service.database_password}
-      POSTGRES_USER: n8n
+      POSTGRES_USER: ${service.service}
     image: postgres:16
     restart: unless-stopped
     volumes:
@@ -15,9 +15,9 @@ services:
     depends_on:
       - postgres
     environment:
-      DB_POSTGRESDB_HOST: n8n-postgres-1
+      DB_POSTGRESDB_HOST: ${service.service}-postgres-1
       DB_POSTGRESDB_PASSWORD: ${service.database_password}
-      DB_POSTGRESDB_USER: n8n
+      DB_POSTGRESDB_USER: ${service.service}
       DB_TYPE: postgresdb
       GENERIC_TIMEZONE: ${default.timezone}
       N8N_HOST: ${service.fqdn}

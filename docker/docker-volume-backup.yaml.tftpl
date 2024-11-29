@@ -22,7 +22,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /var/lib/docker/volumes:/backup:ro
+      - ${contains(server.flags, "truenas") ? "/mnt/.ix-apps/docker/volumes" : "/var/lib/docker/volumes"}:/backup:ro
   weekly:
     environment:
       AWS_ACCESS_KEY_ID: ${server.b2.application_key_id}
@@ -42,4 +42,4 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /var/lib/docker/volumes:/backup:ro
+      - ${contains(server.flags, "truenas") ? "/mnt/.ix-apps/docker/volumes" : "/var/lib/docker/volumes"}:/backup:ro

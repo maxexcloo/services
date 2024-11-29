@@ -6,7 +6,7 @@ services:
   postgres:
     environment:
       POSTGRES_PASSWORD: ${service.database_password}
-      POSTGRES_USER: immich
+      POSTGRES_USER: ${service.service}
     image: tensorchord/pgvecto-rs:pg16-v0.2.1
     restart: unless-stopped
     volumes:
@@ -19,11 +19,11 @@ services:
       - postgres
       - redis
     environment:
-      DB_DATABASE_NAME: immich
-      DB_HOSTNAME: immich-postgres-1
+      DB_DATABASE_NAME: ${service.service}
+      DB_HOSTNAME: ${service.service}-postgres-1
       DB_PASSWORD: ${service.database_password}
-      DB_USERNAME: immich
-      REDIS_HOSTNAME: immich-redis-1
+      DB_USERNAME: ${service.service}
+      REDIS_HOSTNAME: ${service.service}-redis-1
       TZ: ${default.timezone}
     image: ghcr.io/imagegenius/immich
     labels:
