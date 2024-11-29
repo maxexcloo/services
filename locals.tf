@@ -150,7 +150,7 @@ locals {
             },
             {
               "​Cloud" = {
-                for service in local.merged_services : "​${service.title}" => {
+                for service in local.merged_services : "​${service.title}${service.platform == "cloud" ? "" : " (${title(service.platform)})"}" => {
                   href        = service.url
                   icon        = service.icon
                   siteMonitor = service.url
