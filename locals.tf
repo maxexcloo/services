@@ -135,7 +135,7 @@ locals {
                     siteMonitor = service.url
                     widget      = jsondecode(templatestring(jsonencode(service.widget), { default = var.default, service = service }))
                   }
-                  if service.fqdn != null && service.server == k
+                  if service.fqdn != null && service.server == k || service.platform == "cloud" && service.server == k
                 },
                 {
                   for service in server.services : "​${service.title}" => {
@@ -156,7 +156,7 @@ locals {
                   siteMonitor = service.url
                   widget      = jsondecode(templatestring(jsonencode(service.widget), { default = var.default, service = service }))
                 }
-                if service.platform == "cloud" || service.fqdn != null && service.server == null
+                if service.fqdn != null && service.server == null || service.platform == "cloud" && service.server == null
               }
             }
           )
