@@ -32,6 +32,7 @@ locals {
         enable_b2                = false
         enable_database_password = false
         enable_dns               = can(service.dns_name) && can(service.dns_zone)
+        enable_metrics           = false
         enable_password          = false
         enable_resend            = false
         enable_secret_hash       = false
@@ -41,12 +42,14 @@ locals {
         fqdn                     = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal : null
         group                    = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? var.default.domain_internal : "Uncategorized")})"
         icon                     = "homepage"
+        metrics_suffix           = "/metrics"
         name                     = k
         platform                 = "docker"
         server                   = null
         server_cloudflare_tunnel = try(var.servers[service.server].cloudflare_tunnel, null)
         server_flags             = try(var.servers[service.server].flags, [])
         service                  = null
+        site_monitor_suffix      = ""
         title                    = title(replace(replace(k, "${try(service.platform, "docker")}-", ""), "-", " "))
         url                      = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal}${can(service.port) ? ":${service.port}" : ""}" : null
         username                 = null
@@ -70,28 +73,6 @@ locals {
           services = merge(
             {
               for k, server in var.servers : "${contains(server.flags, "docker") ? "" : "​"}${k} (${server.title})" => merge(
-                contains(server.flags, "docker") || contains(server.flags, "haos") ? {
-                  "CPU" = {
-                    href = contains(server.flags, "docker") ? "https://glances.${server.fqdn_internal}" : "https://${server.fqdn_internal}:61208"
-                    widget = {
-                      metric  = "cpu"
-                      type    = "glances"
-                      url     = contains(server.flags, "docker") ? "https://glances.${server.fqdn_internal}" : "https://${server.fqdn_internal}:61208"
-                      version = contains(server.flags, "docker") ? 4 : 3
-                    }
-                  }
-                } : {},
-                contains(server.flags, "docker") || contains(server.flags, "haos") ? {
-                  "Memory" = {
-                    href = contains(server.flags, "docker") ? "https://glances.${server.fqdn_internal}" : "https://${server.fqdn_internal}:61208"
-                    widget = {
-                      metric  = "memory"
-                      type    = "glances"
-                      url     = contains(server.flags, "docker") ? "https://glances.${server.fqdn_internal}" : "https://${server.fqdn_internal}:61208"
-                      version = contains(server.flags, "docker") ? 4 : 3
-                    }
-                  }
-                } : {},
                 contains(server.flags, "docker") && contains(keys(local.filtered_portainer_endpoints), k) ? {
                   "Portainer" = {
                     href = "${var.terraform.portainer.url}/#!/${local.filtered_portainer_endpoints[k]["Id"]}/docker/dashboard"
@@ -104,35 +85,40 @@ locals {
                     }
                   }
                 } : {},
+                contains(server.flags, "docker") || contains(server.flags, "haos") ? {
+                  for metric in ["cpu", "memory"] : upper(metric) => {
+                    widget = {
+                      metric   = metric
+                      password = local.output_services["docker-glances"].secret_hash
+                      type     = "glances"
+                      url      = contains(server.flags, "docker") ? "https://glances.${server.fqdn_internal}" : "https://${server.fqdn_internal}:61208"
+                      username = server.secret_hash
+                      version  = contains(server.flags, "haos") ? 3 : 4
+                    }
+                  }
+                } : {},
                 contains(server.flags, "docker") ? {
                   "Watchtower" = {
                     icon = "watchtower"
                     widget = {
-                      key  = server.secret_hash
+                      key  = "${server.secret_hash}:${local.output_services["docker-watchtower"].secret_hash}"
                       type = "watchtower"
                       url  = "https://watchtower.${server.fqdn_internal}"
                     }
                   }
                 } : {},
-                contains(server.flags, "docker") && !contains(server.flags, "cloudflare_proxy") ? {
-                  "​Speedtest (External)" = {
-                    href        = "https://speedtest.${server.fqdn_external}/"
-                    icon        = "openspeedtest"
-                    siteMonitor = "https://speedtest.${server.fqdn_external}/"
-                  }
-                } : {},
                 contains(server.flags, "docker") ? {
-                  "​Speedtest${!contains(server.flags, "cloudflare_proxy") ? " (Internal)" : ""}" = {
-                    href        = "https://speedtest.${server.fqdn_internal}/"
+                  for fqdn in contains(server.flags, "cloudflare_proxy") ? [server.fqdn_internal] : [server.fqdn_internal, server.fqdn_external] : "​Speedtest${fqdn == server.fqdn_external ? " (External)" : ""}" => {
+                    href        = "https://speedtest.${fqdn}/"
                     icon        = "openspeedtest"
-                    siteMonitor = "https://speedtest.${server.fqdn_internal}/"
+                    siteMonitor = "https://speedtest.${fqdn}/"
                   }
                 } : {},
                 {
                   for service in local.output_services : "​${service.title}" => {
                     href        = service.url
                     icon        = service.icon
-                    siteMonitor = service.url
+                    siteMonitor = "${service.url}${service.site_monitor_suffix}"
                     widget      = jsondecode(templatestring(jsonencode(service.widget), { default = var.default, service = service }))
                   }
                   if service.fqdn != null && service.server == k || service.platform == "cloud" && service.server == k
@@ -141,7 +127,7 @@ locals {
                   for service in server.services : "​${service.title}" => {
                     href        = service.url
                     icon        = service.icon
-                    siteMonitor = service.url
+                    siteMonitor = "${service.url}${try(service.site_monitor_suffix, "")}"
                     widget      = jsondecode(templatestring(jsonencode(service.widget), { default = var.default, service = service }))
                   }
                 }
@@ -163,6 +149,43 @@ locals {
         })
       }
       if service.service == "homepage"
+    },
+    {
+      for k, service in local.merged_services : k => {
+        "/config/prometheus.yaml" = templatefile("templates/${service.service}/prometheus.yaml.tftpl", {
+          default = var.default
+          servers = var.servers
+
+          service_names = distinct(
+            concat(
+              [
+                for service in local.filtered_portainer_stacks : service.service
+                if service.enable_metrics
+              ],
+              flatten([
+                for server in var.servers : [
+                  for service in server.services : service.service
+                  if service.enable_metrics
+                ]
+              ])
+            )
+          )
+
+          services = concat(
+            [
+              for service in local.filtered_portainer_stacks : service
+              if service.enable_metrics
+            ],
+            flatten([
+              for server in var.servers : [
+                for service in server.services : service
+                if service.enable_metrics
+              ]
+            ])
+          )
+        })
+      }
+      if service.service == "prometheus"
     }
   )
 
@@ -195,6 +218,7 @@ locals {
         password              = service.enable_password ? onepassword_item.service[service.name].password : null
         resend_api_key        = service.enable_resend ? local.output_resend_api_keys[service.name] : null
         secret_hash           = service.enable_secret_hash ? local.output_secret_hashes[service.name] : null
+        secret_hash_bcrypt    = service.enable_secret_hash ? replace(bcrypt_hash.service[service.name].id, "$", "$$") : null
         tailscale_tailnet_key = service.enable_tailscale ? local.output_tailscale_tailnet_keys[service.name] : null
       },
       service

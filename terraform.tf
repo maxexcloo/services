@@ -12,6 +12,9 @@ terraform {
     b2 = {
       source = "backblaze/b2"
     }
+    bcrypt = {
+      source = "viktorradnai/bcrypt"
+    }
     cloudflare = {
       source = "cloudflare/cloudflare"
     }

@@ -5,10 +5,8 @@ networks:
 services:
   service:
     environment:
-      DOCKER_ENABLE_SECURITY: true
       INSTALL_BOOK_AND_ADVANCED_HTML_OPS: true
       LANGS: en_GB
-      SECURITY_ENABLE_LOGIN: true
     image: stirlingtools/stirling-pdf
     labels:
       caddy: ${service.fqdn}

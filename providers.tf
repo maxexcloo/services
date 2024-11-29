@@ -3,6 +3,8 @@ provider "b2" {
   application_key_id = var.terraform.b2.application_key_id
 }
 
+provider "bcrypt" {}
+
 provider "cloudflare" {
   api_key = var.terraform.cloudflare.api_key
   email   = var.terraform.cloudflare.email

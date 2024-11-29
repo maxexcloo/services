@@ -3,29 +3,6 @@ networks:
     external: true
     name: docker
 services:
-  # loki:
-  #   image: grafana/loki
-  #   labels:
-  #     caddy: loki.${server.fqdn_internal}
-  #     caddy.import: internal
-  #     caddy.reverse_proxy: "{{upstreams 3100}}"
-  #   restart: unless-stopped
-  #   volumes:
-  #     - loki:/loki
-  # prometheus:
-  #   command:
-  #     - '--config.file=/etc/prometheus/prometheus.yml'
-  #     - '--storage.tsdb.path=/prometheus'
-  #     - '--storage.tsdb.retention.time=15d'
-  #     - '--web.enable-lifecycle'
-  #   image: prom/prometheus
-  #   labels:
-  #     caddy: prometheus.${server.fqdn_internal}
-  #     caddy.import: internal
-  #     caddy.reverse_proxy: "{{upstreams 9090}}"
-  #   restart: unless-stopped
-  #   volumes:
-  #     - prometheus:/prometheus
   service:
     environment:
       GF_SECURITY_ADMIN_EMAIL: ${service.username}
@@ -33,7 +10,12 @@ services:
       GF_SECURITY_ADMIN_USER: ${service.username}
       GF_SERVER_ROOT_DOMAIN: ${service.fqdn}
       GF_SERVER_ROOT_URL: ${service.url}
-      GF_USERS_ALLOW_SIGN_UP: false
+      GF_SMTP_ENABLED: true
+      GF_SMTP_FROM_ADDRESS: ${default.email}
+      GF_SMTP_FROM_NAME: ${service.title}
+      GF_SMTP_HOST: smtp.resend.com:465
+      GF_SMTP_PASSWORD: ${service.resend_api_key}
+      GF_SMTP_USERNAME: resend
     image: grafana/grafana
     labels:
       caddy: ${service.fqdn}
@@ -44,5 +26,3 @@ services:
       - data:/var/lib/grafana
 volumes:
   data:
-  # loki:
-  # prometheus:

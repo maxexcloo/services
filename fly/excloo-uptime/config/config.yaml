@@ -255,6 +255,15 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
+    name: "Loki (au-pie-truenas)"
+    url: "https://loki.excloo.org"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
     name: "MySpeed (au-mini)"
     url: "https://myspeed.excloo.org"
   - alerts:
@@ -266,6 +275,15 @@ endpoints:
     group: "Services (excloo.org)"
     name: "Portainer (au-mini)"
     url: "https://portainer.excloo.org"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "Prometheus (au-pie-truenas)"
+    url: "https://prometheus.excloo.org"
   - alerts:
       - type: email
     conditions:

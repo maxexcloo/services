@@ -5,15 +5,14 @@ networks:
 services:
   service:
     environment:
-      ALLOW_UNAUTHENTICATED: true
-      JWT_SECRET: ${service.secret_hash}
-    image: ghcr.io/c4illin/convertx
+      LOKI_LIMITS_CONFIG_RETENTION_PERIOD: 744h
+    image: grafana/loki
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
-      caddy.reverse_proxy: "{{upstreams 3000}}"
+      caddy.reverse_proxy: "{{upstreams 3100}}"
     restart: unless-stopped
     volumes:
-      - data:/app/data
+      - data:/loki
 volumes:
   data:

@@ -1,0 +1,26 @@
+scrape_configs:
+%{ for service_name in service_names ~}
+%{ for service in services ~}
+%{ if service.service == service_name ~}
+%{ for k, server in servers ~}
+%{ if service.server == k || contains(server.services.*.service, service.service) ~}
+  - job_name: '${service_name}-${k}'
+    metrics_path: '${service.metrics_suffix}'
+    scheme: '${service.enable_ssl ? "https" : "http"}'
+%{ if service.enable_secret_hash ~}
+    basic_auth:
+      username: '${server.secret_hash}'
+      password: '${service.secret_hash}'
+%{ endif ~}
+    static_configs:
+      - targets: ['${service.fqdn != null ? service.fqdn : "${service_name}.${server.fqdn_internal}"}']
+        labels:
+          location: '${server.location}'
+          name: '${service.server == k ? service.name : ""}'
+          server: '${k}'
+          service: '${service.service}'
+%{ endif ~}
+%{ endfor ~}
+%{ endif ~}
+%{ endfor ~}
+%{ endfor ~}

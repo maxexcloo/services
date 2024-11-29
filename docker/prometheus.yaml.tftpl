@@ -7,18 +7,24 @@ services:
     command: bash -c "${config}"
     image: bash
     volumes:
-      - config:/app/config
+      - config:/config
   service:
+    command:
+      - --config.file=/config/prometheus.yaml
+      - --storage.tsdb.retention.time=744h
+      - --web.enable-lifecycle
     depends_on:
       config:
         condition: service_completed_successfully
-    image: ghcr.io/gethomepage/homepage
+    image: prom/prometheus
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
-      caddy.reverse_proxy: "{{upstreams 3000}}"
+      caddy.reverse_proxy: "{{upstreams 9090}}"
     restart: unless-stopped
     volumes:
-      - config:/app/config
+      - config:/config
+      - data:/prometheus
 volumes:
   config:
+  data:
