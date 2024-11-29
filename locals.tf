@@ -70,29 +70,29 @@ locals {
           services = merge(
             {
               for k, server in var.servers : "${contains(server.flags, "docker") ? "" : "​"}${k} (${server.title})" => merge(
-                contains(server.flags, "docker") ? {
+                contains(server.flags, "docker") || contains(server.flags, "haos") ? {
                   "CPU" = {
-                    href = "https://glances.${server.fqdn_internal}"
+                    href = contains(server.flags, "docker") ? "https://glances.${server.fqdn_internal}" : "https://${server.fqdn_internal}:61208"
                     widget = {
                       metric  = "cpu"
                       type    = "glances"
-                      url     = "https://glances.${server.fqdn_internal}"
-                      version = 4
+                      url     = contains(server.flags, "docker") ? "https://glances.${server.fqdn_internal}" : "https://${server.fqdn_internal}:61208"
+                      version = contains(server.flags, "docker") ? 4 : 3
                     }
                   }
                 } : {},
-                contains(server.flags, "docker") ? {
+                contains(server.flags, "docker") || contains(server.flags, "haos") ? {
                   "Memory" = {
-                    href = "https://glances.${server.fqdn_internal}"
+                    href = contains(server.flags, "docker") ? "https://glances.${server.fqdn_internal}" : "https://${server.fqdn_internal}:61208"
                     widget = {
                       metric  = "memory"
                       type    = "glances"
-                      url     = "https://glances.${server.fqdn_internal}"
-                      version = 4
+                      url     = contains(server.flags, "docker") ? "https://glances.${server.fqdn_internal}" : "https://${server.fqdn_internal}:61208"
+                      version = contains(server.flags, "docker") ? 4 : 3
                     }
                   }
                 } : {},
-                contains(keys(local.filtered_portainer_endpoints), k) ? {
+                contains(server.flags, "docker") && contains(keys(local.filtered_portainer_endpoints), k) ? {
                   "Portainer" = {
                     href = "${var.terraform.portainer.url}/#!/${local.filtered_portainer_endpoints[k]["Id"]}/docker/dashboard"
                     icon = "portainer"
@@ -114,7 +114,7 @@ locals {
                     }
                   }
                 } : {},
-                !contains(server.flags, "cloudflare_proxy") && contains(server.flags, "docker") ? {
+                contains(server.flags, "docker") && !contains(server.flags, "cloudflare_proxy") ? {
                   "​Speedtest (External)" = {
                     href        = "https://speedtest.${server.fqdn_external}/"
                     icon        = "openspeedtest"
