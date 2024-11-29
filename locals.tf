@@ -42,14 +42,14 @@ locals {
         fqdn                     = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal : null
         group                    = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? var.default.domain_internal : "Uncategorized")})"
         icon                     = "homepage"
-        metrics_suffix           = "/metrics"
+        metrics_path             = "/metrics"
         name                     = k
         platform                 = "docker"
         server                   = null
         server_cloudflare_tunnel = try(var.servers[service.server].cloudflare_tunnel, null)
         server_flags             = try(var.servers[service.server].flags, [])
         service                  = null
-        site_monitor_suffix      = ""
+        site_monitor_path        = ""
         title                    = title(replace(replace(k, "${try(service.platform, "docker")}-", ""), "-", " "))
         url                      = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal}${can(service.port) ? ":${service.port}" : ""}" : null
         username                 = null
@@ -118,7 +118,7 @@ locals {
                   for service in local.output_services : "​${service.title}" => {
                     href        = service.url
                     icon        = service.icon
-                    siteMonitor = "${service.url}${service.site_monitor_suffix}"
+                    siteMonitor = "${service.url}${service.site_monitor_path}"
                     widget      = jsondecode(templatestring(jsonencode(service.widget), { default = var.default, service = service }))
                   }
                   if service.fqdn != null && service.server == k || service.platform == "cloud" && service.server == k
@@ -127,7 +127,7 @@ locals {
                   for service in server.services : "​${service.title}" => {
                     href        = service.url
                     icon        = service.icon
-                    siteMonitor = "${service.url}${try(service.site_monitor_suffix, "")}"
+                    siteMonitor = "${service.url}${try(service.site_monitor_path, "")}"
                     widget      = jsondecode(templatestring(jsonencode(service.widget), { default = var.default, service = service }))
                   }
                 }
@@ -153,23 +153,7 @@ locals {
     {
       for k, service in local.merged_services : k => {
         "/config/prometheus.yaml" = templatefile("templates/${service.service}/prometheus.yaml.tftpl", {
-          default = var.default
           servers = var.servers
-
-          service_names = distinct(
-            concat(
-              [
-                for service in local.filtered_portainer_stacks : service.service
-                if service.enable_metrics
-              ],
-              flatten([
-                for server in var.servers : [
-                  for service in server.services : service.service
-                  if service.enable_metrics
-                ]
-              ])
-            )
-          )
 
           services = concat(
             [

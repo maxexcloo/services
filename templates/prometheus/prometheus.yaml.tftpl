@@ -1,11 +1,9 @@
 scrape_configs:
-%{ for service_name in service_names ~}
 %{ for service in services ~}
-%{ if service.service == service_name ~}
-%{ for k, server in servers ~}
-%{ if service.server == k || contains(server.services.*.service, service.service) ~}
-  - job_name: '${service_name}-${k}'
-    metrics_path: '${service.metrics_suffix}'
+%{ for server_name, server in servers ~}
+%{ if server_name == service.server || contains(server.services.*.service, service.service) ~}
+  - job_name: '${service.service}-${server_name}'
+    metrics_path: '${service.metrics_path}'
     scheme: '${service.enable_ssl ? "https" : "http"}'
 %{ if service.enable_secret_hash ~}
     basic_auth:
@@ -13,14 +11,12 @@ scrape_configs:
       password: '${service.secret_hash}'
 %{ endif ~}
     static_configs:
-      - targets: ['${service.fqdn != null ? service.fqdn : "${service_name}.${server.fqdn_internal}"}']
+      - targets: ['${service.fqdn != null ? service.fqdn : "${service.service}.${server.fqdn_internal}"}']
         labels:
           location: '${server.location}'
-          name: '${service.server == k ? service.name : ""}'
-          server: '${k}'
+          name: '${server_name == service.server ? service.name : ""}'
+          server: '${server_name}'
           service: '${service.service}'
-%{ endif ~}
-%{ endfor ~}
 %{ endif ~}
 %{ endfor ~}
 %{ endfor ~}
