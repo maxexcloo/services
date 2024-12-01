@@ -219,7 +219,7 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
-    name: "Excloo Reddit (au-oracle)"
+    name: "Excloo Reddit (au-mini)"
     url: "https://reddit.excloo.com"
   - alerts:
       - type: email
