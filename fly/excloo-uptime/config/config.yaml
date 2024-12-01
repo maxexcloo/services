@@ -256,7 +256,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Loki (au-pie-truenas)"
-    url: "https://loki.excloo.org"
+    url: "https://loki.excloo.org/ready"
   - alerts:
       - type: email
     conditions:
