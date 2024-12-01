@@ -37,7 +37,7 @@ resource "local_file" "fly_gatus" {
   filename = "fly/${replace(each.key, "fly-", "")}/config/config.yaml"
 
   content = templatefile(
-    "templates/${each.value.service}/config.yaml.tftpl",
+    "templates/${each.value.service}/config.yaml",
     {
       default  = var.default
       gatus    = each.value

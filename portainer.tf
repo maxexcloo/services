@@ -17,7 +17,7 @@ resource "restapi_object" "portainer_stack" {
   data = jsonencode({
     name = each.value.service
 
-    stackfilecontent = templatefile("docker/${each.value.service}.yaml.tftpl", {
+    stackfilecontent = templatefile("docker/${each.value.service}.yaml", {
       config  = join("; ", [for k, config in try(local.merged_services_configs[each.value.name], {}) : "echo '${base64gzip(config)}' | base64 -d | gunzip > ${k}"])
       default = var.default
       server  = var.servers[each.value.server]

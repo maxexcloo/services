@@ -3,6 +3,11 @@ networks:
     external: true
     name: docker
 services:
+  config:
+    command: bash -c "${config}"
+    image: bash
+    volumes:
+      - config:/config
   service:
     environment:
       GF_SECURITY_ADMIN_EMAIL: ${service.username}
@@ -25,4 +30,5 @@ services:
     volumes:
       - data:/var/lib/grafana
 volumes:
+  config:
   data:

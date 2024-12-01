@@ -1,4 +1,4 @@
-resource "random_password" "b2_service" {
+resource "random_password" "b2" {
   for_each = {
     for k, service in local.merged_services : k => service
     if service.enable_b2
@@ -9,7 +9,7 @@ resource "random_password" "b2_service" {
   upper   = false
 }
 
-resource "random_password" "database_service" {
+resource "random_password" "database_password" {
   for_each = {
     for k, service in local.merged_services : k => service
     if service.enable_database_password
@@ -19,7 +19,7 @@ resource "random_password" "database_service" {
   special = false
 }
 
-resource "random_password" "secret_hash_service" {
+resource "random_password" "secret_hash" {
   for_each = {
     for k, service in local.merged_services : k => service
     if service.enable_secret_hash

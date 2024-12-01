@@ -1,0 +1,28 @@
+networks:
+  default:
+    external: true
+    name: docker
+services:
+  config:
+    command: bash -c "${config}"
+    image: bash
+    volumes:
+      - config:/config
+  service:
+    command: run /config/config.yaml
+    image: grafana/alloy
+    labels:
+      caddy: ${service.service}.${server.fqdn_internal}
+      caddy.basic_auth.${server.secret_hash}: ${service.secret_hash_bcrypt}
+      caddy.import: internal
+      caddy.reverse_proxy: "{{upstreams 4318}}"
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /:/host/root:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - config:/config
+volumes:
+  config:

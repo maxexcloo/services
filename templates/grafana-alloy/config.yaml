@@ -1,0 +1,52 @@
+exporters:
+%{ for server_name, server in servers ~}
+%{ for service in services ~}
+%{ if server_name == service.server && service.service == "loki" ~}
+  ${service.service}-${server_name}:
+    basic_auth:
+      username: ${server.secret_hash}
+      password: ${service.password}
+    endpoint: ${service.url}/loki/api/v1/push
+    labels:
+      compose_service:
+        value: '{{ attributes["com.docker.compose.service"] }}'
+%{ endif ~}
+%{ endfor ~}
+%{ endfor ~}
+
+receivers:
+  docker_stats:
+    container_labels_to_metadata: ['com.docker.compose.service']
+    endpoint: unix:///var/run/docker.sock
+  filelog:
+    include:
+      - /var/lib/docker/containers/*/*.log
+    operators:
+      - type: docker_metadata
+      - type: json_parser
+        field: message
+      - type: time_parser
+        layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+        parse_from: attributes.time
+  hostmetrics:
+    scrapers:
+      cpu: {}
+      disk: {}
+      filesystem: {}
+      load: {}
+      memory: {}
+      network: {}
+      paging: {}
+      process: {}
+  otlp:
+    protocols:
+      http:
+        endpoint: :4318
+
+service:
+  pipelines:
+    logs:
+      exporters: [%{ for server_name, server in servers ~}%{ for service in services ~}%{ if server_name == service.server && service.service == "loki" ~}${service.service}-${server_name},%{ endif ~}%{ endfor ~}%{ endfor ~}]
+      receivers: [filelog]
+    metrics:
+      receivers: [docker_stats, hostmetrics]

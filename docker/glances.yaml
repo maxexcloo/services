@@ -4,18 +4,17 @@ networks:
     name: docker
 services:
   service:
-    command:
-      - --collector.filesystem.mount-points-exclude=^/(dev|etc|host|proc|sys)($$|/)
-      - --path.procfs=/host/proc
-      - --path.rootfs=/host
-      - --path.sysfs=/host/sys
-    image: prom/node-exporter
+    environment:
+      GLANCES_OPT: -w
+    hostname: ${service.server}
+    image: nicolargo/glances
     labels:
       caddy: ${service.service}.${server.fqdn_internal}
       caddy.basic_auth.${server.secret_hash}: ${service.secret_hash_bcrypt}
       caddy.import: internal
-      caddy.reverse_proxy: "{{upstreams 9100}}"
+      caddy.reverse_proxy: "{{upstreams 61208}}"
     pid: host
     restart: unless-stopped
     volumes:
-      - /:/host:ro,rslave
+      - /etc/os-release:/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro

@@ -9,6 +9,7 @@ services:
     image: grafana/loki
     labels:
       caddy: ${service.fqdn}
+      caddy.basic_auth.${server.secret_hash}: ${service.password_bcrypt}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 3100}}"
     restart: unless-stopped

@@ -10,7 +10,7 @@ services:
       - config:/config
   service:
     command:
-      - --config.file=/config/prometheus.yaml
+      - --config.file=/config/config.yaml
       - --storage.tsdb.retention.time=744h
       - --web.enable-lifecycle
     depends_on:
@@ -19,6 +19,7 @@ services:
     image: prom/prometheus
     labels:
       caddy: ${service.fqdn}
+      caddy.basic_auth.${server.secret_hash}: ${service.password_bcrypt}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 9090}}"
     restart: unless-stopped

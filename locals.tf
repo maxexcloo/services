@@ -61,15 +61,33 @@ locals {
   }
 
   merged_services_configs = merge(
+    # {
+    #   for k, service in local.merged_services : k => {
+    #     "/config/config.yaml" = templatefile("templates/${service.service}/config.yaml", {
+    #       servers = var.servers
+    #       services = local.output_services
+    #     })
+    #   }
+    #   if service.service == "grafana"
+    # },
+    {
+      for k, service in local.merged_services : k => {
+        "/config/config.yaml" = templatefile("templates/${service.service}/config.yaml", {
+          servers  = var.servers
+          services = local.output_services
+        })
+      }
+      if service.service == "grafana-alloy"
+    },
     {
       for k, service in local.merged_services : k => {
         "/app/config/bookmarks.yaml"  = ""
         "/app/config/docker.yaml"     = ""
         "/app/config/kubernetes.yaml" = ""
-        "/app/config/settings.yaml"   = templatefile("templates/${service.service}/settings.yaml.tftpl", { default = var.default, homepage = service })
-        "/app/config/widgets.yaml"    = templatefile("templates/${service.service}/widgets.yaml.tftpl", { default = var.default, homepage = service })
+        "/app/config/settings.yaml"   = templatefile("templates/${service.service}/settings.yaml", { default = var.default, homepage = service })
+        "/app/config/widgets.yaml"    = templatefile("templates/${service.service}/widgets.yaml", { default = var.default, homepage = service })
 
-        "/app/config/services.yaml" = templatefile("templates/${service.service}/services.yaml.tftpl", {
+        "/app/config/services.yaml" = templatefile("templates/${service.service}/services.yaml", {
           services = merge(
             {
               for k, server in var.servers : "${contains(server.flags, "docker") ? "" : "​"}${k} (${server.title})" => merge(
@@ -152,7 +170,7 @@ locals {
     },
     {
       for k, service in local.merged_services : k => {
-        "/config/prometheus.yaml" = templatefile("templates/${service.service}/prometheus.yaml.tftpl", {
+        "/config/config.yaml" = templatefile("templates/${service.service}/config.yaml", {
           servers = var.servers
 
           services = concat(
@@ -183,7 +201,7 @@ locals {
   }
 
   output_database_passwords = {
-    for k, random_password in random_password.database_service : k => random_password.result
+    for k, random_password in random_password.database_password : k => random_password.result
   }
 
   output_resend_api_keys = {
@@ -191,7 +209,7 @@ locals {
   }
 
   output_secret_hashes = {
-    for k, random_password in random_password.secret_hash_service : k => random_password.result
+    for k, random_password in random_password.secret_hash : k => random_password.result
   }
 
   output_services = {
@@ -200,9 +218,10 @@ locals {
         b2                    = service.enable_b2 ? local.output_b2[service.name] : null
         database_password     = service.enable_database_password ? local.output_database_passwords[service.name] : null
         password              = service.enable_password ? onepassword_item.service[service.name].password : null
+        password_bcrypt       = service.enable_password ? replace(bcrypt_hash.password[service.name].id, "$", "$$") : null
         resend_api_key        = service.enable_resend ? local.output_resend_api_keys[service.name] : null
         secret_hash           = service.enable_secret_hash ? local.output_secret_hashes[service.name] : null
-        secret_hash_bcrypt    = service.enable_secret_hash ? replace(bcrypt_hash.service[service.name].id, "$", "$$") : null
+        secret_hash_bcrypt    = service.enable_secret_hash ? replace(bcrypt_hash.secret_hash[service.name].id, "$", "$$") : null
         tailscale_tailnet_key = service.enable_tailscale ? local.output_tailscale_tailnet_keys[service.name] : null
       },
       service

@@ -5,10 +5,10 @@ scrape_configs:
   - job_name: '${service.service}-${server_name}'
     metrics_path: '${service.metrics_path}'
     scheme: '${service.enable_ssl ? "https" : "http"}'
-%{ if service.enable_secret_hash ~}
+%{ if service.enable_password || service.enable_secret_hash ~}
     basic_auth:
-      username: '${server.secret_hash}'
-      password: '${service.secret_hash}'
+      username: '${service.username != null ? service.username : server.secret_hash}'
+      password: '${service.enable_password ? service.password : service.secret_hash}'
 %{ endif ~}
     static_configs:
       - targets: ['${service.fqdn != null ? service.fqdn : "${service.service}.${server.fqdn_internal}"}']
