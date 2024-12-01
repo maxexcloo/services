@@ -35,7 +35,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (Servers)"
     name: "${service.title} (${k})"
-    url: "${service.url}"
+    url: "${service.url}${service.monitoring_path}"
 %{ endfor ~}
 %{ endfor ~}
 %{ for service in services ~}
@@ -54,7 +54,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "${service.group}"
     name: "${service.title} (${service.server != null ? service.server : service.platform})"
-    url: "${service.url}"
+    url: "${service.url}${service.monitoring_path}"
 %{ endif ~}
 %{ endfor ~}
 ui:
