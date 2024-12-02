@@ -72,15 +72,6 @@ locals {
     # },
     {
       for k, service in local.merged_services : k => {
-        "/config/config.yaml" = templatefile("templates/${service.service}/config.yaml", {
-          servers  = var.servers
-          services = local.output_services
-        })
-      }
-      if service.service == "grafana-alloy"
-    },
-    {
-      for k, service in local.merged_services : k => {
         "/app/config/bookmarks.yaml"  = ""
         "/app/config/docker.yaml"     = ""
         "/app/config/kubernetes.yaml" = ""

@@ -219,7 +219,7 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
-    name: "Excloo Reddit (au-mini)"
+    name: "Excloo Reddit (au-oracle)"
     url: "https://reddit.excloo.com"
   - alerts:
       - type: email
@@ -293,15 +293,6 @@ endpoints:
     group: "Services (excloo.com)"
     name: "Excloo Uptime (fly)"
     url: "https://uptime.excloo.com"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "Node-RED (au-pie-haos)"
-    url: "https://haos.pie.au.excloo.org:1880"
   - alerts:
       - type: email
     conditions:
