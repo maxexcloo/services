@@ -19,7 +19,6 @@ services:
     image: prom/prometheus
     labels:
       caddy: ${service.fqdn}
-      caddy.basic_auth.${server.secret_hash}: ${service.password_bcrypt}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 9090}}"
     restart: unless-stopped
