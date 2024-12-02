@@ -1,77 +1,26 @@
 locals {
+  filtered_onepassword_services = {
+    for k, service in local.merged_services_all : k => service
+    if service.enable_password || service.enable_b2 || service.enable_database_password || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.username != null
+  }
+
   filtered_portainer_endpoints = {
     for k, endpoint in jsondecode(data.http.portainer_endpoints.response_body) : endpoint["Name"] => endpoint
+    if !strcontains(endpoint["Name"], "-disabled")
   }
 
-  filtered_portainer_stacks = merge(
-    [
-      for k, service in local.output_services : (
-        service.server != null ? (
-          contains(keys(local.filtered_portainer_endpoints), service.server) ? {
-            (k) = merge(service, { server_id = local.filtered_portainer_endpoints[service.server]["Id"] })
-          }
-          :
-          {}
-        )
-        :
-        {
-          for k, server in var.servers : "${service.name}-${k}" => merge(service, { server = k, server_id = local.filtered_portainer_endpoints[k]["Id"] })
-          if contains(keys(local.filtered_portainer_endpoints), k)
-        }
-      )
-      if service.platform == "docker" && service.service != null
-    ]...
-  )
-
-  merged_services = {
-    for k, service in var.services : k => merge(
-      {
-        description              = ""
-        dns_content              = try(service.dns_content, can(service.server) ? try(service.dns_zone, "") != var.default.domain_internal ? var.servers[service.server].fqdn_external : var.servers[service.server].fqdn_internal : null)
-        dns_zone                 = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null)
-        enable_b2                = false
-        enable_database_password = false
-        enable_dns               = can(service.dns_name) && can(service.dns_zone)
-        enable_metrics           = false
-        enable_password          = false
-        enable_resend            = false
-        enable_secret_hash       = false
-        enable_ssl               = true
-        enable_ssl_validation    = true
-        enable_tailscale         = false
-        fqdn                     = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal : null
-        group                    = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? var.default.domain_internal : "Uncategorized")})"
-        icon                     = "homepage"
-        metrics_path             = "/metrics"
-        monitoring_path          = ""
-        name                     = k
-        platform                 = "docker"
-        server                   = null
-        server_cloudflare_tunnel = try(var.servers[service.server].cloudflare_tunnel, null)
-        server_flags             = try(var.servers[service.server].flags, [])
-        service                  = null
-        title                    = title(replace(replace(k, "${try(service.platform, "docker")}-", ""), "-", " "))
-        url                      = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal}${can(service.port) ? ":${service.port}" : ""}" : null
-        username                 = null
-        widget                   = null
-        zone                     = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) == var.default.domain_internal ? "internal" : "external"
-      },
-      service
-    )
-  }
-
-  merged_services_configs = merge(
+  filtered_portainer_stack_configs = merge(
     # {
-    #   for k, service in local.merged_services : k => {
+    #   for k, service in local.merged_services_all : k => {
     #     "/config/config.yaml" = templatefile("templates/${service.service}/config.yaml", {
     #       servers = var.servers
-    #       services = local.output_services
+    #       services = local.output_services_all
     #     })
     #   }
     #   if service.service == "grafana"
     # },
     {
-      for k, service in local.merged_services : k => {
+      for k, service in local.merged_services_all : k => {
         "/app/config/bookmarks.yaml"  = ""
         "/app/config/docker.yaml"     = ""
         "/app/config/kubernetes.yaml" = ""
@@ -98,7 +47,7 @@ locals {
                   for metric in ["cpu", "memory"] : upper(metric) => {
                     widget = {
                       metric   = metric
-                      password = local.output_services["docker-glances"].secret_hash
+                      password = local.output_services_all["docker-glances-${k}"].secret_hash
                       type     = "glances"
                       url      = contains(server.flags, "docker") ? "https://glances.${server.fqdn_internal}" : "https://${server.fqdn_internal}:61208"
                       username = server.secret_hash
@@ -110,7 +59,7 @@ locals {
                   "Watchtower" = {
                     icon = "watchtower"
                     widget = {
-                      key  = "${server.secret_hash}:${local.output_services["docker-watchtower"].secret_hash}"
+                      key  = "${server.secret_hash}:${local.output_services_all["docker-watchtower-${k}"].secret_hash}"
                       type = "watchtower"
                       url  = "https://watchtower.${server.fqdn_internal}"
                     }
@@ -124,7 +73,8 @@ locals {
                   }
                 } : {},
                 {
-                  for service in local.output_services : "​${service.title}" => {
+                  for service in local.output_services_all : "​${service.title}" => {
+                    description = service.description
                     href        = service.url
                     icon        = service.icon
                     siteMonitor = "${service.url}${service.monitoring_path}"
@@ -134,6 +84,7 @@ locals {
                 },
                 {
                   for service in server.services : "​${service.title}" => {
+                    description = service.description
                     href        = service.url
                     icon        = service.icon
                     siteMonitor = "${service.url}${try(service.monitoring_path, "")}"
@@ -145,7 +96,8 @@ locals {
             },
             {
               "​Cloud" = {
-                for service in local.merged_services : "​${service.title}${service.platform == "cloud" ? "" : " (${title(service.platform)})"}" => {
+                for service in local.merged_services_all : "​${service.title}${service.platform == "cloud" ? "" : " (${title(service.platform)})"}" => {
+                  description = service.description
                   href        = service.url
                   icon        = service.icon
                   siteMonitor = service.url
@@ -160,7 +112,7 @@ locals {
       if service.service == "homepage"
     },
     {
-      for k, service in local.merged_services : k => {
+      for k, service in local.merged_services_all : k => {
         "/config/config.yaml" = templatefile("templates/${service.service}/config.yaml", {
           servers = var.servers
 
@@ -180,6 +132,66 @@ locals {
       }
       if service.service == "prometheus"
     }
+  )
+
+  filtered_portainer_stacks = {
+    for k, service in local.output_services_all : k => merge(service, { endpoint_id = local.filtered_portainer_endpoints[service.server]["Id"] })
+    if service.platform == "docker" && service.service != null && try(contains(keys(local.filtered_portainer_endpoints), service.server), false)
+  }
+
+  merged_services = {
+    for k, service in var.services : k => merge(
+      {
+        description              = ""
+        dns_content              = try(service.dns_content, can(service.server) ? try(service.dns_zone, "") != var.default.domain_internal ? var.servers[service.server].fqdn_external : var.servers[service.server].fqdn_internal : null)
+        dns_zone                 = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null)
+        enable_b2                = false
+        enable_database_password = false
+        enable_dns               = can(service.dns_name) && can(service.dns_zone)
+        enable_metrics           = false
+        enable_password          = false
+        enable_resend            = false
+        enable_secret_hash       = false
+        enable_ssl               = true
+        enable_ssl_validation    = true
+        enable_tailscale         = false
+        fqdn                     = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal : null
+        group                    = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? var.default.domain_internal : "Uncategorized")})"
+        icon                     = try(service.service, "homepage")
+        metrics_path             = "/metrics"
+        monitoring_path          = ""
+        name                     = k
+        platform                 = "docker"
+        server                   = null
+        server_flags             = try(var.servers[service.server].flags, [])
+        service                  = null
+        title                    = title(replace(replace(k, "${try(service.platform, "docker")}-", ""), "-", " "))
+        url                      = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal}${can(service.port) ? ":${service.port}" : ""}" : null
+        username                 = null
+        widget                   = null
+        zone                     = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) == var.default.domain_internal ? "internal" : "external"
+      },
+      service
+    )
+  }
+
+  merged_services_all = merge(
+    [
+      for service_name, service in local.merged_services : (
+        service.platform != "docker" || service.server != null ? {
+          (service_name) = service
+        }
+        :
+        {
+          for server_name, server in var.servers : "${service_name}-${server_name}" => merge(
+            service,
+            {
+              server = server_name
+            }
+          )
+        }
+      )
+    ]...
   )
 
   output_b2 = {
@@ -203,17 +215,17 @@ locals {
     for k, random_password in random_password.secret_hash : k => random_password.result
   }
 
-  output_services = {
-    for k, service in local.merged_services : k => merge(
+  output_services_all = {
+    for k, service in local.merged_services_all : k => merge(
       {
-        b2                    = service.enable_b2 ? local.output_b2[service.name] : null
-        database_password     = service.enable_database_password ? local.output_database_passwords[service.name] : null
-        password              = service.enable_password ? onepassword_item.service[service.name].password : null
-        password_bcrypt       = service.enable_password ? replace(bcrypt_hash.password[service.name].id, "$", "$$") : null
-        resend_api_key        = service.enable_resend ? local.output_resend_api_keys[service.name] : null
-        secret_hash           = service.enable_secret_hash ? local.output_secret_hashes[service.name] : null
-        secret_hash_bcrypt    = service.enable_secret_hash ? replace(bcrypt_hash.secret_hash[service.name].id, "$", "$$") : null
-        tailscale_tailnet_key = service.enable_tailscale ? local.output_tailscale_tailnet_keys[service.name] : null
+        b2                    = try(local.output_b2[k], null)
+        database_password     = try(local.output_database_passwords[k], null)
+        password              = try(onepassword_item.service[k].password, null)
+        password_bcrypt       = try(replace(bcrypt_hash.password[k].id, "$", "$$"), null)
+        resend_api_key        = try(local.output_resend_api_keys[k], null)
+        secret_hash           = try(local.output_secret_hashes[k], null)
+        secret_hash_bcrypt    = try(replace(bcrypt_hash.secret_hash[k].id, "$", "$$"), null)
+        tailscale_tailnet_key = try(local.output_tailscale_tailnet_keys[k], null)
       },
       service
     )

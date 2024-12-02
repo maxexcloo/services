@@ -12,13 +12,13 @@ resource "restapi_object" "portainer_stack" {
   create_path  = "/stacks/create/standalone/string"
   path         = "/stacks"
   provider     = restapi.portainer
-  query_string = "endpointId=${each.value.server_id}"
+  query_string = "endpointId=${each.value.endpoint_id}"
 
   data = jsonencode({
     name = each.value.service
 
     stackfilecontent = templatefile("docker/${each.value.service}.yaml", {
-      config  = join("; ", [for k, config in try(local.merged_services_configs[each.value.name], {}) : "echo '${base64gzip(config)}' | base64 -d | gunzip > ${k}"])
+      config  = join("; ", [for k, config in try(local.filtered_portainer_stack_configs[each.key], {}) : "echo '${base64gzip(config)}' | base64 -d | gunzip > ${k}"])
       default = var.default
       server  = var.servers[each.value.server]
       service = each.value

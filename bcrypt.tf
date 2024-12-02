@@ -1,10 +1,10 @@
 resource "bcrypt_hash" "password" {
   for_each = {
-    for k, service in onepassword_item.service : k => service
-    if local.merged_services[k].enable_password
+    for k, service in local.merged_services_all : k => service
+    if service.enable_password
   }
 
-  cleartext = each.value.password
+  cleartext = onepassword_item.service[each.key].password
   cost      = 14
 }
 
