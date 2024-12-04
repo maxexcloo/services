@@ -1,9 +1,9 @@
-%{ for server, services in services ~}
+%{ for category, services in services ~}
 %{ if length(services) > 0 ~}
-- ${server}:
-%{ for service, variables in services ~}
+- ${category}:
+%{ for service, widget in services ~}
   - ${service}:
-      ${indent(6, yamlencode(variables))}
+      ${indent(6, yamlencode(widget))}
 %{ endfor ~}
 %{ endif ~}
 %{ endfor ~}

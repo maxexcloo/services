@@ -6,14 +6,14 @@ services:
   external:
     image: openspeedtest/latest
     labels:
-      caddy: speedtest.${server.fqdn_external}
+      caddy: ${service.service}.${server.fqdn_external}
       caddy.import: external
       caddy.reverse_proxy: "{{upstreams 3000}}"
     restart: unless-stopped
   internal:
     image: openspeedtest/latest
     labels:
-      caddy: speedtest.${server.fqdn_internal}
+      caddy: ${service.service}.${server.fqdn_internal}
       caddy.import: internal
       caddy.reverse_proxy: "{{upstreams 3000}}"
     restart: unless-stopped
