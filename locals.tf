@@ -19,6 +19,7 @@ locals {
         enable_database_password = false
         enable_dns               = can(service.dns_name) && can(service.dns_zone)
         enable_metrics           = false
+        enable_monitoring        = true
         enable_password          = false
         enable_resend            = false
         enable_secret_hash       = false
@@ -46,7 +47,7 @@ locals {
           for widget in try(service.widgets, []) : merge(
             {
               enable_href       = true
-              enable_monitoring = true
+              enable_monitoring = try(service.enable_monitoring, true)
               icon              = try(service.service, "homepage")
               priority          = false
               widget            = null
