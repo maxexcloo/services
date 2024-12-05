@@ -25,7 +25,7 @@ resource "b2_application_key" "service" {
 
 resource "b2_bucket" "service" {
   for_each = {
-    for k, service in local.merged_services_all : k => service
+    for k, service in local.filtered_services_all : k => service
     if service.enable_b2
   }
 

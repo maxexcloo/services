@@ -12,7 +12,7 @@ resource "restapi_object" "portainer_stack" {
   create_path  = "/stacks/create/standalone/string"
   path         = "/stacks"
   provider     = restapi.portainer
-  query_string = "endpointId=${each.value.endpoint_id}"
+  query_string = "endpointId=${each.value.portainer_endpoint_id}"
 
   data = jsonencode({
     name = each.value.service

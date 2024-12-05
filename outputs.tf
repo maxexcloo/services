@@ -30,7 +30,7 @@ output "tailscale_tailnet_keys" {
 
 resource "local_file" "fly_gatus" {
   for_each = {
-    for k, service in local.merged_services_all : k => service
+    for k, service in local.filtered_services_all : k => service
     if service.service == "gatus"
   }
 
