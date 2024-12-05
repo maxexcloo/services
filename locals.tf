@@ -18,6 +18,7 @@ locals {
     secrets                  = {}
     server                   = null
     service                  = null
+    title                    = ""
     username                 = null
   }
 
@@ -78,7 +79,6 @@ locals {
         group                   = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? var.default.domain_internal : "Uncategorized")})"
         name                    = k
         server_flags            = try(var.servers[service.server].flags, [])
-        title                   = title(replace(replace(k, "${try(service.platform, local.default_service_config.platform)}-", ""), "-", " "))
         url                     = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal}${can(service.port) ? ":${service.port}" : ""}" : null
         zone                    = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) == var.default.domain_internal ? "internal" : "external"
       },
@@ -88,8 +88,10 @@ locals {
           for widget in try(service.widgets, []) : merge(
             local.default_widget_config,
             {
+              description       = try(service.description, local.default_widget_config.description)
               enable_monitoring = try(service.enable_monitoring, local.default_widget_config.enable_monitoring)
               icon              = try(service.service, local.default_widget_config.icon)
+              title             = try(service.title, local.default_widget_config.title)
             },
             widget
           )
@@ -133,10 +135,10 @@ locals {
             {
               for k, server in var.servers : "${contains(server.flags, "docker") ? "" : "​"}${k} (${server.title})" => merge([
                 for service in concat(values(local.output_services_all), server.services) : {
-                  for widget in service.widgets : "${widget.priority ? "" : "​"}${try(coalesce(widget.title, service.title), "")}" => {
-                    description = try(coalesce(widget.description, service.description), "")
+                  for widget in service.widgets : "${widget.priority ? "" : "​"}${widget.title}" => {
+                    description = widget.description
                     href        = widget.enable_href ? templatestring(coalesce(widget.url, service.url), { default = var.default, server = server, service = service }) : null
-                    icon        = coalesce(widget.icon, service.icon)
+                    icon        = widget.icon
                     siteMonitor = widget.enable_monitoring ? templatestring("${coalesce(widget.url, service.url)}${service.monitoring_path}", { default = var.default, server = server, service = service }) : null
                     widget      = jsondecode(templatestring(jsonencode(widget.widget), { default = var.default, server = server, service = service }))
                   }
@@ -148,10 +150,10 @@ locals {
             {
               "​Cloud" = merge([
                 for service in local.output_services_all : {
-                  for widget in service.widgets : "${widget.priority ? "" : "​"}${try(coalesce(widget.title, service.title), "")}${service.platform == "cloud" ? "" : " (${title(service.platform)})"}" => {
-                    description = try(coalesce(widget.description, service.description), "")
+                  for widget in service.widgets : "${widget.priority ? "" : "​"}${widget.title}${service.platform == "cloud" ? "" : " (${title(service.platform)})"}" => {
+                    description = widget.description
                     href        = widget.enable_href ? templatestring(coalesce(widget.url, service.url), { default = var.default, service = service }) : null
-                    icon        = coalesce(widget.icon, service.icon)
+                    icon        = widget.icon
                     siteMonitor = widget.enable_monitoring ? templatestring("${coalesce(widget.url, service.url)}${service.monitoring_path}", { default = var.default, service = service }) : null
                     widget      = jsondecode(templatestring(jsonencode(widget.widget), { default = var.default, service = service }))
                   }
