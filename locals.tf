@@ -156,7 +156,7 @@ locals {
                     widget      = jsondecode(templatestring(jsonencode(widget.widget), { default = var.default, service = service }))
                   }
                 }
-                if service.platform == "cloud" && service.server == null
+                if service.platform == "cloud" && service.server == null || service.server == null
               ]...)
             }
           )
