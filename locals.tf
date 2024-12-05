@@ -135,7 +135,7 @@ locals {
             {
               for k, server in var.servers : "${contains(server.flags, "docker") ? "" : "​"}${k} (${server.title})" => merge([
                 for service in concat(values(local.output_services_all), server.services) : {
-                  for widget in service.widgets : "${widget.priority ? "" : "​"}${widget.title}" => {
+                  for widget in service.widgets : "${widget.priority ? "" : "​"}${templatestring(widget.title, { default = var.default, server = server, service = service })}" => {
                     description = widget.description
                     href        = widget.enable_href ? templatestring(coalesce(widget.url, service.url), { default = var.default, server = server, service = service }) : null
                     icon        = widget.icon
@@ -150,7 +150,7 @@ locals {
             {
               "​Cloud" = merge([
                 for service in local.output_services_all : {
-                  for widget in service.widgets : "${widget.priority ? "" : "​"}${widget.title}${service.platform == "cloud" ? "" : " (${title(service.platform)})"}" => {
+                  for widget in service.widgets : "${widget.priority ? "" : "​"}${templatestring(widget.title, { default = var.default, service = service })}${service.platform == "cloud" ? "" : " (${title(service.platform)})"}" => {
                     description = widget.description
                     href        = widget.enable_href ? templatestring(coalesce(widget.url, service.url), { default = var.default, service = service }) : null
                     icon        = widget.icon
