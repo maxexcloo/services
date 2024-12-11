@@ -1,41 +1,7 @@
 locals {
-  default_service_config = {
-    description              = ""
-    enable_b2                = false
-    enable_database_password = false
-    enable_metrics           = false
-    enable_monitoring        = true
-    enable_password          = false
-    enable_resend            = false
-    enable_secret_hash       = false
-    enable_ssl               = true
-    enable_ssl_validation    = true
-    enable_tailscale         = false
-    icon                     = "homepage"
-    metrics_path             = "/metrics"
-    monitoring_path          = ""
-    platform                 = "docker"
-    secrets                  = {}
-    server                   = null
-    service                  = null
-    title                    = ""
-    username                 = null
-  }
-
-  default_widget_config = {
-    description       = null
-    enable_href       = true
-    enable_monitoring = true
-    icon              = "homepage"
-    priority          = false
-    title             = null
-    url               = null
-    widget            = null
-  }
-
   filtered_onepassword_services = {
     for k, service in local.filtered_services_all : k => service
-    if service.enable_password || service.enable_b2 || service.enable_database_password || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.username != null
+    if service.database_name != null || service.database_username != null || service.enable_password || service.enable_b2 || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.username != null
   }
 
   filtered_portainer_endpoints = {
@@ -69,7 +35,7 @@ locals {
 
   merged_services = {
     for k, service in var.services : k => merge(
-      local.default_service_config,
+      var.default.service_config,
       {
         dns_content             = can(service.server) ? try(service.dns_zone, "") != var.default.domain_internal ? var.servers[service.server].fqdn_external : var.servers[service.server].fqdn_internal : null
         dns_zone                = can(service.server) ? var.default.domain_internal : null
@@ -86,12 +52,12 @@ locals {
       {
         widgets = [
           for widget in try(service.widgets, []) : merge(
-            local.default_widget_config,
+            var.default.widget_config,
             {
-              description       = try(service.description, local.default_widget_config.description)
-              enable_monitoring = try(service.enable_monitoring, local.default_widget_config.enable_monitoring)
-              icon              = try(service.service, local.default_widget_config.icon)
-              title             = try(service.title, local.default_widget_config.title)
+              description       = try(service.description, var.default.widget_config.description)
+              enable_monitoring = try(service.enable_monitoring, var.default.widget_config.enable_monitoring)
+              icon              = try(service.service, var.default.widget_config.icon)
+              title             = try(service.title, var.default.widget_config.title)
             },
             widget
           )
@@ -109,8 +75,13 @@ locals {
     }
   }
 
-  output_database_passwords = {
-    for k, random_password in random_password.database_password : k => random_password.result
+  output_databases = {
+    for k, service in local.filtered_services_all : k => {
+      name     = try(service.database_name, "")
+      password = try(random_password.database_password[k].result, "")
+      username = try(service.database_username, "")
+    }
+    if service.database_name != null || service.database_username != null
   }
 
   output_portainer_stack_configs = merge(
@@ -206,7 +177,7 @@ locals {
     for k, service in local.filtered_services_all : k => merge(
       {
         b2                    = try(local.output_b2[k], {})
-        database_password     = try(local.output_database_passwords[k], "")
+        database              = try(local.output_databases[k], {})
         password              = try(onepassword_item.service[k].password, "")
         password_bcrypt       = try(replace(bcrypt_hash.password[k].id, "$", "$$"), "")
         portainer_endpoint_id = try(local.filtered_portainer_endpoints[service.server]["Id"], "")

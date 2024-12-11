@@ -4,9 +4,6 @@ networks:
     name: docker
 services:
   service:
-    environment:
-      PGID: 1000
-      PUID: 1000
     hostname: ${service.server}
     image: syncthing/syncthing
     labels:

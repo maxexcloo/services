@@ -129,6 +129,15 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
+    name: "ConvertX (au-oracle)"
+    url: "https://convertx.excloo.org"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
     name: "CubeBackup (au-pie-truenas)"
     url: "https://cubebackup.excloo.org"
   - alerts:
@@ -137,9 +146,18 @@ endpoints:
       - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.com)"
+    group: "Services (excloo.org)"
+    name: "CyberChef (au-oracle)"
+    url: "https://cyberchef.excloo.org"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
     name: "Excloo Books (au-mini)"
-    url: "https://books.excloo.com"
+    url: "https://books.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -156,44 +174,8 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
-    name: "Excloo Convert (au-oracle)"
-    url: "https://convert.excloo.org"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
     name: "Excloo Home (au-mini)"
     url: "https://home.excloo.org"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.com)"
-    name: "Excloo N8N (au-oracle)"
-    url: "https://n8n.excloo.com"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "Excloo NocoDB (au-oracle)"
-    url: "https://nocodb.excloo.org"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "Excloo PDF (au-oracle)"
-    url: "https://pdf.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -219,26 +201,17 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
+    name: "Excloo Recipes (au-oracle)"
+    url: "https://recipes.excloo.com"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
     name: "Excloo Reddit (au-oracle)"
     url: "https://reddit.excloo.com"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "Excloo RSSHub (au-oracle)"
-    url: "https://rsshub.excloo.org"
-  - alerts:
-      - type: email
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (excloo.org)"
-    name: "Excloo Tools (au-oracle)"
-    url: "https://tools.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -272,6 +245,24 @@ endpoints:
       - "[CERTIFICATE_EXPIRATION] > 48h"
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.com)"
+    name: "N8N (au-oracle)"
+    url: "https://n8n.excloo.com"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "NocoDB (au-oracle)"
+    url: "https://nocodb.excloo.org"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
     group: "Services (excloo.org)"
     name: "Portainer (au-mini)"
     url: "https://portainer.excloo.org"
@@ -284,6 +275,24 @@ endpoints:
     group: "Services (excloo.org)"
     name: "Prometheus (au-pie-truenas)"
     url: "https://prometheus.excloo.org"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "RSSHub (au-oracle)"
+    url: "https://rsshub.excloo.org"
+  - alerts:
+      - type: email
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+      - "[RESPONSE_TIME] < 5000"
+      - "[STATUS] == any(200, 401)"
+    group: "Services (excloo.org)"
+    name: "Stirling-PDF (au-oracle)"
+    url: "https://stirling-pdf.excloo.org"
   - alerts:
       - type: email
     conditions:
@@ -342,7 +351,7 @@ endpoints:
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
     group: "Services (excloo.com)"
-    name: "Excloo GitHub Readme Stats (vercel)"
+    name: "GitHub Readme Stats (vercel)"
     url: "https://github-readme-stats.excloo.com"
 ui:
   description: ""

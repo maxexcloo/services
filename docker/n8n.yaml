@@ -5,8 +5,9 @@ networks:
 services:
   postgres:
     environment:
-      POSTGRES_PASSWORD: ${service.database_password}
-      POSTGRES_USER: ${service.service}
+      POSTGRES_DB: ${service.database.name}
+      POSTGRES_PASSWORD: ${service.database.password}
+      POSTGRES_USER: ${service.database.username}
     image: postgres:16
     restart: unless-stopped
     volumes:
@@ -15,9 +16,10 @@ services:
     depends_on:
       - postgres
     environment:
+      DB_POSTGRESDB_DATABASE: ${service.database.name}
       DB_POSTGRESDB_HOST: ${service.service}-postgres-1
-      DB_POSTGRESDB_PASSWORD: ${service.database_password}
-      DB_POSTGRESDB_USER: ${service.service}
+      DB_POSTGRESDB_PASSWORD: ${service.database.password}
+      DB_POSTGRESDB_USER: ${service.database.username}
       DB_TYPE: postgresdb
       GENERIC_TIMEZONE: ${default.timezone}
       N8N_HOST: ${service.fqdn}

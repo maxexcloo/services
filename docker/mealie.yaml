@@ -1,0 +1,26 @@
+networks:
+  default:
+    external: true
+    name: docker
+services:
+  service:
+    environment:
+      BASE_URL: ${service.url}
+      OPENAI_API_KEY: ${service.secrets.openai_api_key}
+      SMTP_FROM_EMAIL: ${default.email}
+      SMTP_FROM_NAME: ${service.name}
+      SMTP_HOST: smtp.resend.com
+      SMTP_PASSWORD: ${service.resend_api_key}
+      SMTP_PORT: 465
+      SMTP_USER: resend
+      TZ: ${default.timezone}
+    image: ghcr.io/mealie-recipes/mealie
+    labels:
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
+      caddy.reverse_proxy: "{{upstreams 9000}}"
+    restart: unless-stopped
+    volumes:
+      - data:/app/data
+volumes:
+  data:

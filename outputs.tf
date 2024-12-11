@@ -5,7 +5,7 @@ output "b2" {
 
 output "databases" {
   sensitive = true
-  value     = local.output_database_passwords
+  value     = local.output_databases
 }
 
 output "resend" {

@@ -53,15 +53,27 @@ resource "onepassword_item" "service" {
   }
 
   dynamic "section" {
-    for_each = each.value.enable_database_password ? [true] : []
+    for_each = each.value.database_name != null || each.value.database_username != null ? [true] : []
 
     content {
-      label = "Database"
+      label = "Database Name"
+
+      field {
+        label = "Name"
+        type  = "STRING"
+        value = each.value.database_name
+      }
+
+      field {
+        label = "Username"
+        type  = "STRING"
+        value = each.value.database_username
+      }
 
       field {
         label = "Password"
         type  = "CONCEALED"
-        value = local.output_database_passwords[each.key]
+        value = local.output_databases[each.key].password
       }
     }
   }

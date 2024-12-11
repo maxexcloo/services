@@ -5,8 +5,9 @@ networks:
 services:
   postgres:
     environment:
-      POSTGRES_PASSWORD: ${service.database_password}
-      POSTGRES_USER: ${service.service}
+      POSTGRES_DB: ${service.database.name}
+      POSTGRES_PASSWORD: ${service.database.password}
+      POSTGRES_USER: ${service.database.username}
     image: postgres:16
     restart: unless-stopped
     volumes:
@@ -15,7 +16,7 @@ services:
     depends_on:
       - postgres
     environment:
-      NC_DB: pg://${service.service}-postgres-1:5432?u=${service.service}&p=${service.database_password}&d=${service.service}
+      NC_DB: pg://${service.service}-postgres-1:5432?d=${service.database.name}&p=${service.database.password}&u=${service.database.username}
     image: nocodb/nocodb
     labels:
       caddy: ${service.fqdn}
