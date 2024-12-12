@@ -4,6 +4,8 @@ networks:
     name: docker
 services:
   service:
+    environment:
+      ENV: dev
     image: ghcr.io/open-webui/open-webui
     labels:
       caddy: ${service.fqdn}
