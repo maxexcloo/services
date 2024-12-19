@@ -1,0 +1,19 @@
+networks:
+  default:
+    external: true
+    name: ${default.organisation}
+services:
+  service:
+    environment:
+      ALLOW_UNAUTHENTICATED: true
+      JWT_SECRET: ${service.secret_hash}
+    image: ghcr.io/c4illin/convertx
+    labels:
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+    restart: unless-stopped
+    volumes:
+      - data:/app/data
+volumes:
+  data:

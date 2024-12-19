@@ -1,7 +1,7 @@
 networks:
   default:
     external: true
-    name: docker
+    name: ${default.organisation}
 services:
   postgres:
     environment:
@@ -21,7 +21,7 @@ services:
       DB_POSTGRESDB_PASSWORD: ${service.database.password}
       DB_POSTGRESDB_USER: ${service.database.username}
       DB_TYPE: postgresdb
-      GENERIC_TIMEZONE: ${default.timezone}
+      GENERIC_TIMEZONE: ${server.config.timezone}
       N8N_HOST: ${service.fqdn}
       N8N_PROTOCOL: https
       WEBHOOK_URL: ${service.url}

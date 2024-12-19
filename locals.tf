@@ -19,7 +19,7 @@ locals {
               server = server_name
             }
           )
-          if contains(server.flags, "docker")
+          if contains(server.flags, "docker") && (!contains(server.flags, "minimal") || service.enable_on_minimal)
         }
         : {
           (service_name) = service
@@ -85,15 +85,6 @@ locals {
   }
 
   output_portainer_stack_configs = merge(
-    # {
-    #   for k, service in local.filtered_services_all : k => {
-    #     "/config/config.yaml" = templatefile("templates/${service.service}/config.yaml", {
-    #       servers = var.servers
-    #       services = local.output_services_all
-    #     })
-    #   }
-    #   if service.service == "grafana"
-    # },
     {
       for k, service in local.filtered_services_all : k => {
         "/app/config/bookmarks.yaml"  = ""

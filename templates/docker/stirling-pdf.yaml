@@ -1,7 +1,7 @@
 networks:
   default:
     external: true
-    name: docker
+    name: ${default.organisation}
 services:
   service:
     environment:

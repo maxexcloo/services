@@ -1,30 +1,24 @@
 networks:
   default:
     external: true
-    name: docker
+    name: ${default.organisation}
 services:
   config:
     command: bash -c "${config}"
     image: bash
     volumes:
-      - config:/config
+      - config:/app/config
   service:
-    command:
-      - --config.file=/config/config.yaml
-      - --storage.tsdb.retention.time=744h
-      - --web.enable-lifecycle
     depends_on:
       config:
         condition: service_completed_successfully
-    image: prom/prometheus
+    image: ghcr.io/gethomepage/homepage
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
-      caddy.reverse_proxy: "{{upstreams 9090}}"
+      caddy.reverse_proxy: "{{upstreams 3000}}"
     restart: unless-stopped
     volumes:
-      - config:/config
-      - data:/prometheus
+      - config:/app/config
 volumes:
   config:
-  data:

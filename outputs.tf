@@ -27,23 +27,3 @@ output "tailscale_tailnet_keys" {
   sensitive = true
   value     = local.output_tailscale_tailnet_keys
 }
-
-resource "local_file" "fly_gatus" {
-  for_each = {
-    for k, service in local.filtered_services_all : k => service
-    if service.service == "gatus"
-  }
-
-  filename = "fly/${replace(each.key, "fly-", "")}/config/config.yaml"
-
-  content = templatefile(
-    "templates/${each.value.service}/config.yaml",
-    {
-      default  = var.default
-      gatus    = each.value
-      servers  = var.servers
-      services = local.merged_services
-      tags     = var.tags
-    }
-  )
-}
