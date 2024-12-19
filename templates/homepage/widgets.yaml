@@ -1,15 +1,5 @@
-- datetime:
-    text_size: xl
-    format:
-      hourCycle: h23
-      timeStyle: short
 - search:
     focus: true
     provider: google
     showSearchSuggestions: true
     target: _blank
-- openmeteo:
-    cache: 5
-    latitude: 33.8688
-    longitude: 151.2093
-    units: metric

@@ -44,6 +44,7 @@ locals {
         fqdn                    = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal : null
         group                   = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? var.default.domain_internal : "Uncategorized")})"
         name                    = k
+        portainer_name          = replace(k, "docker-", "")
         server_flags            = try(var.servers[service.server].flags, [])
         url                     = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal}${can(service.port) ? ":${service.port}" : ""}" : null
         zone                    = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) == var.default.domain_internal ? "internal" : "external"
@@ -75,6 +76,51 @@ locals {
     }
   }
 
+  output_config_homepage_services = merge(
+    {
+      for k, server in var.servers : "1 - ${k} (${server.title})" => merge([
+        for service in concat(values(local.output_services_all), server.services) : {
+          for widget in service.widgets : "${widget.priority ? "1" : can(widget.widget.type) ? "2" : "3"} - ${templatestring(widget.title, { default = var.default, server = server, service = service })}" => {
+            description = widget.description
+            href        = widget.enable_href ? templatestring(coalesce(widget.url, service.url), { default = var.default, server = server, service = service }) : null
+            icon        = widget.icon
+            siteMonitor = widget.enable_monitoring ? templatestring("${coalesce(widget.url, service.url)}${service.monitoring_path}", { default = var.default, server = server, service = service }) : null
+            widget      = jsondecode(templatestring(jsonencode(widget.widget), { default = var.default, server = server, service = service }))
+          }
+        }
+        if service.server == k
+      ]...)
+      if contains(server.flags, "homepage")
+    },
+    {
+      "2 - Cloud" = merge([
+        for service in local.output_services_all : {
+          for widget in service.widgets : "${widget.priority ? "1" : can(widget.widget.type) ? "2" : "3"} - ${templatestring(widget.title, { default = var.default, service = service })}${service.platform == "cloud" ? "" : " (${title(service.platform)})"}" => {
+            description = widget.description
+            href        = widget.enable_href ? templatestring(coalesce(widget.url, service.url), { default = var.default, service = service }) : null
+            icon        = widget.icon
+            siteMonitor = widget.enable_monitoring ? templatestring("${coalesce(widget.url, service.url)}${service.monitoring_path}", { default = var.default, service = service }) : null
+            widget      = jsondecode(templatestring(jsonencode(widget.widget), { default = var.default, service = service }))
+          }
+        }
+        if service.platform == "cloud" && service.server == null || service.server == null
+      ]...)
+    }
+  )
+
+  output_config_prometheus_services = concat(
+    [
+      for service in local.output_portainer_stacks : service
+      if service.enable_metrics
+    ],
+    flatten([
+      for server in var.servers : [
+        for service in server.services : service
+        if service.enable_metrics
+      ]
+    ])
+  )
+
   output_databases = {
     for k, service in local.filtered_services_all : k => {
       name     = try(service.database_name, "")
@@ -90,62 +136,15 @@ locals {
         "/app/config/bookmarks.yaml"  = ""
         "/app/config/docker.yaml"     = ""
         "/app/config/kubernetes.yaml" = ""
-        "/app/config/settings.yaml"   = templatefile("templates/${service.service}/settings.yaml", { default = var.default, homepage = service })
+        "/app/config/settings.yaml"   = templatefile("templates/${service.service}/settings.yaml", { default = var.default, homepage = service, services = local.output_config_homepage_services })
         "/app/config/widgets.yaml"    = templatefile("templates/${service.service}/widgets.yaml", { default = var.default, homepage = service })
-        "/app/config/services.yaml" = templatefile("templates/${service.service}/services.yaml", {
-          services = merge(
-            {
-              for k, server in var.servers : "${contains(server.flags, "docker") ? "" : "​"}${k} (${server.title})" => merge([
-                for service in concat(values(local.output_services_all), server.services) : {
-                  for widget in service.widgets : "${widget.priority ? "" : "​"}${templatestring(widget.title, { default = var.default, server = server, service = service })}" => {
-                    description = widget.description
-                    href        = widget.enable_href ? templatestring(coalesce(widget.url, service.url), { default = var.default, server = server, service = service }) : null
-                    icon        = widget.icon
-                    siteMonitor = widget.enable_monitoring ? templatestring("${coalesce(widget.url, service.url)}${service.monitoring_path}", { default = var.default, server = server, service = service }) : null
-                    widget      = jsondecode(templatestring(jsonencode(widget.widget), { default = var.default, server = server, service = service }))
-                  }
-                }
-                if service.server == k
-              ]...)
-              if contains(server.flags, "homepage")
-            },
-            {
-              "​Cloud" = merge([
-                for service in local.output_services_all : {
-                  for widget in service.widgets : "${widget.priority ? "" : "​"}${templatestring(widget.title, { default = var.default, service = service })}${service.platform == "cloud" ? "" : " (${title(service.platform)})"}" => {
-                    description = widget.description
-                    href        = widget.enable_href ? templatestring(coalesce(widget.url, service.url), { default = var.default, service = service }) : null
-                    icon        = widget.icon
-                    siteMonitor = widget.enable_monitoring ? templatestring("${coalesce(widget.url, service.url)}${service.monitoring_path}", { default = var.default, service = service }) : null
-                    widget      = jsondecode(templatestring(jsonencode(widget.widget), { default = var.default, service = service }))
-                  }
-                }
-                if service.platform == "cloud" && service.server == null || service.server == null
-              ]...)
-            }
-          )
-        })
+        "/app/config/services.yaml"   = templatefile("templates/${service.service}/services.yaml", { services = local.output_config_homepage_services })
       }
       if service.service == "homepage"
     },
     {
       for k, service in local.filtered_services_all : k => {
-        "/config/config.yaml" = templatefile("templates/${service.service}/config.yaml", {
-          servers = var.servers
-
-          services = concat(
-            [
-              for service in local.output_portainer_stacks : service
-              if service.enable_metrics
-            ],
-            flatten([
-              for server in var.servers : [
-                for service in server.services : service
-                if service.enable_metrics
-              ]
-            ])
-          )
-        })
+        "/config/config.yaml" = templatefile("templates/${service.service}/config.yaml", { servers = var.servers, services = local.output_config_prometheus_services })
       }
       if service.service == "prometheus"
     }

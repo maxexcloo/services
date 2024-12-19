@@ -1,2 +1,11 @@
 hideVersion: true
 title: ${homepage.title}
+useEqualHeights: true
+layout:
+%{ for category, services in services ~}
+%{ if length(services) > 0 ~}
+  ${split(" - ", category)[1]}:
+    columns: 4
+    style: row
+%{ endif ~}
+%{ endfor ~}
