@@ -18,6 +18,9 @@ terraform {
     cloudflare = {
       source = "cloudflare/cloudflare"
     }
+    fly = {
+      source = "andrewbaxter/fly"
+    }
     github = {
       source = "integrations/github"
     }

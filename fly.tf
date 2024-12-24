@@ -1,43 +1,44 @@
-resource "restapi_object" "fly_app_service" {
-  for_each = {
-    for k, service in local.filtered_services_all : k => service
-    if service.platform == "fly"
-  }
+resource "fly_app" "service" {
+  for_each = local.filtered_services_fly
 
-  destroy_path = "/apps/${each.value.name}"
-  path         = "/apps"
-  provider     = restapi.fly
-  read_path    = "/apps/${each.value.name}"
-  update_path  = "/apps/${each.value.name}"
+  assign_shared_ip_address = true
+  name                     = each.value.name
+  org                      = var.terraform.fly.org
+}
 
-  data = jsonencode({
-    app_name = each.value.name
-    org_slug = var.terraform.fly.org_slug
-  })
+resource "fly_cert" "service" {
+  for_each = local.filtered_services_fly
+
+  app      = fly_app.service[each.key].name
+  hostname = each.value.fqdn
+}
+
+resource "fly_ip" "service" {
+  for_each = local.filtered_services_fly
+
+  app    = fly_app.service[each.key].name
+  region = each.value.fly.region
+  type   = "v6"
 }
 
 resource "restapi_object" "fly_app_machine_service" {
-  for_each = {
-    for k, service in local.filtered_services_all : k => service
-    if service.platform == "fly"
-  }
+  for_each = local.filtered_services_fly
 
-  destroy_path  = "/apps/${each.value.name}/machines/{id}/stop"
-  path          = "/apps/${each.value.name}/machines"
+  destroy_path  = "/apps/${fly_app.service[each.key].name}/machines/{id}/stop"
+  path          = "/apps/${fly_app.service[each.key].name}/machines"
   provider      = restapi.fly
   update_method = "POST"
 
   data = jsonencode({
-    region = each.value.region
+    region = each.value.fly.region
     config = {
-      guest = each.value.guest
-      image = each.value.image
+      image = each.value.fly.image
       checks = {
         http = {
           interval = "5s"
           method   = "GET"
           path     = "/"
-          port     = each.value.port
+          port     = each.value.fly.port
           timeout  = "5s"
           type     = "http"
         }
@@ -45,7 +46,7 @@ resource "restapi_object" "fly_app_machine_service" {
       env = merge(
         {
           FLY_PROCESS_GROUP = "app"
-          PRIMARY_REGION    = each.value.region
+          PRIMARY_REGION    = each.value.fly.region
         },
         each.value.enable_resend ? { RESEND_API_KEY = local.output_resend_api_keys[each.key] } : {},
         each.value.enable_tailscale ? { TAILSCALE_TAILNET_KEY = local.output_tailscale_tailnet_keys[each.key] } : {},
@@ -56,9 +57,14 @@ resource "restapi_object" "fly_app_machine_service" {
           raw_value  = base64encode(content)
         }
       ]
+      guest = {
+        cpu_kind  = each.value.fly.cpu_type
+        cpus      = each.value.fly.cpus
+        memory_mb = each.value.fly.memory
+      }
       services = [
         {
-          internal_port = each.value.port
+          internal_port = each.value.fly.port
           protocol      = "tcp"
           ports = [
             {
@@ -81,12 +87,8 @@ resource "restapi_object" "fly_app_machine_service" {
     }
   })
 
-  depends_on = [
-    restapi_object.fly_app_service
-  ]
-
   force_new = [
-    each.value.name,
-    each.value.region
+    each.value.fly.region,
+    each.value.name
   ]
 }

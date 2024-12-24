@@ -28,9 +28,19 @@ locals {
     ]...
   )
 
+  filtered_services_enable_b2 = {
+    for k, service in local.filtered_services_all : k => service
+    if service.enable_b2
+  }
+
   filtered_services_enable_dns = {
     for k, service in local.filtered_services_all : k => service
     if service.enable_dns
+  }
+
+  filtered_services_fly = {
+    for k, service in local.filtered_services_all : k => service
+    if service.platform == "fly"
   }
 
   merged_services = {
@@ -46,7 +56,7 @@ locals {
         name                    = replace(k, "/^[^-]*-/", "")
         platform                = element(split("-", k), 0)
         server_flags            = try(var.servers[service.server].flags, [])
-        url                     = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal}${can(service.port) && element(split("-", k), 0) != "fly" ? ":${service.port}" : ""}" : null
+        url                     = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal}${can(service.port) ? ":${service.port}" : ""}" : null
         zone                    = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) == var.default.domain_internal ? "internal" : "external"
       },
       service,

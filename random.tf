@@ -1,8 +1,5 @@
 resource "random_password" "b2" {
-  for_each = {
-    for k, service in local.filtered_services_all : k => service
-    if service.enable_b2
-  }
+  for_each = local.filtered_services_enable_b2
 
   length  = 6
   special = false
