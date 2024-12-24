@@ -21,6 +21,9 @@ terraform {
     github = {
       source = "integrations/github"
     }
+    graphql = {
+      source = "sullivtr/graphql"
+    }
     onepassword = {
       source = "1password/onepassword"
     }

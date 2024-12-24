@@ -1,3 +1,69 @@
+resource "graphql_mutation" "fly_app_certificate" {
+  for_each = local.filtered_services_fly
+
+  compute_mutation_keys = {}
+  delete_mutation       = "mutation { __typename }"
+  provider              = graphql.fly
+  read_query            = "query { __typename }"
+  update_mutation       = "mutation { __typename }"
+
+  create_mutation = <<-EOT
+    mutation($app: ID!, $hostname: String!) {
+      addCertificate(appId: $app, hostname: $hostname) {
+        certificate {
+          configured
+        }
+      }
+    }
+  EOT
+
+  lifecycle {
+    ignore_changes = [
+      mutation_variables
+    ]
+  }
+
+  mutation_variables = {
+    app      = restapi_object.fly_app_service[each.key].api_data.name
+    hostname = each.value.fqdn
+  }
+}
+
+resource "graphql_mutation" "fly_app_ip" {
+  for_each = local.filtered_services_fly
+
+  compute_mutation_keys = {}
+  delete_mutation       = "mutation { __typename }"
+  provider              = graphql.fly
+  read_query            = "query { __typename }"
+  update_mutation       = "mutation { __typename }"
+
+  create_mutation = <<-EOT
+    mutation($app: ID!) {
+      ipv4: allocateIpAddress(input: { appId: $app, type: shared_v4 }) {
+        ipAddress {
+          address
+        }
+      }
+      ipv6: allocateIpAddress(input: { appId: $app, type: v6 }) {
+        ipAddress {
+          address
+        }
+      }
+    }
+  EOT
+
+  lifecycle {
+    ignore_changes = [
+      mutation_variables
+    ]
+  }
+
+  mutation_variables = {
+    app = restapi_object.fly_app_service[each.key].api_data.name
+  }
+}
+
 resource "restapi_object" "fly_app_service" {
   for_each = local.filtered_services_fly
 
