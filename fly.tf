@@ -1,31 +1,23 @@
-resource "fly_app" "service" {
+resource "restapi_object" "fly_app_service" {
   for_each = local.filtered_services_fly
 
-  assign_shared_ip_address = true
-  name                     = each.value.name
-  org                      = var.terraform.fly.org
-}
+  destroy_path = "/apps/${each.value.name}"
+  path         = "/apps"
+  provider     = restapi.fly
+  read_path    = "/apps/${each.value.name}"
+  update_path  = "/apps/${each.value.name}"
 
-resource "fly_cert" "service" {
-  for_each = local.filtered_services_fly
-
-  app      = fly_app.service[each.key].name
-  hostname = each.value.fqdn
-}
-
-resource "fly_ip" "service" {
-  for_each = local.filtered_services_fly
-
-  app    = fly_app.service[each.key].name
-  region = each.value.fly.region
-  type   = "v6"
+  data = jsonencode({
+    app_name = each.value.name
+    org_slug = var.terraform.fly.org
+  })
 }
 
 resource "restapi_object" "fly_app_machine_service" {
   for_each = local.filtered_services_fly
 
-  destroy_path  = "/apps/${fly_app.service[each.key].name}/machines/{id}/stop"
-  path          = "/apps/${fly_app.service[each.key].name}/machines"
+  destroy_path  = "/apps/${restapi_object.fly_app_service[each.key].api_data.name}/machines/{id}/stop"
+  path          = "/apps/${restapi_object.fly_app_service[each.key].api_data.name}/machines"
   provider      = restapi.fly
   update_method = "POST"
 

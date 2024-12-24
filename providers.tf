@@ -8,10 +8,6 @@ provider "cloudflare" {
   email   = var.terraform.cloudflare.email
 }
 
-provider "fly" {
-  fly_api_token = var.terraform.fly.api_token
-}
-
 provider "github" {
   token = var.terraform.github.token
 }
