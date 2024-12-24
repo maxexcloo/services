@@ -21,10 +21,10 @@ services:
       - redis
     environment:
       DB_DATABASE_NAME: ${service.database.name}
-      DB_HOSTNAME: ${service.portainer_name}-postgres-1
+      DB_HOSTNAME: ${service.name}-postgres-1
       DB_PASSWORD: ${service.database.password}
       DB_USERNAME: ${service.database.username}
-      REDIS_HOSTNAME: ${service.portainer_name}-redis-1
+      REDIS_HOSTNAME: ${service.name}-redis-1
       TZ: ${server.config.timezone}
     image: ghcr.io/imagegenius/immich
     labels:

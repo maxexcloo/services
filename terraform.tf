@@ -24,11 +24,20 @@ terraform {
     onepassword = {
       source = "1password/onepassword"
     }
+    random = {
+      source = "hashicorp/random"
+    }
     restapi = {
       source = "mastercard/restapi"
     }
+    ssh = {
+      source = "loafoe/ssh"
+    }
     tailscale = {
       source = "tailscale/tailscale"
+    }
+    tls = {
+      source = "hashicorp/tls"
     }
   }
 }

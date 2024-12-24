@@ -3,8 +3,6 @@ provider "b2" {
   application_key_id = var.terraform.b2.application_key_id
 }
 
-provider "bcrypt" {}
-
 provider "cloudflare" {
   api_key = var.terraform.cloudflare.api_key
   email   = var.terraform.cloudflare.email
@@ -19,13 +17,26 @@ provider "onepassword" {
 }
 
 provider "restapi" {
+  alias                = "fly"
+  id_attribute         = "id"
+  uri                  = var.terraform.fly.url
+  write_returns_object = true
+
+  headers = {
+    Authorization = "Bearer ${var.terraform.fly.api_token}"
+    Content-Type  = "application/json"
+  }
+}
+
+provider "restapi" {
   alias                = "portainer"
   id_attribute         = "Id"
   uri                  = "${var.terraform.portainer.url}/api"
   write_returns_object = true
 
   headers = {
-    X-API-Key = var.terraform.portainer.api_key
+    Content-Type = "application/json"
+    X-API-Key    = var.terraform.portainer.api_key
   }
 }
 

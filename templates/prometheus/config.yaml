@@ -1,5 +1,5 @@
 scrape_configs:
-%{ for service in services ~}
+%{ for service_name, service in services ~}
 %{ for server_name, server in servers ~}
 %{ if server_name == service.server || contains(server.services.*.service, service.service) ~}
   - job_name: '${service.service}-${server_name}'
@@ -14,7 +14,7 @@ scrape_configs:
       - targets: ['${service.fqdn != null ? service.fqdn : "${service.service}.${server.fqdn_internal}"}']
         labels:
           location: '${server.location}'
-          name: '${service.name}'
+          name: '${service_name}'
           server: '${server_name}'
           service: '${service.service}'
 %{ endif ~}

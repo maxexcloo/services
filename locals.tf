@@ -43,10 +43,10 @@ locals {
         enable_dns              = can(service.dns_name) && can(service.dns_zone)
         fqdn                    = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal : null
         group                   = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? var.default.domain_internal : "Uncategorized")})"
-        name                    = k
-        portainer_name          = replace(k, "docker-", "")
+        name                    = replace(k, "/^[^-]*-/", "")
+        platform                = element(split("-", k), 0)
         server_flags            = try(var.servers[service.server].flags, [])
-        url                     = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal}${can(service.port) ? ":${service.port}" : ""}" : null
+        url                     = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : var.servers[service.server].fqdn_internal}${can(service.port) && element(split("-", k), 0) != "fly" ? ":${service.port}" : ""}" : null
         zone                    = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) == var.default.domain_internal ? "internal" : "external"
       },
       service,
@@ -133,6 +133,21 @@ locals {
   output_portainer_stack_configs = merge(
     {
       for k, service in local.filtered_services_all : k => {
+        "/app/config.yaml" = templatefile(
+          "templates/${service.service}/config.yaml",
+          {
+            default  = var.default
+            gatus    = service
+            servers  = var.servers
+            services = local.merged_services
+            tags     = var.tags
+          }
+        )
+      }
+      if service.service == "gatus"
+    },
+    {
+      for k, service in local.filtered_services_all : k => {
         "/app/config/bookmarks.yaml"  = ""
         "/app/config/docker.yaml"     = ""
         "/app/config/kubernetes.yaml" = ""
@@ -156,7 +171,7 @@ locals {
   }
 
   output_resend_api_keys = {
-    for k, restapi_object in restapi_object.resend_api_key_service : k => jsondecode(restapi_object.create_response).token
+    for k, restapi_object in restapi_object.resend_api_key_service : k => sensitive(jsondecode(restapi_object.create_response).token)
   }
 
   output_secret_hashes = {
