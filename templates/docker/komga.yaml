@@ -5,17 +5,18 @@ networks:
 services:
   service:
     environment:
-      DOCKER_MODS: linuxserver/mods:universal-calibre
-      OAUTHLIB_RELAX_TOKEN_SCOPE: 1
+      JAVA_TOOL_OPTIONS: -Xmx2g
       TZ: ${server.config.timezone}
-    image: linuxserver/calibre-web
+    image: gotson/komga
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
-      caddy.reverse_proxy: "{{upstreams 8083}}"
+      caddy.reverse_proxy: "{{upstreams 25600}}"
+    ports:
+      - 25600:25600
     restart: unless-stopped
     volumes:
       - data:/config
-      - /Volumes/Media/Books:/books
+      - /Volumes/Media/Books:/data
 volumes:
   data:

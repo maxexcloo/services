@@ -19,7 +19,7 @@ locals {
               server = server_name
             }
           )
-          if contains(server.flags, "docker") && (!contains(server.flags, "minimal") || service.enable_on_minimal)
+          if contains(server.flags, "docker")
         }
         : {
           (service_name) = service
