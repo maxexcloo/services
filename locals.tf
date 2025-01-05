@@ -97,6 +97,7 @@ locals {
             siteMonitor = widget.enable_monitoring ? templatestring("${coalesce(widget.url, service.url)}${service.monitoring_path}", { default = var.default, server = server, service = service }) : null
             widget      = jsondecode(templatestring(jsonencode(widget.widget), { default = var.default, server = server, service = service }))
           }
+          if(widget.flag_exclude == null && widget.flag_include == null) || (widget.flag_exclude != null && !contains(server.flags, coalesce(widget.flag_exclude, "undefined"))) || (widget.flag_include != null && contains(server.flags, coalesce(widget.flag_include, "undefined")))
         }
         if service.server == k
       ]...)
