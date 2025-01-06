@@ -1,0 +1,16 @@
+networks:
+  default:
+    external: true
+    name: ${default.organisation}
+services:
+  beszel:
+    image: henrygd/beszel
+    labels:
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
+      caddy.reverse_proxy: "{{upstreams 8090}}"
+    restart: unless-stopped
+    volumes:
+      - data:/beszel_data
+volumes:
+  data:
