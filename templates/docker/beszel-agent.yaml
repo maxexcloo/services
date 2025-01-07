@@ -1,5 +1,5 @@
 services:
-  beszel-agent:
+  service:
     environment:
       KEY: ${service.secrets.public_key}
     image: henrygd/beszel-agent
