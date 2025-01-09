@@ -35,16 +35,16 @@ locals {
     for k, service in local.merged_services_all : k => merge(
       var.default.service_config,
       {
-        dns_content             = can(service.server) ? try(service.dns_zone, "") != var.default.domain_internal ? local.merged_servers[service.server].fqdn_external : local.merged_servers[service.server].fqdn_internal : null
-        dns_zone                = can(service.server) ? var.default.domain_internal : null
-        enable_cloudflare_proxy = contains(try(local.merged_servers[service.server].flags, []), "cloudflare_proxy") && try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) != var.default.domain_internal
-        enable_dns              = can(service.dns_name) && can(service.dns_zone)
-        fqdn                    = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : local.merged_servers[service.server].fqdn_internal : null
-        group                   = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? var.default.domain_internal : "Uncategorized")})"
-        platform                = element(split("-", k), 0)
-        server_flags            = try(local.merged_servers[service.server].flags, [])
-        url                     = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : local.merged_servers[service.server].fqdn_internal}${try(service.port, var.default.service_config.port) != 443 ? ":${service.port}" : ""}" : null
-        zone                    = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) == var.default.domain_internal ? "internal" : "external"
+        dns_content  = can(service.server) ? try(service.dns_zone, "") != var.default.domain_internal ? local.merged_servers[service.server].fqdn_external : local.merged_servers[service.server].fqdn_internal : var.default.service_config.dns_content
+        dns_zone     = can(service.server) ? var.default.domain_internal : var.default.service_config.dns_zone
+        enable_proxy = contains(try(local.merged_servers[service.server].flags, []), "cloudflare_proxy") && try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) != var.default.domain_internal
+        enable_dns   = can(service.dns_name) && can(service.dns_zone)
+        fqdn         = can(service.dns_name) && can(service.dns_zone) || can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.merged_servers[service.server].fqdn_internal}" : var.default.service_config.fqdn
+        group        = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? var.default.domain_internal : "Uncategorized")})"
+        platform     = element(split("-", k), 0)
+        server_flags = try(local.merged_servers[service.server].flags, var.default.service_config.server_flags)
+        url          = can(service.dns_name) && can(service.dns_zone) || can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.merged_servers[service.server].fqdn_internal}"}${try(service.port, var.default.service_config.port) != var.default.service_config.port ? ":${service.port}" : ""}" : var.default.service_config.url
+        zone         = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) == var.default.domain_internal ? "internal" : var.default.service_config.zone
       },
       service
     )
@@ -55,7 +55,9 @@ locals {
       for server_name, server in local.merged_servers : {
         for service in server.services : "server-${service.service}-${server_name}" => merge(
           {
-            port = 443
+            group          = "Services (Servers)"
+            port           = 443
+            server_service = true
           },
           service,
           {
@@ -102,7 +104,7 @@ locals {
             siteMonitor = widget.enable_monitoring ? "${widget.url}${widget.monitoring_path}" : null
             widget      = widget.widget
           }), { default = var.default, server = server, service = service }))
-          if contains(server.flags, widget.server_flag_exclude) == false && widget.server_flag_exclude != var.default.widget_config.server_flag_exclude || contains(server.flags, widget.server_flag_include) && widget.server_flag_include != var.default.widget_config.server_flag_include
+          if contains(server.flags, widget.filter_server_flag) && widget.filter_mode == "include" || contains(server.flags, widget.filter_server_flag) == false && widget.filter_mode == "exclude"
         }
         if service.server == k
       ]...)
@@ -129,8 +131,6 @@ locals {
       {
         b2                    = try(local.output_b2[k], {})
         database              = try(local.output_databases[k], {})
-        password              = try(onepassword_item.service[k].password, "")
-        password_bcrypt       = try(replace(bcrypt_hash.password[k].id, "$", "$$"), "")
         portainer_endpoint_id = try(local.filtered_portainer_endpoints[service.server]["Id"], "")
         resend_api_key        = try(local.output_resend_api_keys[k], "")
         secret_hash           = try(local.output_secret_hashes[k], "")
@@ -139,6 +139,8 @@ locals {
       },
       service,
       {
+        password        = try(onepassword_item.service[k].password, "")
+        password_bcrypt = try(replace(bcrypt_hash.password[k].id, "$", "$$"), "")
         widgets = [
           for widget in try(service.widgets, []) : merge(
             var.default.widget_config,

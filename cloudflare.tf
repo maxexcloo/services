@@ -12,9 +12,9 @@ resource "cloudflare_record" "service" {
   for_each = local.filtered_services_enable_dns
 
   allow_overwrite = true
-  content         = each.value.enable_cloudflare_proxy ? local.merged_servers[each.value.server].cloudflare_tunnel.cname : each.value.dns_content
+  content         = each.value.enable_proxy ? local.merged_servers[each.value.server].cloudflare_tunnel.cname : each.value.dns_content
   name            = each.value.dns_name
-  proxied         = each.value.enable_cloudflare_proxy
+  proxied         = each.value.enable_proxy
   type            = can(cidrhost("${each.value.dns_content}/32", 0)) ? "A" : "CNAME"
   zone_id         = data.cloudflare_zone.service[each.key].id
 }
@@ -32,7 +32,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "server" {
     dynamic "ingress_rule" {
       for_each = {
         for k, service in local.filtered_services_enable_dns : k => service
-        if service.enable_cloudflare_proxy && service.server == each.key
+        if service.enable_proxy && service.server == each.key
       }
 
       content {
