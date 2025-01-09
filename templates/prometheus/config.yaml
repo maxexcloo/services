@@ -9,7 +9,7 @@ scrape_configs:
     authorization:
       credentials: '${service.secrets.metrics_token}'
 %{ endif ~}
-%{ if !can(service.secrets.metrics_token) && (can(service.secrets.metrics_password) || can(service.secrets.metrics_username) || service.enable_password || service.enable_secret_hash) ~}
+%{ if can(service.secrets.metrics_token) == false && (can(service.secrets.metrics_password) || can(service.secrets.metrics_username) || service.enable_password || service.enable_secret_hash) ~}
     basic_auth:
       username: '${service.metrics_username != null ? service.metrics_username : service.username != null ? service.username : server.secret_hash}'
       password: '${can(service.secrets.metrics_password) ? service.secrets.metrics_password : service.enable_password ? service.password : service.secret_hash}'

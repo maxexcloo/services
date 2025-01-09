@@ -12,7 +12,7 @@ resource "cloudflare_record" "service" {
   for_each = local.filtered_services_enable_dns
 
   allow_overwrite = true
-  content         = each.value.enable_cloudflare_proxy ? var.servers[each.value.server].cloudflare_tunnel.cname : each.value.dns_content
+  content         = each.value.enable_cloudflare_proxy ? local.merged_servers[each.value.server].cloudflare_tunnel.cname : each.value.dns_content
   name            = each.value.dns_name
   proxied         = each.value.enable_cloudflare_proxy
   type            = can(cidrhost("${each.value.dns_content}/32", 0)) ? "A" : "CNAME"
@@ -21,7 +21,7 @@ resource "cloudflare_record" "service" {
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "server" {
   for_each = {
-    for k, server in var.servers : k => server
+    for k, server in local.merged_servers : k => server
     if contains(server.flags, "cloudflared")
   }
 

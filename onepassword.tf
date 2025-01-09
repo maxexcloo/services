@@ -6,8 +6,9 @@ resource "onepassword_item" "service" {
   for_each = local.filtered_onepassword_services
 
   category = "login"
+  password = each.value.enable_password || each.value.password == "" ? null : each.value.password
   title    = "${each.value.title} (${each.value.server != null ? each.value.server : each.value.platform})"
-  url      = each.value.url
+  url      = try(templatestring(each.value.url, { default = var.default, server = try(local.merged_servers[each.value.server], null), service = each.value }), null)
   username = each.value.username
   vault    = data.onepassword_vault.services.uuid
 

@@ -17,28 +17,9 @@ endpoints:
       - type: email
     conditions:
       - "[CONNECTED] == true"
-    group: "${tags[server.tag].title}"
+    group: "${tags[server.tag]}"
     name: "${k} (${server.title})"
     url: "icmp://${k}"
-%{ for service in server.services ~}
-%{ if service.enable_monitoring ~}
-  - alerts:
-      - type: email
-%{ if service.enable_ssl_validation == false ~}
-    client:
-      insecure: true
-%{ endif ~}
-    conditions:
-%{ if service.enable_ssl && service.enable_ssl_validation ~}
-      - "[CERTIFICATE_EXPIRATION] > 48h"
-%{ endif ~}
-      - "[RESPONSE_TIME] < 5000"
-      - "[STATUS] == any(200, 401)"
-    group: "Services (Servers)"
-    name: "${service.title} (${k})"
-    url: "${service.url}${service.monitoring_path}"
-%{ endif ~}
-%{ endfor ~}
 %{ endfor ~}
 %{ for service in services ~}
 %{ if service.enable_monitoring && service.fqdn != null ~}

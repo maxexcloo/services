@@ -39,6 +39,9 @@ terraform {
     tailscale = {
       source = "tailscale/tailscale"
     }
+    tfe = {
+      source = "hashicorp/tfe"
+    }
     tls = {
       source = "hashicorp/tls"
     }
