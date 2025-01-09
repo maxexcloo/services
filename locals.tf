@@ -1,7 +1,7 @@
 locals {
   filtered_onepassword_services = {
     for k, service in local.merged_services : k => service
-    if service.database_name != null || service.database_username != null || service.enable_password || service.enable_b2 || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.username != null
+    if service.database_name != null || service.database_username != null || service.enable_password || service.enable_b2 || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.password != "" || service.username != null
   }
 
   filtered_portainer_endpoints = {
@@ -43,7 +43,7 @@ locals {
         group                   = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? var.default.domain_internal : "Uncategorized")})"
         platform                = element(split("-", k), 0)
         server_flags            = try(local.merged_servers[service.server].flags, [])
-        url                     = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : local.merged_servers[service.server].fqdn_internal}${can(service.port) ? ":${service.port}" : ""}" : null
+        url                     = can(service.dns_name) && can(service.dns_zone) || can(service.port) && can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : local.merged_servers[service.server].fqdn_internal}${try(service.port, var.default.service_config.port) != 443 ? ":${service.port}" : ""}" : null
         zone                    = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) == var.default.domain_internal ? "internal" : "external"
       },
       service
@@ -62,6 +62,7 @@ locals {
             name     = service.service
             password = server.password
             server   = server_name
+            username = server.user.username
           }
         )
       }
@@ -101,7 +102,7 @@ locals {
             siteMonitor = widget.enable_monitoring ? "${widget.url}${widget.monitoring_path}" : null
             widget      = widget.widget
           }), { default = var.default, server = server, service = service }))
-          if contains(server.flags, widget.server_flag_exclude) == false || contains(server.flags, widget.server_flag_include)
+          if contains(server.flags, widget.server_flag_exclude) == false && widget.server_flag_exclude != var.default.widget_config.server_flag_exclude || contains(server.flags, widget.server_flag_include) && widget.server_flag_include != var.default.widget_config.server_flag_include
         }
         if service.server == k
       ]...)
