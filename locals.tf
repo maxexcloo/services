@@ -25,7 +25,7 @@ locals {
   }
 
   filter_services_prometheus = {
-    for k, service in local.output_portainer_stacks : k => service
+    for k, service in local.merged_services_outputs : k => service
     if service.enable_metrics
   }
 
