@@ -15,6 +15,6 @@ services:
     restart: unless-stopped
     volumes:
       - data:/config
-      - /mnt/truenas/books:/data
+      - /mnt/truenas/books/komga:/data
 volumes:
   data:
