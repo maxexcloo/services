@@ -12,11 +12,8 @@ services:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 25600}}"
-    ports:
-      - 25600:25600
     restart: unless-stopped
     volumes:
       - data:/config
-      - /Volumes/Media/Books:/data
 volumes:
   data:
