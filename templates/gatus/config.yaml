@@ -22,7 +22,7 @@ endpoints:
     url: "icmp://${k}"
 %{ endfor ~}
 %{ for service in services ~}
-%{ if service.enable_monitoring && service.fqdn != null ~}
+%{ if service.enable_monitoring && service.fqdn != null && service.group != default.service_config.group && service.title != default.service_config.title ~}
   - alerts:
       - type: email
 %{ if service.enable_ssl_validation == false ~}
@@ -35,7 +35,7 @@ endpoints:
 %{ endif ~}
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
-    group: "${service.group}"
+    group: "Services (${service.group})"
     name: "${service.title} (${service.server != null ? service.server : service.platform})"
     url: "${service.url}${service.monitoring_path}"
 %{ endif ~}

@@ -35,12 +35,12 @@ locals {
     for k, service in local.merged_services_all : k => merge(
       var.default.service_config,
       {
-        dns_content  = can(service.server) ? try(service.dns_zone, "") != var.default.domain_internal ? local.merged_servers[service.server].fqdn_external : local.merged_servers[service.server].fqdn_internal : var.default.service_config.dns_content
+        dns_content  = can(service.server) ? try(service.dns_zone, var.default.service_config.dns_zone) != var.default.domain_internal ? local.merged_servers[service.server].fqdn_external : local.merged_servers[service.server].fqdn_internal : var.default.service_config.dns_content
         dns_zone     = can(service.server) ? var.default.domain_internal : var.default.service_config.dns_zone
         enable_proxy = contains(try(local.merged_servers[service.server].flags, []), "cloudflare_proxy") && try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) != var.default.domain_internal
         enable_dns   = can(service.dns_name) && can(service.dns_zone)
         fqdn         = can(service.dns_name) && can(service.dns_zone) || can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.merged_servers[service.server].fqdn_internal}" : var.default.service_config.fqdn
-        group        = "Services (${try(service.dns_zone, can(service.port) && can(service.server) ? var.default.domain_internal : "Uncategorized")})"
+        group        = try(service.dns_zone, can(service.server) ? var.default.domain_internal : var.default.service_config.group)
         platform     = element(split("-", k), 0)
         server_flags = try(local.merged_servers[service.server].flags, var.default.service_config.server_flags)
         url          = can(service.dns_name) && can(service.dns_zone) || can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.merged_servers[service.server].fqdn_internal}"}${try(service.port, var.default.service_config.port) != var.default.service_config.port ? ":${service.port}" : ""}" : var.default.service_config.url
@@ -55,7 +55,7 @@ locals {
       for server_name, server in local.merged_servers : {
         for service in server.services : "server-${service.service}-${server_name}" => merge(
           {
-            group          = "Services (Servers)"
+            group          = "Servers"
             port           = 443
             server_service = true
           },
