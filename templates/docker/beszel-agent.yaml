@@ -1,7 +1,7 @@
 services:
   service:
     environment:
-      KEY: ${service.secrets.public_key}
+      KEY: ${service.config.public_key}
     image: henrygd/beszel-agent
     network_mode: host
     restart: unless-stopped

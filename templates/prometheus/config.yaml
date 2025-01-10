@@ -5,14 +5,14 @@ scrape_configs:
   - job_name: '${service.service}-${server_name}'
     metrics_path: '${service.metrics_path}'
     scheme: '${service.enable_ssl ? "https" : "http"}'
-%{ if can(service.secrets.metrics_token) ~}
+%{ if can(service.config.metrics_token) ~}
     authorization:
-      credentials: '${service.secrets.metrics_token}'
+      credentials: '${service.config.metrics_token}'
 %{ endif ~}
-%{ if can(service.secrets.metrics_token) == false && (can(service.secrets.metrics_password) || can(service.secrets.metrics_username) || service.enable_password || service.enable_secret_hash) ~}
+%{ if can(service.config.metrics_token) == false && (can(service.config.metrics_password) || can(service.config.metrics_username) || service.enable_password || service.enable_secret_hash) ~}
     basic_auth:
-      username: '${service.metrics_username != null ? service.metrics_username : service.username != null ? service.username : server.secret_hash}'
-      password: '${can(service.secrets.metrics_password) ? service.secrets.metrics_password : service.enable_password ? service.password : service.secret_hash}'
+      username: '${service.config.metrics_username != null ? service.config.metrics_username : service.username != null ? service.username : server.secret_hash}'
+      password: '${can(service.config.metrics_password) ? service.config.metrics_password : service.enable_password ? service.password : service.secret_hash}'
 %{ endif ~}
     static_configs:
       - targets: ['${service.fqdn != null ? service.fqdn : "${service.service}.${server.fqdn_internal}"}']

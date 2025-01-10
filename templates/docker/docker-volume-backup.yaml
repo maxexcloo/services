@@ -3,18 +3,19 @@ networks:
     external: true
     name: ${default.organisation}
 services:
-  daily:
+%{ for schedule in service.config.backup_schedules ~}
+  ${schedule.cron}:
     environment:
       AWS_ACCESS_KEY_ID: ${server.b2.application_key_id}
       AWS_ENDPOINT: ${server.b2.endpoint}
       AWS_S3_BUCKET_NAME: ${server.b2.bucket_name}
       AWS_SECRET_ACCESS_KEY: ${server.b2.application_key}
       BACKUP_COMPRESSION: zst
-      BACKUP_CRON_EXPRESSION: "@daily"
-      BACKUP_EXCLUDE_REGEXP: '[a-f0-9]{64}\/|backingFsBlockDev$|excloo-photos_.*\/|metadata\.db$'
-      BACKUP_FILENAME: docker-backup-daily-%Y-%m-%dT%H-%M-%S.tar.zst
-      BACKUP_PRUNING_PREFIX: docker-backup-daily-
-      BACKUP_RETENTION_DAYS: 7
+      BACKUP_CRON_EXPRESSION: "@${schedule.cron}"
+      BACKUP_EXCLUDE_REGEXP: '${service.config.backup_exclude_regexp}'
+      BACKUP_FILENAME: docker-backup-${schedule.cron}-%Y-%m-%dT%H-%M-%S.tar.zst
+      BACKUP_PRUNING_PREFIX: docker-backup-${schedule.cron}-
+      BACKUP_RETENTION_DAYS: ${schedule.retention_days}
       GPG_PASSPHRASE: ${server.secret_hash}
       NOTIFICATION_URLS: smtp://resend:${server.resend_api_key}@smtp.resend.com:465/?fromAddress=${default.email}&toAddresses=${default.email}
     image: offen/docker-volume-backup
@@ -23,23 +24,4 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
       - ${contains(server.flags, "truenas") ? "/mnt/.ix-apps/docker/volumes" : "/var/lib/docker/volumes"}:/backup:ro
-  weekly:
-    environment:
-      AWS_ACCESS_KEY_ID: ${server.b2.application_key_id}
-      AWS_ENDPOINT: ${server.b2.endpoint}
-      AWS_S3_BUCKET_NAME: ${server.b2.bucket_name}
-      AWS_SECRET_ACCESS_KEY: ${server.b2.application_key}
-      BACKUP_COMPRESSION: zst
-      BACKUP_CRON_EXPRESSION: "@weekly"
-      BACKUP_EXCLUDE_REGEXP: '[a-f0-9]{64}\/|backingFsBlockDev$|excloo-photos_.*\/|metadata\.db$'
-      BACKUP_FILENAME: docker-backup-weekly-%Y-%m-%dT%H-%M-%S.tar.zst
-      BACKUP_PRUNING_PREFIX: docker-backup-weekly-
-      BACKUP_RETENTION_DAYS: 31
-      GPG_PASSPHRASE: ${server.secret_hash}
-      NOTIFICATION_URLS: smtp://resend:${server.resend_api_key}@smtp.resend.com:465/?fromAddress=${default.email}&toAddresses=${default.email}
-    image: offen/docker-volume-backup
-    restart: unless-stopped
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-      - ${contains(server.flags, "truenas") ? "/mnt/.ix-apps/docker/volumes" : "/var/lib/docker/volumes"}:/backup:ro
+%{ endfor ~}

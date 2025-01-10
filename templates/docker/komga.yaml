@@ -15,5 +15,6 @@ services:
     restart: unless-stopped
     volumes:
       - data:/config
+      - /mnt/truenas/books:/data
 volumes:
   data:

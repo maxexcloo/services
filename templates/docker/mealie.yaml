@@ -6,7 +6,7 @@ services:
   service:
     environment:
       BASE_URL: ${service.url}
-      OPENAI_API_KEY: ${service.secrets.openai_api_key}
+      OPENAI_API_KEY: ${service.config.openai_api_key}
       SMTP_FROM_EMAIL: ${default.email}
       SMTP_FROM_NAME: ${service.title}
       SMTP_HOST: smtp.resend.com
