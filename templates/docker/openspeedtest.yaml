@@ -3,6 +3,7 @@ networks:
     external: true
     name: ${default.organisation}
 services:
+%{ if contains(server.flags, "cloudflare_proxy") == false ~}
   external:
     image: openspeedtest/latest
     labels:
@@ -10,6 +11,7 @@ services:
       caddy.import: external
       caddy.reverse_proxy: "{{upstreams 3000}}"
     restart: unless-stopped
+%{ endif ~}
   internal:
     image: openspeedtest/latest
     labels:

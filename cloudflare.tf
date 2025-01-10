@@ -40,6 +40,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "server" {
         service  = "https://localhost"
 
         origin_request {
+          http_host_header   = cloudflare_record.service[ingress_rule.key].hostname
           no_tls_verify      = true
           origin_server_name = cloudflare_record.service[ingress_rule.key].hostname
         }
