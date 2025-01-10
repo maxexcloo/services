@@ -28,25 +28,25 @@ resource "onepassword_item" "service" {
       label = "B2"
 
       field {
-        label = "Application Key"
+        label = "B2 Application Key"
         type  = "CONCEALED"
         value = local.output_b2[each.key].application_key
       }
 
       field {
-        label = "Application Key ID"
+        label = "B2 Application Key ID"
         type  = "STRING"
         value = local.output_b2[each.key].application_key_id
       }
 
       field {
-        label = "Bucket Name"
+        label = "B2 Bucket Name"
         type  = "STRING"
         value = local.output_b2[each.key].bucket_name
       }
 
       field {
-        label = "Endpoint"
+        label = "B2 Endpoint"
         type  = "URL"
         value = local.output_b2[each.key].endpoint
       }
@@ -54,27 +54,59 @@ resource "onepassword_item" "service" {
   }
 
   dynamic "section" {
-    for_each = each.value.database_name != null || each.value.database_username != null ? [true] : []
+    for_each = each.value.enable_database_password ? [true] : []
 
     content {
-      label = "Database Name"
+      label = "Database"
 
       field {
-        label = "Name"
+        label = "Database Name"
         type  = "STRING"
-        value = each.value.database_name
+        value = local.output_databases[each.key].name
       }
 
       field {
-        label = "Username"
+        label = "Database Username"
         type  = "STRING"
-        value = each.value.database_username
+        value = local.output_databases[each.key].username
       }
 
       field {
-        label = "Password"
+        label = "Database Password"
         type  = "CONCEALED"
         value = local.output_databases[each.key].password
+      }
+    }
+  }
+
+  dynamic "section" {
+    for_each = try(local.output_resend_api_keys[each.key], local.merged_servers[each.value.server].resend_api_key, "") != "" ? [true] : []
+
+    content {
+      label = "Mail"
+
+      field {
+        label = "SMTP Host"
+        type  = "STRING"
+        value = var.terraform.resend.smtp_host
+      }
+
+      field {
+        label = "SMTP Port"
+        type  = "STRING"
+        value = var.terraform.resend.smtp_port
+      }
+
+      field {
+        label = "SMTP Username"
+        type  = "STRING"
+        value = var.terraform.resend.smtp_username
+      }
+
+      field {
+        label = "SMTP Password"
+        type  = "CONCEALED"
+        value = try(local.output_resend_api_keys[each.key], local.merged_servers[each.value.server].resend_api_key, "")
       }
     }
   }
@@ -86,7 +118,7 @@ resource "onepassword_item" "service" {
       label = "Resend"
 
       field {
-        label = "API Key"
+        label = "Resend API Key"
         type  = "CONCEALED"
         value = local.output_resend_api_keys[each.key]
       }
@@ -114,7 +146,7 @@ resource "onepassword_item" "service" {
       label = "Tailscale"
 
       field {
-        label = "Tailnet Key"
+        label = "Tailscale Tailnet Key"
         type  = "CONCEALED"
         value = local.output_tailscale_tailnet_keys[each.key]
       }

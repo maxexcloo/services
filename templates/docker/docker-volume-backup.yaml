@@ -17,7 +17,7 @@ services:
       BACKUP_PRUNING_PREFIX: docker-backup-${schedule.cron}-
       BACKUP_RETENTION_DAYS: ${schedule.retention_days}
       GPG_PASSPHRASE: ${server.secret_hash}
-      NOTIFICATION_URLS: smtp://resend:${server.resend_api_key}@smtp.resend.com:465/?fromAddress=${default.email}&toAddresses=${default.email}
+      NOTIFICATION_URLS: smtp://${service.mail.username}:${service.mail.password}@${service.mail.host}:${service.mail.port}/?fromAddress=${default.email}&toAddresses=${default.email}
     image: offen/docker-volume-backup
     restart: unless-stopped
     volumes:

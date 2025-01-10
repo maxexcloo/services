@@ -1,7 +1,7 @@
 locals {
   filtered_onepassword_services = {
     for k, service in local.merged_services : k => service
-    if service.database_name != null || service.database_username != null || service.enable_password || service.enable_b2 || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.password != "" || service.username != null
+    if service.enable_database_password || service.enable_password || service.enable_b2 || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.password != "" || service.username != null
   }
 
   filtered_portainer_endpoints = {
@@ -128,19 +128,22 @@ locals {
 
   merged_services_outputs = {
     for k, service in local.merged_services : k => merge(
-      {
-        b2                    = try(local.output_b2[k], {})
-        database              = try(local.output_databases[k], {})
-        portainer_endpoint_id = try(local.filtered_portainer_endpoints[service.server]["Id"], "")
-        resend_api_key        = try(local.output_resend_api_keys[k], "")
-        secret_hash           = try(local.output_secret_hashes[k], "")
-        secret_hash_bcrypt    = try(replace(bcrypt_hash.secret_hash[k].id, "$", "$$"), "")
-        tailscale_tailnet_key = try(local.output_tailscale_tailnet_keys[k], "")
-      },
       service,
       {
-        password        = try(onepassword_item.service[k].password, "")
-        password_bcrypt = try(replace(bcrypt_hash.password[k].id, "$", "$$"), "")
+        b2                    = service.enable_b2 ? local.output_b2[k] : {}
+        database              = service.enable_database_password ? local.output_databases[k] : {}
+        password              = service.enable_password ? onepassword_item.service[k].password : ""
+        password_bcrypt       = service.enable_password ? replace(bcrypt_hash.password[k].id, "$", "$$") : ""
+        portainer_endpoint_id = try(local.filtered_portainer_endpoints[service.server]["Id"], "")
+        secret_hash           = service.enable_secret_hash ? local.output_secret_hashes[k] : ""
+        secret_hash_bcrypt    = service.enable_secret_hash ? replace(bcrypt_hash.secret_hash[k].id, "$", "$$") : ""
+        tailscale_tailnet_key = service.enable_tailscale ? local.output_tailscale_tailnet_keys[k] : ""
+        mail = {
+          host     = var.terraform.resend.smtp_host
+          password = try(local.output_resend_api_keys[k], local.merged_servers[service.server].resend_api_key, "")
+          port     = var.terraform.resend.smtp_port
+          username = var.terraform.resend.smtp_username
+        }
         widgets = [
           for widget in try(service.widgets, []) : merge(
             var.default.widget_config,
@@ -171,11 +174,11 @@ locals {
 
   output_databases = {
     for k, service in local.merged_services : k => {
-      name     = try(service.database_name, "")
-      password = try(random_password.database_password[k].result, "")
-      username = try(service.database_username, "")
+      name     = service.service
+      password = random_password.database_password[k].result
+      username = service.service
     }
-    if service.database_name != null || service.database_username != null
+    if service.enable_database_password
   }
 
   output_portainer_stack_configs = merge(
@@ -184,11 +187,12 @@ locals {
         "/app/config.yaml" = templatefile(
           "templates/${service.service}/config.yaml",
           {
-            default  = var.default
-            gatus    = service
-            servers  = local.merged_servers
-            services = local.merged_services
-            tags     = var.tags
+            default   = var.default
+            gatus     = service
+            servers   = local.merged_servers
+            services  = local.merged_services
+            tags      = var.tags
+            terraform = var.terraform
           }
         )
       }

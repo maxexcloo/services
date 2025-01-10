@@ -18,9 +18,9 @@ services:
       GF_SMTP_ENABLED: true
       GF_SMTP_FROM_ADDRESS: ${default.email}
       GF_SMTP_FROM_NAME: ${service.title}
-      GF_SMTP_HOST: smtp.resend.com:465
-      GF_SMTP_PASSWORD: ${service.resend_api_key}
-      GF_SMTP_USERNAME: resend
+      GF_SMTP_HOST: ${service.mail.host}:${service.mail.port}
+      GF_SMTP_PASSWORD: ${service.mail.password}
+      GF_SMTP_USERNAME: ${service.mail.username}
     image: grafana/grafana
     labels:
       caddy: ${service.fqdn}

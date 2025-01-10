@@ -1,16 +1,16 @@
 alerting:
   email:
     default-alert:
-      description: "${gatus.title} Check Failed"
+      description: ${gatus.title} Check Failed
       failure-threshold: 5
       send-on-resolved: true
       success-threshold: 5
-    from: "${default.email}"
-    host: "smtp.resend.com"
-    password: "$${RESEND_API_KEY}"
-    port: 587
-    to: "${default.email}"
-    username: "resend"
+    from: ${default.email}
+    host: ${terraform.resend.smtp_host}
+    password: $${RESEND_API_KEY}
+    port: ${terraform.resend.smtp_port}
+    to: ${default.email}
+    username: ${terraform.resend.smtp_username}
 endpoints:
 %{ for k, server in servers ~}
   - alerts:
@@ -41,6 +41,6 @@ endpoints:
 %{ endif ~}
 %{ endfor ~}
 ui:
-  description: "${gatus.description}"
-  header: "${gatus.title}"
-  title: "${gatus.title}"
+  description: ${gatus.description}
+  header: ${gatus.title}
+  title: ${gatus.title}

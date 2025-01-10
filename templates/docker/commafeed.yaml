@@ -7,11 +7,11 @@ services:
     environment:
       COMMAFEED_PASSWORD_RECOVERY_ENABLED: true
       QUARKUS_MAILER_FROM: ${default.email}
-      QUARKUS_MAILER_HOST: smtp.resend.com
-      QUARKUS_MAILER_PASSWORD: ${service.resend_api_key}
-      QUARKUS_MAILER_PORT: 465
+      QUARKUS_MAILER_HOST: ${service.mail.host}
+      QUARKUS_MAILER_PASSWORD: ${service.mail.password}
+      QUARKUS_MAILER_PORT: ${service.mail.port}
       QUARKUS_MAILER_TLS: true
-      QUARKUS_MAILER_USERNAME: resend
+      QUARKUS_MAILER_USERNAME: ${service.mail.username}
     image: athou/commafeed:latest-h2-jvm
     labels:
       caddy: ${service.fqdn}

@@ -9,10 +9,10 @@ services:
       OPENAI_API_KEY: ${service.config.openai_api_key}
       SMTP_FROM_EMAIL: ${default.email}
       SMTP_FROM_NAME: ${service.title}
-      SMTP_HOST: smtp.resend.com
-      SMTP_PASSWORD: ${service.resend_api_key}
-      SMTP_PORT: 465
-      SMTP_USER: resend
+      SMTP_HOST: ${service.mail.host}
+      SMTP_PASSWORD: ${service.mail.password}
+      SMTP_PORT: ${service.mail.port}
+      SMTP_USER: ${service.mail.username}
       TZ: ${server.config.timezone}
     image: ghcr.io/mealie-recipes/mealie
     labels:
