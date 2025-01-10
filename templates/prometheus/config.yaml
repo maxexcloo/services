@@ -11,7 +11,7 @@ scrape_configs:
 %{ endif ~}
 %{ if can(service.config.metrics_token) == false && (can(service.config.metrics_password) || can(service.config.metrics_username) || service.enable_password || service.enable_secret_hash) ~}
     basic_auth:
-      username: '${service.config.metrics_username != null ? service.config.metrics_username : service.username != null ? service.username : server.secret_hash}'
+      username: '${can(service.config.metrics_username) ? service.config.metrics_username : service.username != null ? service.username : server.secret_hash}'
       password: '${can(service.config.metrics_password) ? service.config.metrics_password : service.enable_password ? service.password : service.secret_hash}'
 %{ endif ~}
     static_configs:

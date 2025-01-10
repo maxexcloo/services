@@ -1,0 +1,19 @@
+networks:
+  default:
+    external: true
+    name: ${default.organisation}
+services:
+  service:
+    environment:
+      LOKI_LIMITS_CONFIG_RETENTION_PERIOD: 744h
+    image: grafana/loki
+    labels:
+      caddy: ${service.fqdn}
+      caddy.basic_auth.${server.secret_hash}: ${service.password_bcrypt}
+      caddy.import: ${service.zone}
+      caddy.reverse_proxy: "{{upstreams 3100}}"
+    restart: unless-stopped
+    volumes:
+      - data:/loki
+volumes:
+  data:
