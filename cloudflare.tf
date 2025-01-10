@@ -37,10 +37,26 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "server" {
 
       content {
         hostname = cloudflare_record.service[ingress_rule.key].hostname
+        path     = "/.well-known/acme-challenge/*"
+        service  = "http://localhost"
+
+        origin_request {
+          http_host_header = cloudflare_record.service[ingress_rule.key].hostname
+        }
+      }
+    }
+
+    dynamic "ingress_rule" {
+      for_each = {
+        for k, service in local.filtered_services_enable_dns : k => service
+        if service.enable_proxy && service.server == each.key
+      }
+
+      content {
+        hostname = cloudflare_record.service[ingress_rule.key].hostname
         service  = "https://localhost"
 
         origin_request {
-          http_host_header   = cloudflare_record.service[ingress_rule.key].hostname
           no_tls_verify      = true
           origin_server_name = cloudflare_record.service[ingress_rule.key].hostname
         }
