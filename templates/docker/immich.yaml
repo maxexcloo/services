@@ -1,7 +1,6 @@
 networks:
-  default:
+  ${default.organisation}:
     external: true
-    name: ${default.organisation}
 services:
   postgres:
     environment:
@@ -19,24 +18,25 @@ services:
     depends_on:
       - postgres
       - redis
-    devices:
-      - /dev/dri:/dev/dri
     environment:
       DB_DATABASE_NAME: ${service.database.name}
-      DB_HOSTNAME: ${service.name}-postgres-1
+      DB_HOSTNAME: postgres
       DB_PASSWORD: ${service.database.password}
       DB_USERNAME: ${service.database.username}
-      REDIS_HOSTNAME: ${service.name}-redis-1
+      REDIS_HOSTNAME: redis
       TZ: ${server.config.timezone}
     image: ghcr.io/imagegenius/immich
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 8080}}"
+    networks:
+      - default
+      - ${default.organisation}
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/truenas-nvme/immich:/photos
+      - /Volumes/Pictures/Immich:/photos
       - data:/config
 volumes:
   data:

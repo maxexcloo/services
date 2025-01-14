@@ -1,7 +1,6 @@
 networks:
-  default:
+  ${default.organisation}:
     external: true
-    name: ${default.organisation}
 services:
   service:
     environment:
@@ -15,9 +14,12 @@ services:
       WATCHTOWER_REMOVE_VOLUMES: true
     image: containrrr/watchtower
     labels:
-      caddy: watchtower.${server.fqdn_internal}
+      caddy: ${service.fqdn}
       caddy.import: internal
       caddy.reverse_proxy: "{{upstreams 8080}}"
+    networks:
+      - default
+      - ${default.organisation}
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

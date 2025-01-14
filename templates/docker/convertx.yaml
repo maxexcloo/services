@@ -1,7 +1,6 @@
 networks:
-  default:
+  ${default.organisation}:
     external: true
-    name: ${default.organisation}
 services:
   service:
     environment:
@@ -12,6 +11,9 @@ services:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 3000}}"
+    networks:
+      - default
+      - ${default.organisation}
     restart: unless-stopped
     volumes:
       - data:/app/data

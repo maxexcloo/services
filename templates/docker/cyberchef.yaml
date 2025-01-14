@@ -1,7 +1,6 @@
 networks:
-  default:
+  ${default.organisation}:
     external: true
-    name: ${default.organisation}
 services:
   service:
     image: mpepping/cyberchef
@@ -9,4 +8,7 @@ services:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 8000}}"
+    networks:
+      - default
+      - ${default.organisation}
     restart: unless-stopped

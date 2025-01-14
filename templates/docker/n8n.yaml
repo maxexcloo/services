@@ -1,7 +1,6 @@
 networks:
-  default:
+  ${default.organisation}:
     external: true
-    name: ${default.organisation}
 services:
   postgres:
     environment:
@@ -17,7 +16,7 @@ services:
       - postgres
     environment:
       DB_POSTGRESDB_DATABASE: ${service.database.name}
-      DB_POSTGRESDB_HOST: ${service.name}-postgres-1
+      DB_POSTGRESDB_HOST: postgres
       DB_POSTGRESDB_PASSWORD: ${service.database.password}
       DB_POSTGRESDB_USER: ${service.database.username}
       DB_TYPE: postgresdb
@@ -31,6 +30,9 @@ services:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 5678}}"
+    networks:
+      - default
+      - ${default.organisation}
     restart: unless-stopped
     volumes:
       - data:/home/node/.n8n

@@ -1,7 +1,6 @@
 networks:
-  default:
+  ${default.organisation}:
     external: true
-    name: ${default.organisation}
 services:
   postgres:
     environment:
@@ -16,12 +15,15 @@ services:
     depends_on:
       - postgres
     environment:
-      NC_DB: pg://${service.name}-postgres-1:5432?d=${service.database.name}&p=${service.database.password}&u=${service.database.username}
+      NC_DB: pg://postgres:5432?d=${service.database.name}&p=${service.database.password}&u=${service.database.username}
     image: nocodb/nocodb
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 8080}}"
+    networks:
+      - default
+      - ${default.organisation}
     restart: unless-stopped
     volumes:
       - data:/usr/app/data

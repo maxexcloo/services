@@ -1,7 +1,3 @@
-networks:
-  default:
-    external: true
-    name: ${default.organisation}
 services:
 %{ for schedule in service.config.backup_schedules ~}
   ${schedule.cron}:

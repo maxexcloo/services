@@ -1,15 +1,16 @@
 networks:
-  default:
+  ${default.organisation}:
     external: true
-    name: ${default.organisation}
 services:
   service:
-    hostname: ${service.server}
     image: syncthing/syncthing
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 8384}}"
+    networks:
+      - default
+      - ${default.organisation}
     ports:
       - 22000:22000
       - 22000:22000/udp
