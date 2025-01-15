@@ -41,6 +41,7 @@ provider "restapi" {
   alias                = "portainer"
   id_attribute         = "Id"
   insecure             = true
+  rate_limit           = 10
   uri                  = "${var.terraform.portainer.url}/api"
   write_returns_object = true
 

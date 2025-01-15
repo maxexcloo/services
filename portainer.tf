@@ -1,8 +1,10 @@
 data "http" "portainer_endpoints" {
-  url = "${var.terraform.portainer.url}/api/endpoints"
+  insecure = true
+  url      = "${var.terraform.portainer.url}/api/endpoints"
 
   request_headers = {
-    X-API-Key = var.terraform.portainer.api_key
+    Content-Type = "application/json"
+    X-API-Key    = var.terraform.portainer.api_key
   }
 }
 
