@@ -80,7 +80,7 @@ resource "onepassword_item" "service" {
   }
 
   dynamic "section" {
-    for_each = try(local.output_resend_api_keys[each.key], local.merged_servers[each.value.server].resend_api_key, "") != "" ? [true] : []
+    for_each = try(local.output_resend_api_keys[each.key], local.output_servers[each.value.server].resend_api_key, "") != "" ? [true] : []
 
     content {
       label = "Mail"
@@ -106,7 +106,7 @@ resource "onepassword_item" "service" {
       field {
         label = "SMTP Password"
         type  = "CONCEALED"
-        value = try(local.output_resend_api_keys[each.key], local.merged_servers[each.value.server].resend_api_key, "")
+        value = try(local.output_resend_api_keys[each.key], local.output_servers[each.value.server].resend_api_key, "")
       }
     }
   }

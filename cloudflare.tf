@@ -1,3 +1,9 @@
+data "cloudflare_api_token_permission_groups" "default" {}
+
+data "cloudflare_zone" "internal" {
+  name = var.default.domain_internal
+}
+
 data "cloudflare_zone" "service" {
   for_each = local.filtered_services_enable_dns
 
@@ -8,11 +14,25 @@ resource "cloudflare_account" "default" {
   name = var.terraform.cloudflare.email
 }
 
+resource "cloudflare_api_token" "internal" {
+  name = "internal"
+
+  policy {
+    permission_groups = [
+      data.cloudflare_api_token_permission_groups.default.zone["DNS Write"],
+      data.cloudflare_api_token_permission_groups.default.zone["Zone Read"]
+    ]
+    resources = {
+      "com.cloudflare.api.account.zone.${data.cloudflare_zone.internal.id}" = "*"
+    }
+  }
+}
+
 resource "cloudflare_record" "service" {
   for_each = local.filtered_services_enable_dns
 
   allow_overwrite = true
-  content         = each.value.enable_proxy ? local.merged_servers[each.value.server].cloudflare_tunnel.cname : each.value.dns_content
+  content         = each.value.enable_proxy ? local.output_servers[each.value.server].cloudflare_tunnel.cname : each.value.dns_content
   name            = each.value.dns_name
   proxied         = each.value.enable_proxy
   type            = can(cidrhost("${each.value.dns_content}/32", 0)) ? "A" : "CNAME"
@@ -21,7 +41,7 @@ resource "cloudflare_record" "service" {
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "server" {
   for_each = {
-    for k, server in local.merged_servers : k => server
+    for k, server in local.output_servers : k => server
     if contains(server.flags, "cloudflared")
   }
 
