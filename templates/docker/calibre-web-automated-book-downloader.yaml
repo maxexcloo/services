@@ -1,0 +1,21 @@
+networks:
+  ${default.organisation}:
+    external: true
+services:
+  cloudflare-bypass:
+    image: ghcr.io/sarperavci/cloudflarebypassforscraping
+    restart: unless-stopped
+  service:
+    environment:
+      CLOUDFLARE_PROXY_URL: http://cloudflare-bypass:8000
+    image: ghcr.io/calibrain/calibre-web-automated-book-downloader
+    labels:
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
+      caddy.reverse_proxy: "{{upstreams 8084}}"
+    networks:
+      - default
+      - ${default.organisation}
+    restart: unless-stopped
+    volumes:
+      - /mnt/truenas/books/unsorted:/cwa-book-ingest
