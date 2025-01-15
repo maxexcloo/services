@@ -40,10 +40,7 @@ resource "cloudflare_record" "service" {
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "server" {
-  for_each = {
-    for k, server in local.output_servers : k => server
-    if contains(server.flags, "cloudflared")
-  }
+  for_each = local.output_servers
 
   account_id = cloudflare_account.default.id
   tunnel_id  = each.value.cloudflare_tunnel.id
