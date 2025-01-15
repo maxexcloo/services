@@ -15,7 +15,7 @@ services:
       caddy_1.tls.resolvers: 1.1.1.1
     networks:
       - default
-      - ${var.default.organisation}
+      - ${default.organisation}
     ports:
       - 80:80
       - 443:443
