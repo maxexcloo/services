@@ -18,4 +18,4 @@ services:
       - ${default.organisation}
     restart: unless-stopped
     volumes:
-      - /mnt/truenas/books/unsorted:/cwa-book-ingest
+      - /mnt/truenas-nvme/books/ingest:/cwa-book-ingest

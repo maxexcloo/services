@@ -14,8 +14,8 @@ services:
       - ${default.organisation}
     restart: unless-stopped
     volumes:
-      - /mnt/truenas/cubebackup/cfg:/opt/cubebackup/etc
-      - /mnt/truenas/cubebackup/data:/cubebackup_data
-      - /mnt/truenas/cubebackup/db:/opt/cubebackup/db
-      - /mnt/truenas/cubebackup/index:/cubebackup_index
-      - /mnt/truenas/cubebackup/log:/opt/cubebackup/log
+      - /mnt/truenas-nvme/cubebackup/cfg:/opt/cubebackup/etc
+      - /mnt/truenas-nvme/cubebackup/data:/cubebackup_data
+      - /mnt/truenas-nvme/cubebackup/db:/opt/cubebackup/db
+      - /mnt/truenas-nvme/cubebackup/index:/cubebackup_index
+      - /mnt/truenas-nvme/cubebackup/log:/opt/cubebackup/log
