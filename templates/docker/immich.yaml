@@ -36,8 +36,9 @@ services:
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /Volumes/Pictures/Immich:/photos
       - data:/config
+      - photos:/photos
 volumes:
   data:
+  photos:
   postgres:
