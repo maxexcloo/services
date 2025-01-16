@@ -47,6 +47,9 @@ services:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 8000}}"
+    networks:
+      - default
+      - ${default.organisation}
     restart: unless-stopped
     volumes:
       - /mnt/truenas-nvme/paperless/consume:/usr/src/paperless/consume
