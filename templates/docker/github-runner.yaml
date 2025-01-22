@@ -7,7 +7,7 @@ services:
       LABELS: ${server.location},${server.name},${service.platform},${service.service}
       REPO_URL: ${service.config.repo_url}
       RUNNER_NAME: ${service.platform}-${server.name}-${i}
-    image: myoung34/github-runner
+    image: myoung34/github-runner:ubuntu-noble
     restart: unless-stopped
     security_opt:
       - label:disable
