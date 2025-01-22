@@ -4,7 +4,7 @@ services:
     container_name: ${service.service}-service-${i}
     environment:
       ACCESS_TOKEN: ${service.config.access_token}
-      LABELS: ${server.location},${server.name},${service.platform},${service.service}
+      LABELS: ${server.location},${server.name},${service.platform},${service.service},${service.platform}-${server.name}-${i}
       REPO_URL: ${service.config.repo_url}
       RUNNER_NAME: ${service.platform}-${server.name}-${i}
     image: myoung34/github-runner:ubuntu-noble
