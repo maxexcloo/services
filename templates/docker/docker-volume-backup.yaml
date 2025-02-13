@@ -1,5 +1,5 @@
 services:
-%{ for schedule in service.config.backup_schedules ~}
+%{ for schedule in service.config.schedules ~}
   ${schedule.cron}:
     environment:
       AWS_ACCESS_KEY_ID: ${server.b2.application_key_id}
@@ -13,7 +13,7 @@ services:
       BACKUP_PRUNING_PREFIX: docker-backup-${schedule.cron}-
       BACKUP_RETENTION_DAYS: ${schedule.retention_days}
       GPG_PASSPHRASE: ${server.secret_hash}
-      NOTIFICATION_URLS: smtp://${service.mail.username}:${service.mail.password}@${service.mail.host}:${service.mail.port}/?fromAddress=${default.email}&toAddresses=${default.email}
+      NOTIFICATION_URLS: ${contains(schedule.notification_types, "email") ? "smtp://${service.mail.username}:${service.mail.password}@${service.mail.host}:${service.mail.port}/?fromAddress=${default.email}&toAddresses=${default.email}" : ""}
     image: offen/docker-volume-backup:v2
     restart: unless-stopped
     volumes:
