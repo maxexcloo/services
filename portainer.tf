@@ -12,7 +12,6 @@ resource "restapi_object" "portainer_stack" {
   for_each = local.output_portainer_stacks
 
   create_path  = "/stacks/create/standalone/string"
-  force_new    = [each.value.portainer_endpoint_id]
   path         = "/stacks"
   provider     = restapi.portainer
   query_string = "endpointId=${each.value.portainer_endpoint_id}"
@@ -27,4 +26,8 @@ resource "restapi_object" "portainer_stack" {
       service = each.value
     })
   })
+
+  force_new = [
+    each.value.portainer_endpoint_id
+  ]
 }
