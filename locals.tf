@@ -129,7 +129,7 @@ locals {
       service,
       {
         b2                    = service.enable_b2 ? local.output_b2[k] : {}
-        cloudflare_api_token  = cloudflare_api_token.internal.value
+        cloudflare_api_token  = try(local.output_servers[service.server].cloudflare_api_token, null)
         cloudflare_tunnel     = try(local.output_servers[service.server].cloudflare_tunnel, null)
         database              = service.enable_database_password ? local.output_databases[k] : {}
         password              = service.enable_password ? onepassword_item.service[k].password : ""

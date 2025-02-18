@@ -1,9 +1,3 @@
-data "cloudflare_api_token_permission_groups" "default" {}
-
-data "cloudflare_zone" "internal" {
-  name = var.default.domain_internal
-}
-
 data "cloudflare_zone" "service" {
   for_each = local.filtered_services_enable_dns
 
@@ -12,20 +6,6 @@ data "cloudflare_zone" "service" {
 
 resource "cloudflare_account" "default" {
   name = var.terraform.cloudflare.email
-}
-
-resource "cloudflare_api_token" "internal" {
-  name = "internal"
-
-  policy {
-    permission_groups = [
-      data.cloudflare_api_token_permission_groups.default.zone["DNS Write"],
-      data.cloudflare_api_token_permission_groups.default.zone["Zone Read"]
-    ]
-    resources = {
-      "com.cloudflare.api.account.zone.${data.cloudflare_zone.internal.id}" = "*"
-    }
-  }
 }
 
 resource "cloudflare_record" "service" {
