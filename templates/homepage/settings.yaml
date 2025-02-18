@@ -1,6 +1,5 @@
 hideVersion: true
 title: ${homepage.title}
-useEqualHeights: false
 layout:
 %{ for category, services in services ~}
 %{ if length(services) > 0 ~}
