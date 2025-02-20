@@ -1,4 +1,4 @@
-hideVersion: true
+headerStyle: clean
 title: ${homepage.title}
 layout:
 %{ for category, services in services ~}
