@@ -148,6 +148,6 @@ resource "restapi_object" "fly_app_machine_service" {
   force_new = [
     each.value.fly.region,
     each.value.name,
-    base64encode(jsonencode(local.output_portainer_stack_configs[each.key]))
+    sha256(jsonencode(local.output_portainer_stack_configs[each.key]))
   ]
 }
