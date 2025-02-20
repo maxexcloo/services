@@ -24,25 +24,20 @@ locals {
     if service.platform == "fly"
   }
 
-  filtered_services_prometheus = {
-    for k, service in local.merged_services_outputs : k => service
-    if service.enable_metrics
-  }
-
   merged_services = {
     for k, service in local.merged_services_all : k => merge(
       var.default.service_config,
       {
-        dns_content  = can(service.server) ? try(service.dns_zone, var.default.service_config.dns_zone) != var.default.domain_internal ? local.output_servers[service.server].fqdn_external : local.output_servers[service.server].fqdn_internal : var.default.service_config.dns_content
-        dns_zone     = can(service.server) ? var.default.domain_internal : var.default.service_config.dns_zone
-        enable_proxy = contains(try(local.output_servers[service.server].flags, []), "cloudflare_proxy") && try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) != var.default.domain_internal
-        enable_dns   = can(service.dns_name) && can(service.dns_zone)
-        fqdn         = can(service.dns_name) && can(service.dns_zone) || can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.output_servers[service.server].fqdn_internal}" : var.default.service_config.fqdn
-        group        = try(service.dns_zone, can(service.server) ? var.default.domain_internal : var.default.service_config.group)
-        platform     = element(split("-", k), 0)
-        server_flags = try(local.output_servers[service.server].flags, var.default.service_config.server_flags)
-        url          = can(service.dns_name) && can(service.dns_zone) || can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.output_servers[service.server].fqdn_internal}"}${try(service.port, var.default.service_config.port) != var.default.service_config.port ? ":${service.port}" : ""}" : var.default.service_config.url
-        zone         = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) == var.default.domain_internal ? "internal" : var.default.service_config.zone
+        dns_content             = can(service.server) ? try(service.dns_zone, var.default.service_config.dns_zone) != var.default.domain_internal ? local.output_servers[service.server].fqdn_external : local.output_servers[service.server].fqdn_internal : var.default.service_config.dns_content
+        dns_zone                = can(service.server) ? var.default.domain_internal : var.default.service_config.dns_zone
+        enable_cloudflare_proxy = contains(try(local.output_servers[service.server].flags, []), "cloudflare_proxy") && try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) != var.default.domain_internal
+        enable_dns              = can(service.dns_name) && can(service.dns_zone)
+        fqdn                    = can(service.dns_name) && can(service.dns_zone) || can(service.server) ? can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.output_servers[service.server].fqdn_internal}" : var.default.service_config.fqdn
+        group                   = try(service.dns_zone, can(service.server) ? var.default.domain_internal : var.default.service_config.group)
+        platform                = element(split("-", k), 0)
+        server_flags            = try(local.output_servers[service.server].flags, var.default.service_config.server_flags)
+        url                     = can(service.dns_name) && can(service.dns_zone) || can(service.server) ? "${try(service.enable_ssl, true) ? "https://" : "http://"}${can(service.dns_name) && can(service.dns_zone) ? "${service.dns_name}.${service.dns_zone}" : "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.output_servers[service.server].fqdn_internal}"}${try(service.port, var.default.service_config.port) != var.default.service_config.port ? ":${service.port}" : ""}" : var.default.service_config.url
+        zone                    = try(service.dns_zone, can(service.server) ? var.default.domain_internal : null) == var.default.domain_internal ? "internal" : var.default.service_config.zone
       },
       service
     )
@@ -99,7 +94,7 @@ locals {
             description = widget.description
             href        = widget.enable_href ? widget.url : null
             icon        = widget.icon
-            siteMonitor = widget.enable_monitoring ? "${widget.url}${widget.monitoring_path}" : null
+            siteMonitor = widget.enable_monitoring ? widget.url : null
             widget      = widget.widget
           }), { default = var.default, server = server, service = service }))
           if contains(server.flags, widget.filter_server_flag) && widget.filter_mode == "include" || contains(server.flags, widget.filter_server_flag) == false && widget.filter_mode == "exclude"
@@ -115,7 +110,7 @@ locals {
             description = widget.description
             href        = widget.enable_href ? widget.url : null
             icon        = widget.icon
-            siteMonitor = widget.enable_monitoring ? "${widget.url}${widget.monitoring_path}" : null
+            siteMonitor = widget.enable_monitoring ? widget.url : null
             widget      = widget.widget
           }), { default = var.default, service = service }))
         }
@@ -152,7 +147,6 @@ locals {
               enable_href       = try(service.enable_href, var.default.service_config.enable_href)
               enable_monitoring = try(service.enable_monitoring, var.default.service_config.enable_monitoring)
               icon              = try(service.icon, var.default.service_config.icon)
-              monitoring_path   = try(service.monitoring_path, var.default.service_config.monitoring_path)
               title             = try(service.title, var.default.service_config.title)
               url               = can(service.url) ? service.url : ""
             },
@@ -208,12 +202,6 @@ locals {
         "/app/config/services.yaml"   = templatefile("templates/${service.service}/services.yaml", { services = local.merged_services_homepage })
       }
       if service.service == "homepage"
-    },
-    {
-      for k, service in local.merged_services : k => {
-        "/config/config.yaml" = templatefile("templates/${service.service}/config.yaml", { servers = local.output_servers, services = local.filtered_services_prometheus })
-      }
-      if service.service == "prometheus"
     }
   )
 

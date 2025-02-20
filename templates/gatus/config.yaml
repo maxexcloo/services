@@ -37,7 +37,7 @@ endpoints:
       - "[STATUS] == any(200, 401)"
     group: "Services (${service.group})"
     name: "${service.title} (${service.server != null ? service.server : service.platform})"
-    url: "${service.url}${service.monitoring_path}"
+    url: "${service.url}"
 %{ endif ~}
 %{ endfor ~}
 ui:

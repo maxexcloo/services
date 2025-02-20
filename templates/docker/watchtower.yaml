@@ -6,8 +6,6 @@ services:
     environment:
       TZ: ${server.config.timezone}
       WATCHTOWER_CLEANUP: true
-      WATCHTOWER_HTTP_API_METRICS: true
-      WATCHTOWER_HTTP_API_TOKEN: ${service.secret_hash}
       WATCHTOWER_NOTIFICATION_URL: smtp://${service.mail.username}:${service.mail.password}@${service.mail.host}:${service.mail.port}/?from=${default.email}&to=${default.email}
       WATCHTOWER_NOTIFICATIONS_HOSTNAME: ${service.server}
       WATCHTOWER_REMOVE_VOLUMES: true

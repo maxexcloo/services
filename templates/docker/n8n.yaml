@@ -22,7 +22,6 @@ services:
       DB_TYPE: postgresdb
       GENERIC_TIMEZONE: ${server.config.timezone}
       N8N_HOST: ${service.fqdn}
-      N8N_METRICS: true
       N8N_PROTOCOL: https
       WEBHOOK_URL: ${service.url}
     image: n8nio/n8n
