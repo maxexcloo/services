@@ -197,8 +197,8 @@ locals {
         "/app/config/bookmarks.yaml"  = ""
         "/app/config/docker.yaml"     = ""
         "/app/config/kubernetes.yaml" = ""
+        "/app/config/widgets.yaml"    = ""
         "/app/config/settings.yaml"   = templatefile("templates/${service.service}/settings.yaml", { default = var.default, homepage = service, services = local.merged_services_homepage })
-        "/app/config/widgets.yaml"    = templatefile("templates/${service.service}/widgets.yaml", { default = var.default, homepage = service })
         "/app/config/services.yaml"   = templatefile("templates/${service.service}/services.yaml", { services = local.merged_services_homepage })
       }
       if service.service == "homepage"

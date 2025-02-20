@@ -1,5 +1,0 @@
-- search:
-    focus: true
-    provider: google
-    showSearchSuggestions: true
-    target: _blank
