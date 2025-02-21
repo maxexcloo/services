@@ -132,7 +132,7 @@ resource "onepassword_item" "service" {
       label = "Secret Hash"
 
       field {
-        label = "Secret Hash Output"
+        label = "Secret Hash"
         type  = "CONCEALED"
         value = local.output_secret_hashes[each.key]
       }
