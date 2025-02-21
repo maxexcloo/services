@@ -5,8 +5,9 @@ services:
     environment:
       ACCESS_TOKEN: ${service.config.access_token}
       LABELS: ${server.location},${server.name},${service.platform},${service.service},${service.platform}-${server.name}-${i}
-      REPO_URL: ${service.config.repo_url}
+      ORG_NAME: ${default.organisation}
       RUNNER_NAME: ${service.platform}-${server.name}-${i}
+      RUNNER_SCOPE: org
     image: myoung34/github-runner:ubuntu-noble
     restart: unless-stopped
     security_opt:
