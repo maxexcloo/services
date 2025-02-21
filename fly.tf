@@ -82,7 +82,7 @@ resource "restapi_object" "fly_app_service" {
 resource "restapi_object" "fly_app_machine_service" {
   for_each = local.filtered_services_fly
 
-  destroy_path  = "/apps/${restapi_object.fly_app_service[each.key].api_data.name}/machines/{id}/stop"
+  destroy_path  = "/apps/${restapi_object.fly_app_service[each.key].api_data.name}/machines/{id}?force=true"
   path          = "/apps/${restapi_object.fly_app_service[each.key].api_data.name}/machines"
   provider      = restapi.fly
   update_method = "POST"
