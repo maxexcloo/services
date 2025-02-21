@@ -5,7 +5,6 @@ services:
   service:
     environment:
       ALLOW_UNAUTHENTICATED: true
-      JWT_SECRET: ${service.secret_hash}
     image: ghcr.io/c4illin/convertx
     labels:
       caddy: ${service.fqdn}
@@ -15,7 +14,3 @@ services:
       - default
       - ${default.organisation}
     restart: unless-stopped
-    volumes:
-      - data:/app/data
-volumes:
-  data:
