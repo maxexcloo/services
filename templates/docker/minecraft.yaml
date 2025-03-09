@@ -1,0 +1,25 @@
+services:
+  service:
+    environment:
+      ENABLE_WHITELIST: true
+      EULA: true
+      MAX_PLAYERS: ${service.config.max_players}
+      MEMORY: ${service.config.memory}
+      MOTD: ${service.config.motd}
+      OPS: |-
+        ${join("\n        ", service.config.ops)}
+      PLUGINS: |-
+        ${join("\n        ", service.config.plugins)}
+      TYPE: PAPER
+      TZ: ${server.config.timezone}
+      WHITELIST: |-
+        ${join("\n        ", service.config.whitelist)}
+    image: itzg/minecraft-server
+    ports:
+      - 19132:19132/udp
+      - 25565:25565
+    restart: unless-stopped
+    volumes:
+      - data:/data
+volumes:
+  data:
