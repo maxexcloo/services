@@ -1,8 +1,8 @@
 %{ for category, services in services ~}
 %{ if length(services) > 0 ~}
-- ${split(" - ", category)[1]}:
+- "${split(" - ", category)[1]}":
 %{ for service, widget in services ~}
-  - ${split(" - ", service)[1]}:
+  - "${split(" - ", service)[1]}":
       ${indent(6, yamlencode(widget))}
 %{ endfor ~}
 %{ endif ~}
