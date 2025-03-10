@@ -2,6 +2,7 @@ services:
   service:
     environment:
       ENABLE_WHITELIST: true
+      ENFORCE_SECURE_PROFILE: false
       EULA: true
       MAX_PLAYERS: ${service.config.max_players}
       MEMORY: ${service.config.memory}
