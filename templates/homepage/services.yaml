@@ -3,7 +3,7 @@
 - "${split(" - ", category)[1]}":
 %{ for service, widget in services ~}
   - "${split(" - ", service)[1]}":
-      ${indent(6, yamlencode(widget))}
+      ${indent(6, chomp(yamlencode(widget)))}
 %{ endfor ~}
 %{ endif ~}
 %{ endfor ~}
