@@ -19,5 +19,5 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - ${contains(server.flags, "truenas") ? "/mnt/.ix-apps/docker/volumes" : "/var/lib/docker/volumes"}:/backup:ro
+      - ${server.user.docker_path}/volumes:/backup:ro
 %{ endfor ~}

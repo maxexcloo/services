@@ -13,9 +13,7 @@ services:
     security_opt:
       - label:disable
     volumes:
-%{ for path in server.user.sftp_paths ~}
-%{ if path != "/" ~}
+%{ for path in server.user.paths ~}
       - ${path}:${path}
-%{ endif ~}
 %{ endfor ~}
 %{ endfor ~}
