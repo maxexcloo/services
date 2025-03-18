@@ -2,7 +2,7 @@ networks:
   ${default.organisation}:
     external: true
 services:
-  service:
+  mealie:
     environment:
       BASE_URL: ${service.url}
       OPENAI_API_KEY: ${service.config.openai_api_key}

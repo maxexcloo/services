@@ -2,7 +2,7 @@ networks:
   ${default.organisation}:
     external: true
 services:
-  service:
+  open-webui:
     image: ghcr.io/open-webui/open-webui
     labels:
       caddy: ${service.fqdn}

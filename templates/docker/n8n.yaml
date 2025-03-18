@@ -2,16 +2,7 @@ networks:
   ${default.organisation}:
     external: true
 services:
-  postgres:
-    environment:
-      POSTGRES_DB: ${service.database.name}
-      POSTGRES_PASSWORD: ${service.database.password}
-      POSTGRES_USER: ${service.database.username}
-    image: postgres:16
-    restart: unless-stopped
-    volumes:
-      - postgres:/var/lib/postgresql/data
-  service:
+  n8n:
     depends_on:
       - postgres
     environment:
@@ -35,6 +26,15 @@ services:
     restart: unless-stopped
     volumes:
       - data:/home/node/.n8n
+  postgres:
+    environment:
+      POSTGRES_DB: ${service.database.name}
+      POSTGRES_PASSWORD: ${service.database.password}
+      POSTGRES_USER: ${service.database.username}
+    image: postgres:16
+    restart: unless-stopped
+    volumes:
+      - postgres:/var/lib/postgresql/data
 volumes:
   data:
   postgres:

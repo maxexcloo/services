@@ -1,5 +1,5 @@
 services:
-  service:
+  minecraft:
     environment:
       ENABLE_WHITELIST: true
       ENFORCE_SECURE_PROFILE: false

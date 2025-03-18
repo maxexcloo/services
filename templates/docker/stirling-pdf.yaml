@@ -2,7 +2,7 @@ networks:
   ${default.organisation}:
     external: true
 services:
-  service:
+  stirling-pdf:
     environment:
       INSTALL_BOOK_AND_ADVANCED_HTML_OPS: true
       LANGS: en_GB

@@ -2,7 +2,7 @@ networks:
   ${default.organisation}:
     external: true
 services:
-  network:
+  gluetun:
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -26,7 +26,7 @@ services:
     restart: unless-stopped
     volumes:
       - /lib/modules:/lib/modules:ro
-  service:
+  redlib:
     environment:
       REDLIB_DEFAULT_REMOVE_DEFAULT_FEEDS: on
       REDLIB_DEFAULT_SHOW_NSFW: ${service.config.redlib_show_nsfw}
@@ -35,5 +35,5 @@ services:
       REDLIB_FULL_URL: ${service.url}
       REDLIB_ROBOTS_DISABLE_INDEXING: on
     image: quay.io/redlib/redlib
-    network_mode: service:network
+    network_mode: service:gluetun
     restart: unless-stopped

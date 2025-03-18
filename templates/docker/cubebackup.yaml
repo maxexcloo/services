@@ -2,7 +2,7 @@ networks:
   ${default.organisation}:
     external: true
 services:
-  service:
+  cubebackup:
     hostname: ${service.server}
     image: cubebackup/workspace
     labels:

@@ -2,7 +2,7 @@ networks:
   ${default.organisation}:
     external: true
 services:
-  service:
+  beszel:
     image: henrygd/beszel
     labels:
       caddy: ${service.fqdn}

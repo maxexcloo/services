@@ -2,7 +2,7 @@ networks:
   ${default.organisation}:
     external: true
 services:
-  service:
+  convertx:
     environment:
       ALLOW_UNAUTHENTICATED: true
     image: ghcr.io/c4illin/convertx

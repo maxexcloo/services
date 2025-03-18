@@ -7,7 +7,7 @@ services:
     image: bash
     volumes:
       - config:/app/config
-  service:
+  homepage:
     depends_on:
       config:
         condition: service_completed_successfully

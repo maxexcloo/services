@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
     volumes:
       - mariadb:/var/lib/mysql
-  service:
+  wordpress:
     depends_on:
       - mariadb
     environment:
