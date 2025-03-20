@@ -11,6 +11,14 @@ services:
       BASE_URL: ${service.url}
       CREATE_ADMIN: 1
       DATABASE_URL: postgres://${service.database.username}:${service.database.password}@postgres/${service.database.name}?sslmode=disable
+      DISABLE_LOCAL_AUTH: 1
+      OAUTH2_CLIENT_ID: ${service.config.oidc_client_id}
+      OAUTH2_CLIENT_SECRET: ${service.config.oidc_client_secret}
+      OAUTH2_OIDC_DISCOVERY_ENDPOINT: ${default.oidc_issuer}
+      OAUTH2_OIDC_PROVIDER_NAME: ${default.oidc_name}
+      OAUTH2_PROVIDER: oidc
+      OAUTH2_REDIRECT_URL: ${service.url}/oauth2/oidc/callback
+      OAUTH2_USER_CREATION: 1
       RUN_MIGRATIONS: 1
     image: miniflux/miniflux
     labels:
