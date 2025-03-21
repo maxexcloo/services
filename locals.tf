@@ -202,7 +202,13 @@ locals {
         "/app/config/widgets.yaml"    = ""
       }
       if service.service == "homepage"
-    }
+    },
+    {
+      for k, service in local.merged_services : k => {
+        "/config/finger.json" = templatefile("templates/${service.service}/finger.json", { default = var.default })
+      }
+      if service.service == "www"
+    },
   )
 
   output_portainer_stacks = {
