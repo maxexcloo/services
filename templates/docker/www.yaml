@@ -1,0 +1,17 @@
+networks:
+  ${default.organisation}:
+    external: true
+services:
+  error-pages:
+    environment:
+      TEMPLATE_NAME: lost-in-space
+    image: ghcr.io/tarampampam/error-pages
+    labels:
+      caddy: ${service.dns_zone} ${service.fqdn}
+      caddy.import: ${service.zone}
+      caddy.0_reverse_proxy: "/.well-known/webfinger https://id.excloo.com"
+      caddy.1_reverse_proxy: "{{upstreams 8080}}"
+    networks:
+      - default
+      - ${default.organisation}
+    restart: unless-stopped

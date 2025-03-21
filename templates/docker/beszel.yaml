@@ -3,6 +3,8 @@ networks:
     external: true
 services:
   beszel:
+    environment:
+      USER_CREATION: true
     image: henrygd/beszel
     labels:
       caddy: ${service.fqdn}

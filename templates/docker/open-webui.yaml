@@ -3,6 +3,19 @@ networks:
     external: true
 services:
   open-webui:
+    environment:
+      DEFAULT_USER_ROLE: user
+      ENABLE_OAUTH_SIGNUP: true
+      ENABLE_SIGNUP: false
+      OAUTH_CLIENT_ID: ${service.config.oidc_client_id}
+      OAUTH_CLIENT_SECRET: ${service.config.oidc_client_secret}
+      OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
+      OAUTH_PROVIDER_NAME: ${default.oidc_title}
+      OPENAI_API_KEY: ${service.config.openai_api_key}
+      OPENID_PROVIDER_URL: ${default.oidc_url}/.well-known/openid-configuration
+      WEBUI_NAME: ${service.description}
+      WEBUI_SECRET_KEY: ${service.secret_hash}
+      WEBUI_URL: ${service.url}
     image: ghcr.io/open-webui/open-webui
     labels:
       caddy: ${service.fqdn}

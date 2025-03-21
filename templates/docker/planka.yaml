@@ -8,12 +8,9 @@ services:
     environment:
       BASE_URL: ${service.url}
       DATABASE_URL: postgresql://${service.database.username}:${service.database.password}@postgres/${service.database.name}
-      DEFAULT_ADMIN_EMAIL: ${service.username}
-      DEFAULT_ADMIN_NAME: ${default.name}
-      DEFAULT_ADMIN_PASSWORD: ${service.password}
       OIDC_CLIENT_ID: ${service.config.oidc_client_id}
       OIDC_CLIENT_SECRET: ${service.config.oidc_client_secret}
-      OIDC_ISSUER: ${default.oidc_issuer}
+      OIDC_ISSUER: ${default.oidc_url}
       SECRET_KEY: ${service.secret_hash}
       SMTP_FROM: ${default.email}
       SMTP_HOST: ${service.mail.host}

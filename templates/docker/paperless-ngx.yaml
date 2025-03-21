@@ -24,7 +24,7 @@ services:
       PAPERLESS_OCR_LANGUAGE: eng
       PAPERLESS_REDIS: redis://redis:6379
       PAPERLESS_SECRET_KEY: ${service.secret_hash}
-      PAPERLESS_SOCIALACCOUNT_PROVIDERS: '{"openid_connect":{"SCOPE":["openid","profile","email"],"OAUTH_PKCE_ENABLED":true,"APPS":[{"provider_id":"${default.oidc_id}","name":"${default.oidc_name}","client_id":"${service.config.oidc_client_id}","secret":"${service.config.oidc_client_secret}","settings":{"server_url":"${default.oidc_issuer}"}}]}}' 
+      PAPERLESS_SOCIALACCOUNT_PROVIDERS: '{"openid_connect":{"APPS":[{"client_id":"${service.config.oidc_client_id}","name":"${default.oidc_title}","provider_id":"${default.oidc_name}","secret":"${service.config.oidc_client_secret}","settings":{"server_url":"${default.oidc_url}/.well-known/openid-configuration"}}]}}'
       PAPERLESS_TIKA_ENABLED: 1
       PAPERLESS_TIKA_ENDPOINT: http://tika:9998
       PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
