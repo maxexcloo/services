@@ -2,20 +2,10 @@ networks:
   ${default.organisation}:
     external: true
 services:
-  gluetun:
-    cap_add:
-      - NET_ADMIN
-      - SYS_MODULE
-    devices:
-      - /dev/net/tun:/dev/net/tun
-    environment:
-      SERVER_CITIES: ${service.config.gluetun_server_cities}
-      VPN_SERVICE_PROVIDER: ${service.config.gluetun_vpn_service_provider}
-      VPN_TYPE: ${service.config.gluetun_vpn_type}
-      WIREGUARD_ADDRESSES: ${service.config.gluetun_wireguard_addresses}
-      WIREGUARD_PRESHARED_KEY: ${service.config.gluetun_wireguard_preshared_key}
-      WIREGUARD_PRIVATE_KEY: ${service.config.gluetun_wireguard_private_key}
-    image: qmcgaw/gluetun
+  ctrld:
+    command: --cd=${service.config.ctrld_resolver}
+    dns: 127.0.0.1
+    image: controldns/ctrld
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
@@ -24,8 +14,6 @@ services:
       - default
       - ${default.organisation}
     restart: unless-stopped
-    volumes:
-      - /lib/modules:/lib/modules:ro
   redlib:
     environment:
       REDLIB_DEFAULT_REMOVE_DEFAULT_FEEDS: on
@@ -35,5 +23,5 @@ services:
       REDLIB_FULL_URL: ${service.url}
       REDLIB_ROBOTS_DISABLE_INDEXING: on
     image: quay.io/redlib/redlib
-    network_mode: service:gluetun
+    network_mode: service:ctrld
     restart: unless-stopped

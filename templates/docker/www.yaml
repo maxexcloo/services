@@ -6,25 +6,32 @@ services:
     command: bash -c "${config}"
     image: bash
     volumes:
-      - config:/app/config
+      - config:/config
   error-pages:
+    labels:
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
+      caddy.reverse_proxy: "{{upstreams 8080}}"
     environment:
       TEMPLATE_NAME: lost-in-space
     image: ghcr.io/tarampampam/error-pages
-    labels:
-      caddy: ${service.dns_zone} ${service.fqdn}
-      caddy.import: ${service.zone}
-      caddy.0_reverse_proxy: "/.well-known/webfinger finger"
-      caddy.1_reverse_proxy: "{{upstreams 8080}}"
     networks:
       - default
       - ${default.organisation}
     restart: unless-stopped
   finger:
+    depends_on:
+      config:
+        condition: service_completed_successfully
     environment:
       WF_FINGER_FILE: /config/finger.json
-      WF_PORT: 80
-    image: git.maronato.dev/maronato/finger
+    image: ghcr.io/artemstepanov/go-finger:main
+    labels:
+      caddy: ${service.dns_zone}
+      caddy.import: ${service.zone}
+      caddy.0_handle: /.well-known/webfinger*
+      caddy.0_handle.reverse_proxy: "{{upstreams 8080}}"
+      caddy.1_handle.redir: redir ${service.url}{uri} permanent
     networks:
       - default
       - ${default.organisation}

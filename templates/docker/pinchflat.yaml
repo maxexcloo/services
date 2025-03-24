@@ -1,0 +1,21 @@
+networks:
+  ${default.organisation}:
+    external: true
+services:
+  pinchflat:
+    environment:
+      TZ: ${server.config.timezone}
+    image: ghcr.io/kieraneglin/pinchflat
+    labels:
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
+      caddy.reverse_proxy: "{{upstreams 8945}}"
+    networks:
+      - default
+      - ${default.organisation}
+    restart: unless-stopped
+    volumes:
+      - data:/config
+      - /mnt/truenas-nvme/pinchflat:/downloads
+volumes:
+  data:
