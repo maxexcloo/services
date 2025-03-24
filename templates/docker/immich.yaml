@@ -21,6 +21,8 @@ services:
     networks:
       - default
       - ${default.organisation}
+    ports:
+      - 8080:8080
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
