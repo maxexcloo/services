@@ -10,8 +10,6 @@ services:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 8888}}"
-    ports:
-      - 8888:8888
     networks:
       - default
       - ${default.organisation}
