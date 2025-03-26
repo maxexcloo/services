@@ -90,7 +90,7 @@ locals {
     {
       for k, server in local.output_servers : "1 - ${k} (${server.title})" => merge([
         for service in local.merged_services_outputs : {
-          for widget in service.widgets : "${widget.priority ? "1" : can(widget.widget.type) ? "2" : "3"} - ${templatestring(widget.title, { default = var.default, server = server, service = service })}" => jsondecode(templatestring(jsonencode({
+          for widget in service.widgets : "${widget.priority != 0 ? widget.priority : can(widget.widget.type) ? "2" : "3"} - ${templatestring(widget.title, { default = var.default, server = server, service = service })}" => jsondecode(templatestring(jsonencode({
             description = widget.description
             href        = widget.enable_href ? widget.url : null
             icon        = widget.icon
@@ -106,7 +106,7 @@ locals {
     {
       "2 - Cloud" = merge([
         for service in local.merged_services_outputs : {
-          for widget in service.widgets : "${widget.priority ? "1" : can(widget.widget.type) ? "2" : "3"} - ${templatestring(widget.title, { default = var.default, service = service })}${service.platform == "cloud" ? "" : " (${title(service.platform)})"}" => jsondecode(templatestring(jsonencode({
+          for widget in service.widgets : "${widget.priority != 0 ? widget.priority : can(widget.widget.type) ? "2" : "3"} - ${templatestring(widget.title, { default = var.default, service = service })}${service.platform == "cloud" ? "" : " (${title(service.platform)})"}" => jsondecode(templatestring(jsonencode({
             description = widget.description
             href        = widget.enable_href ? widget.url : null
             icon        = widget.icon
