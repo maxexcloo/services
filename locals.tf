@@ -123,16 +123,16 @@ locals {
     for k, service in local.merged_services : k => merge(
       service,
       {
-        b2                    = service.enable_b2 ? local.output_b2[k] : {}
-        cloudflare_api_token  = try(local.output_servers[service.server].cloudflare_api_token, null)
-        cloudflare_tunnel     = try(local.output_servers[service.server].cloudflare_tunnel, null)
-        database              = service.enable_database_password ? local.output_databases[k] : {}
-        password              = service.enable_password ? onepassword_item.service[k].password : ""
-        password_bcrypt       = service.enable_password ? replace(bcrypt_hash.password[k].id, "$", "$$") : ""
-        portainer_endpoint_id = try(local.filtered_portainer_endpoints[service.server]["Id"], "")
-        secret_hash           = service.enable_secret_hash ? local.output_secret_hashes[k] : ""
-        secret_hash_bcrypt    = service.enable_secret_hash ? replace(bcrypt_hash.secret_hash[k].id, "$", "$$") : ""
-        tailscale_tailnet_key = service.enable_tailscale ? local.output_tailscale_tailnet_keys[k] : ""
+        b2                       = service.enable_b2 ? local.output_b2[k] : {}
+        cloudflare_account_token = try(local.output_servers[service.server].cloudflare_account_token, null)
+        cloudflare_tunnel        = try(local.output_servers[service.server].cloudflare_tunnel, null)
+        database                 = service.enable_database_password ? local.output_databases[k] : {}
+        password                 = service.enable_password ? onepassword_item.service[k].password : ""
+        password_bcrypt          = service.enable_password ? replace(bcrypt_hash.password[k].id, "$", "$$") : ""
+        portainer_endpoint_id    = try(local.filtered_portainer_endpoints[service.server]["Id"], "")
+        secret_hash              = service.enable_secret_hash ? local.output_secret_hashes[k] : ""
+        secret_hash_bcrypt       = service.enable_secret_hash ? replace(bcrypt_hash.secret_hash[k].id, "$", "$$") : ""
+        tailscale_tailnet_key    = service.enable_tailscale ? local.output_tailscale_tailnet_keys[k] : ""
         mail = {
           host     = var.terraform.resend.smtp_host
           password = try(local.output_resend_api_keys[k], local.output_servers[service.server].resend_api_key, "")

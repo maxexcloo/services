@@ -9,6 +9,8 @@ services:
       RUNNER_NAME: ${service.platform}-${server.name}-${i}
       RUNNER_SCOPE: org
     image: myoung34/github-runner:ubuntu-noble
+    labels:
+      com.centurylinklabs.watchtower.enable: false
     restart: unless-stopped
     security_opt:
       - label:disable

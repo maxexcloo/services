@@ -9,7 +9,7 @@ services:
       WATCHTOWER_NOTIFICATION_URL: smtp://${service.mail.username}:${service.mail.password}@${service.mail.host}:${service.mail.port}/?from=${default.email}&to=${default.email}
       WATCHTOWER_NOTIFICATIONS_HOSTNAME: ${service.server}
       WATCHTOWER_REMOVE_VOLUMES: true
-      WATCHTOWER_SCHEDULE: "@weekly"
+      WATCHTOWER_SCHEDULE: "@daily"
     image: containrrr/watchtower
     labels:
       caddy: ${service.fqdn}
