@@ -72,28 +72,12 @@ resource "graphql_mutation" "fly_app_ip" {
   }
 }
 
-resource "restapi_object" "fly_app_service" {
-  for_each = local.filtered_services_fly
-
-  destroy_path              = "/apps/${each.value.name}"
-  ignore_all_server_changes = true
-  path                      = "/apps"
-  provider                  = restapi.fly
-  read_path                 = "/apps/${each.value.name}"
-  update_path               = "/apps/${each.value.name}"
-
-  data = jsonencode({
-    app_name = each.value.name
-    org_slug = var.terraform.fly.org
-  })
-}
-
 resource "restapi_object" "fly_app_machine_service" {
   for_each = local.filtered_services_fly
 
-  destroy_path              = "/apps/${restapi_object.fly_app_service[each.key].api_data.name}/machines/{id}?force=true"
+  destroy_path              = "${restapi_object.fly_app_service[each.key].update_path}/machines/{id}?force=true"
   ignore_all_server_changes = true
-  path                      = "/apps/${restapi_object.fly_app_service[each.key].api_data.name}/machines"
+  path                      = "${restapi_object.fly_app_service[each.key].update_path}/machines"
   provider                  = restapi.fly
   update_method             = "POST"
 
@@ -160,4 +144,20 @@ resource "restapi_object" "fly_app_machine_service" {
     each.value.name,
     sha256(jsonencode(local.output_portainer_stack_configs[each.key]))
   ]
+}
+
+resource "restapi_object" "fly_app_service" {
+  for_each = local.filtered_services_fly
+
+  destroy_path              = "/apps/${each.value.name}"
+  ignore_all_server_changes = true
+  path                      = "/apps"
+  provider                  = restapi.fly
+  read_path                 = "/apps/${each.value.name}"
+  update_path               = "/apps/${each.value.name}"
+
+  data = jsonencode({
+    app_name = each.value.name
+    org_slug = var.terraform.fly.org
+  })
 }
