@@ -23,7 +23,7 @@ resource "graphql_mutation" "fly_app_certificate" {
     ]
 
     replace_triggered_by = [
-      restapi_object.fly_app_machine_service[each.key].api_data.id
+      restapi_object.fly_app_machine_service[each.key]
     ]
   }
 
@@ -63,7 +63,7 @@ resource "graphql_mutation" "fly_app_ip" {
     ]
 
     replace_triggered_by = [
-      restapi_object.fly_app_machine_service[each.key].api_data.id
+      restapi_object.fly_app_machine_service[each.key]
     ]
   }
 
