@@ -23,6 +23,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "server" {
   for_each = local.output_servers
 
   account_id = var.terraform.cloudflare.account_id
+  source     = "cloudflare"
   tunnel_id  = each.value.cloudflare_tunnel.id
 
   config = {
