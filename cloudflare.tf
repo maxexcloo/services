@@ -4,13 +4,8 @@ data "cloudflare_zones" "service" {
   name = each.value.dns_zone
 
   account = {
-    id = cloudflare_account.default.id
+    id = var.terraform.cloudflare.account_id
   }
-}
-
-resource "cloudflare_account" "default" {
-  name = var.terraform.cloudflare.email
-  type = "standard"
 }
 
 resource "cloudflare_dns_record" "service" {
@@ -27,7 +22,7 @@ resource "cloudflare_dns_record" "service" {
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "server" {
   for_each = local.output_servers
 
-  account_id = cloudflare_account.default.id
+  account_id = var.terraform.cloudflare.account_id
   tunnel_id  = each.value.cloudflare_tunnel.id
 
   config = {
