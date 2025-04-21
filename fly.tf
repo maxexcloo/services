@@ -67,11 +67,12 @@ resource "graphql_mutation" "fly_app_ip" {
 resource "restapi_object" "fly_app_service" {
   for_each = local.filtered_services_fly
 
-  destroy_path = "/apps/${each.value.name}"
-  path         = "/apps"
-  provider     = restapi.fly
-  read_path    = "/apps/${each.value.name}"
-  update_path  = "/apps/${each.value.name}"
+  destroy_path              = "/apps/${each.value.name}"
+  ignore_all_server_changes = true
+  path                      = "/apps"
+  provider                  = restapi.fly
+  read_path                 = "/apps/${each.value.name}"
+  update_path               = "/apps/${each.value.name}"
 
   data = jsonencode({
     app_name = each.value.name
@@ -82,10 +83,11 @@ resource "restapi_object" "fly_app_service" {
 resource "restapi_object" "fly_app_machine_service" {
   for_each = local.filtered_services_fly
 
-  destroy_path  = "/apps/${restapi_object.fly_app_service[each.key].api_data.name}/machines/{id}?force=true"
-  path          = "/apps/${restapi_object.fly_app_service[each.key].api_data.name}/machines"
-  provider      = restapi.fly
-  update_method = "POST"
+  destroy_path              = "/apps/${restapi_object.fly_app_service[each.key].api_data.name}/machines/{id}?force=true"
+  ignore_all_server_changes = true
+  path                      = "/apps/${restapi_object.fly_app_service[each.key].api_data.name}/machines"
+  provider                  = restapi.fly
+  update_method             = "POST"
 
   data = jsonencode({
     region = each.value.fly.region
