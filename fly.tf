@@ -57,6 +57,10 @@ resource "graphql_mutation" "fly_app_ip" {
     ignore_changes = [
       mutation_variables
     ]
+
+    replace_triggered_by = [
+      restapi_object.fly_app_service[each.key].api_data.id
+    ]
   }
 
   mutation_variables = {
