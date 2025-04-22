@@ -17,7 +17,7 @@ resource "restapi_object" "portainer_stack" {
   provider                  = restapi.portainer
   query_string              = "endpointId=${each.value.portainer_endpoint_id}"
 
-  data = jsonencode({
+  data = sensitive(jsonencode({
     name = each.value.name
 
     stackfilecontent = templatefile("templates/docker/${each.value.service}.yaml", {
@@ -26,7 +26,7 @@ resource "restapi_object" "portainer_stack" {
       server  = local.output_servers[each.value.server]
       service = each.value
     })
-  })
+  }))
 
   force_new = [
     each.value.portainer_endpoint_id

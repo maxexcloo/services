@@ -81,7 +81,7 @@ resource "restapi_object" "fly_app_machine_service" {
   provider                  = restapi.fly
   update_method             = "POST"
 
-  data = jsonencode({
+  data = sensitive(jsonencode({
     region = each.value.fly.region
     config = {
       image = each.value.fly.image
@@ -137,7 +137,7 @@ resource "restapi_object" "fly_app_machine_service" {
         }
       ]
     }
-  })
+  }))
 
   force_new = [
     each.value.fly.region,
@@ -156,8 +156,8 @@ resource "restapi_object" "fly_app_service" {
   read_path                 = "/apps/${each.value.name}"
   update_path               = "/apps/${each.value.name}"
 
-  data = jsonencode({
+  data = sensitive(jsonencode({
     app_name = each.value.name
     org_slug = var.terraform.fly.org
-  })
+  }))
 }
