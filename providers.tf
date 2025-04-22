@@ -8,10 +8,6 @@ provider "cloudflare" {
   email   = var.default.email
 }
 
-provider "github" {
-  token = var.terraform.github.token
-}
-
 provider "graphql" {
   alias = "fly"
   url   = var.terraform.fly.url_graphql
