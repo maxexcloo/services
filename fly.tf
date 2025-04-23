@@ -17,18 +17,22 @@ resource "graphql_mutation" "fly_app_certificate" {
     }
   EOT
 
+  depends_on = [
+    restapi_object.fly_app_service
+  ]
+
   lifecycle {
     ignore_changes = [
       mutation_variables
     ]
 
     replace_triggered_by = [
-      restapi_object.fly_app_machine_service[each.key]
+      restapi_object.fly_app_service[each.key]
     ]
   }
 
   mutation_variables = {
-    app      = restapi_object.fly_app_service[each.key].api_data.name
+    app      = each.value.name
     hostname = each.value.fqdn
   }
 }
@@ -57,18 +61,22 @@ resource "graphql_mutation" "fly_app_ip" {
     }
   EOT
 
+  depends_on = [
+    restapi_object.fly_app_service
+  ]
+
   lifecycle {
     ignore_changes = [
       mutation_variables
     ]
 
     replace_triggered_by = [
-      restapi_object.fly_app_machine_service[each.key]
+      graphql_mutation.fly_app_certificate[each.key]
     ]
   }
 
   mutation_variables = {
-    app = restapi_object.fly_app_service[each.key].api_data.name
+    app = each.value.name
   }
 }
 
