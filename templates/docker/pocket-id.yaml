@@ -4,7 +4,7 @@ networks:
 services:
   pocket-id:
     environment:
-      APP_NAME: ${service.name}
+      APP_NAME: ${service.title}
       EMAIL_ONE_TIME_ACCESS_ENABLED: true
       EMAILS_VERIFIED: true
       MAXMIND_LICENSE_KEY: ${service.config.maxmind_license_key}
