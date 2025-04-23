@@ -15,7 +15,7 @@ services:
       SMTP_HOST: ${service.mail.host}
       SMTP_PASSWORD: ${service.mail.password}
       SMTP_PORT: ${service.mail.port}
-      SMTP_TLS: tls
+      SMTP_TLS: starttls
       SMTP_USER: ${service.mail.username}
       TRUST_PROXY: true
     image: ghcr.io/pocket-id/pocket-id
