@@ -5,9 +5,12 @@ services:
   pocket-id:
     environment:
       APP_NAME: ${service.name}
+      EMAIL_ONE_TIME_ACCESS_ENABLED: true
       EMAILS_VERIFIED: true
       MAXMIND_LICENSE_KEY: ${service.config.maxmind_license_key}
       PUBLIC_APP_URL: ${service.url}
+      PUBLIC_UI_CONFIG_DISABLED: true
+      SESSION_DURATION: 1440
       SMTP_FROM: ${default.email}
       SMTP_HOST: ${service.mail.host}
       SMTP_PASSWORD: ${service.mail.password}
