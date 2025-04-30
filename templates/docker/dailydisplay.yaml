@@ -1,0 +1,16 @@
+networks:
+  ${default.organisation}:
+    external: true
+services:
+  dailydisplay:
+    environment:
+      CONFIG: ${jsonencode(service.config)}
+    image: ghcr.io/maxexcloo/dailydisplay
+    labels:
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
+      caddy.reverse_proxy: "{{upstreams 8000}}"
+    networks:
+      - default
+      - ${default.organisation}
+    restart: unless-stopped
