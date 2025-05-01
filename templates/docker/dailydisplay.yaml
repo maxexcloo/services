@@ -5,5 +5,5 @@ services:
       CONFIG: '${jsonencode(service.config)}'
     image: ghcr.io/maxexcloo/dailydisplay
     ports:
-      - ${service.port}:8000
+      - ${service.port}:${service.port}
     restart: unless-stopped
