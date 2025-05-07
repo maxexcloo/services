@@ -16,8 +16,8 @@ services:
       - ${default.organisation}
     restart: unless-stopped
     volumes:
-      - /mnt/truenas-nvme/books/calibre:/calibre-library
-      - /mnt/truenas-nvme/books/ingest:/cwa-book-ingest
+      - /mnt/truenas-nvme/calibre/calibre:/calibre-library
+      - /mnt/truenas-nvme/calibre/ingest:/cwa-book-ingest
       - data:/config
 volumes:
   data:

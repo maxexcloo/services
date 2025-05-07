@@ -1,9 +1,0 @@
-
-services:
-  dailydisplay:
-    environment:
-      CONFIG: '${jsonencode(service.config)}'
-    image: ghcr.io/maxexcloo/dailydisplay
-    ports:
-      - ${service.port}:${service.port}
-    restart: unless-stopped
