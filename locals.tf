@@ -80,7 +80,7 @@ locals {
             server = server_name
           }
         )
-        if contains(server.flags, element(split("-", service_name), 0)) && contains(server.flags, try(service.filter_server_flag, "")) && try(service.filter_mode, "exclude") == "include" || contains(server.flags, try(service.filter_server_flag, "")) == false && try(service.filter_mode, "exclude") == "exclude"
+        if contains(server.flags, element(split("-", service_name), 0)) && (contains(server.flags, try(service.filter_server_flag, "")) && try(service.filter_mode, "exclude") == "include" || contains(server.flags, try(service.filter_server_flag, "")) == false && try(service.filter_mode, "exclude") == "exclude")
       }
       if can(service.server) == false
     ]...)
