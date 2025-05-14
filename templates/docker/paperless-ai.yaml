@@ -1,0 +1,18 @@
+networks:
+  ${default.organisation}:
+    external: true
+services:
+  paperless-ai:
+    image: clusterzx/paperless-ai
+    labels:
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+    networks:
+      - default
+      - ${default.organisation}
+    restart: unless-stopped
+    volumes:
+      - data:/app/data
+volumes:
+  data:
