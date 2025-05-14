@@ -11,6 +11,8 @@ services:
       OIDC_CONFIGURATION_URL: ${default.oidc_url}/.well-known/openid-configuration
       OIDC_PROVIDER_NAME: ${default.oidc_title}
       OPENAI_API_KEY: ${service.config.openai_api_key}
+      OPENAI_BASE_URL: ${service.config.openai_base_url}
+      OPENAI_MODEL: ${service.config.openai_model}
       SMTP_FROM_EMAIL: ${default.email}
       SMTP_FROM_NAME: ${service.title}
       SMTP_HOST: ${service.mail.host}

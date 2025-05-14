@@ -80,7 +80,7 @@ locals {
             server = server_name
           }
         )
-        if contains(server.flags, element(split("-", service_name), 0)) && (can(service.filter_exclude_server_flag) == false && can(service.filter_include_server_flag) == false || can(service.filter_exclude_server_flag) && contains(server.flags, try(service.filter_exclude_server_flag, "")) == false || can(service.filter_include_server_flag) && contains(server.flags, try(service.filter_include_server_flag, "")))
+        if contains(server.flags, element(split("-", service_name), 0)) && (can(service.filter_exclude_server_flag) == false && can(service.filter_include_server_flag) == false || can(service.filter_exclude_server_flag) && contains(server.flags, try(service.filter_exclude_server_flag, "")) == false || contains(server.flags, try(service.filter_include_server_flag, "")))
       }
       if can(service.server) == false
     ]...)
@@ -97,7 +97,7 @@ locals {
             siteMonitor = widget.enable_monitoring ? widget.url : null
             widget      = widget.widget
           }), { default = var.default, server = server, service = service }))
-          if service.filter_exclude_server_flag == "" && service.filter_include_server_flag == "" || contains(server.flags, service.filter_exclude_server_flag) == false || contains(server.flags, service.filter_include_server_flag)
+          if widget.filter_exclude_server_flag == "" && widget.filter_include_server_flag == "" || widget.filter_exclude_server_flag != "" && contains(server.flags, widget.filter_exclude_server_flag) == false || contains(server.flags, widget.filter_include_server_flag)
         }
         if service.server == k
       ]...)
