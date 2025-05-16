@@ -4,7 +4,7 @@ networks:
 services:
   config:
     command: bash -c "${config}"
-    image: bash
+    image: bash:5
     volumes:
       - config:/app/config
   homepage:
@@ -13,7 +13,7 @@ services:
         condition: service_completed_successfully
     environment:
       HOMEPAGE_ALLOWED_HOSTS: ${service.fqdn}
-    image: ghcr.io/gethomepage/homepage
+    image: ghcr.io/gethomepage/homepage:v1
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}

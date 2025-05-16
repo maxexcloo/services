@@ -3,7 +3,7 @@ networks:
     external: true
 services:
   cyberchef:
-    image: mpepping/cyberchef
+    image: mpepping/cyberchef:latest
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}

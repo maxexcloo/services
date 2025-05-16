@@ -5,7 +5,7 @@ services:
   paperless-ai:
     extra_hosts:
       - host.docker.internal:host-gateway
-    image: clusterzx/paperless-ai
+    image: clusterzx/paperless-ai:latest
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}

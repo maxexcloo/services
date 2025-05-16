@@ -16,7 +16,7 @@ services:
       OAUTH2_REDIRECT_URL: ${service.url}/oauth2/oidc/callback
       OAUTH2_USER_CREATION: 1
       RUN_MIGRATIONS: 1
-    image: miniflux/miniflux
+    image: miniflux/miniflux:latest
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}

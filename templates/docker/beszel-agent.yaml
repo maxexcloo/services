@@ -2,7 +2,7 @@ services:
   beszel-agent:
     environment:
       KEY: ${service.config.public_key}
-    image: henrygd/beszel-agent
+    image: henrygd/beszel-agent:0
     network_mode: host
     restart: unless-stopped
     volumes:

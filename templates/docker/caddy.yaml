@@ -5,7 +5,7 @@ services:
   caddy:
     extra_hosts:
       - host.docker.internal:host-gateway
-    image: ghcr.io/maxexcloo/caddy
+    image: ghcr.io/maxexcloo/caddy:latest
     labels:
       caddy_0: (external)
       caddy_0.tls: ${default.email}

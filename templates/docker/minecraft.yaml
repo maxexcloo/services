@@ -15,7 +15,7 @@ services:
       TZ: ${server.config.timezone}
       WHITELIST: |-
         ${join("\n        ", service.config.whitelist)}
-    image: itzg/minecraft-server
+    image: itzg/minecraft-server:latest
     ports:
       - 19132:19132/udp
       - 25565:25565

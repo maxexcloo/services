@@ -4,7 +4,7 @@ networks:
 services:
   config:
     command: bash -c "${config}"
-    image: bash
+    image: bash:5
     volumes:
       - config:/config
   error-pages:
@@ -15,7 +15,7 @@ services:
       caddy.reverse_proxy: "{{upstreams 8080}}"
     environment:
       TEMPLATE_NAME: lost-in-space
-    image: ghcr.io/tarampampam/error-pages
+    image: ghcr.io/tarampampam/error-pages:3
     networks:
       - default
       - ${default.organisation}

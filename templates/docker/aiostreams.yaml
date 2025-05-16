@@ -7,7 +7,7 @@ services:
       ADDON_ID: ${service.fqdn}
       DEFAULT_TIMEOUT: 5000
       SECRET_KEY: ${sha256(service.secret_hash)}
-    image: ghcr.io/viren070/aiostreams
+    image: ghcr.io/viren070/aiostreams:latest
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}

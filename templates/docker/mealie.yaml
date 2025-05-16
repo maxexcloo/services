@@ -20,7 +20,7 @@ services:
       SMTP_PORT: ${service.mail.port}
       SMTP_USER: ${service.mail.username}
       TZ: ${server.config.timezone}
-    image: ghcr.io/mealie-recipes/mealie
+    image: ghcr.io/mealie-recipes/mealie:latest
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}

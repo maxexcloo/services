@@ -21,7 +21,7 @@ services:
       OPENAI_API_KEY: ${service.config.openai_api_key}
       OPENAI_MODEL: ${service.config.openai_model}
       TZ: ${server.config.timezone}
-    image: ghcr.io/linkwarden/linkwarden
+    image: ghcr.io/linkwarden/linkwarden:latest
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}

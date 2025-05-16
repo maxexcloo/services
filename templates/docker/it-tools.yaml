@@ -3,7 +3,7 @@ networks:
     external: true
 services:
   it-tools:
-    image: corentinth/it-tools
+    image: corentinth/it-tools:latest
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}

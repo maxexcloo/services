@@ -4,7 +4,7 @@ networks:
 services:
 %{ if contains(server.flags, "cloudflare_proxy") == false ~}
   external:
-    image: openspeedtest/latest
+    image: openspeedtest/latest:latest
     labels:
       caddy: ${service.service}.${server.fqdn_external}
       caddy.import: external
@@ -15,7 +15,7 @@ services:
     restart: unless-stopped
 %{ endif ~}
   internal:
-    image: openspeedtest/latest
+    image: openspeedtest/latest:latest
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}

@@ -7,7 +7,7 @@ services:
       WATCHTOWER_NOTIFICATIONS_HOSTNAME: ${service.server}
       WATCHTOWER_REMOVE_VOLUMES: true
       WATCHTOWER_SCHEDULE: "@daily"
-    image: containrrr/watchtower
+    image: containrrr/watchtower:latest
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

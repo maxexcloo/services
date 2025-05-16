@@ -6,7 +6,7 @@ services:
     environment:
       DOCKER_MODS: linuxserver/mods:universal-calibre
       TZ: ${server.config.timezone}
-    image: crocodilestick/calibre-web-automated
+    image: crocodilestick/calibre-web-automated:latest
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}

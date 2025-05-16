@@ -7,7 +7,7 @@ services:
       - postgres
     environment:
       NC_DB: pg://postgres:5432?d=${service.database.name}&p=${service.database.password}&u=${service.database.username}
-    image: nocodb/nocodb
+    image: nocodb/nocodb:latest
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}

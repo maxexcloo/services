@@ -5,7 +5,7 @@ services:
   beszel:
     environment:
       USER_CREATION: true
-    image: henrygd/beszel
+    image: henrygd/beszel:0
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}

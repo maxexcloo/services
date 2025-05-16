@@ -28,7 +28,7 @@ services:
       GF_SMTP_HOST: ${service.mail.host}:465
       GF_SMTP_PASSWORD: ${service.mail.password}
       GF_SMTP_USERNAME: ${service.mail.username}
-    image: grafana/grafana
+    image: grafana/grafana:latest
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}

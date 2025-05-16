@@ -6,7 +6,7 @@ services:
     environment:
       INSTALL_BOOK_AND_ADVANCED_HTML_OPS: true
       LANGS: en_GB
-    image: stirlingtools/stirling-pdf
+    image: stirlingtools/stirling-pdf:latest
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}

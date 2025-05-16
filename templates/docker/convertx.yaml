@@ -5,7 +5,7 @@ services:
   convertx:
     environment:
       ALLOW_UNAUTHENTICATED: true
-    image: ghcr.io/c4illin/convertx
+    image: ghcr.io/c4illin/convertx:latest
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
