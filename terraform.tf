@@ -24,6 +24,9 @@ terraform {
     onepassword = {
       source = "1password/onepassword"
     }
+    sftpgo = {
+      source = "drakkan/sftpgo"
+    }
     random = {
       source = "hashicorp/random"
     }

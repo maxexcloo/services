@@ -19,6 +19,11 @@ locals {
     if service.enable_dns
   }
 
+  filtered_services_enable_sftpgo = {
+    for k, service in local.merged_services : k => service
+    if service.enable_sftpgo
+  }
+
   filtered_services_fly = {
     for k, service in local.merged_services : k => service
     if service.platform == "fly"
@@ -132,6 +137,7 @@ locals {
         portainer_endpoint_id    = try(local.filtered_portainer_endpoints[service.server]["Id"], "")
         secret_hash              = service.enable_secret_hash ? local.output_secret_hashes[k] : ""
         secret_hash_bcrypt       = service.enable_secret_hash ? replace(bcrypt_hash.secret_hash[k].id, "$", "$$") : ""
+        sftpgo                   = service.enable_sftpgo ? local.output_sftpgo[k] : {}
         tailscale_tailnet_key    = service.enable_tailscale ? local.output_tailscale_tailnet_keys[k] : ""
         mail = {
           host     = var.terraform.resend.smtp_host
@@ -166,16 +172,7 @@ locals {
     }
   }
 
-  output_databases = {
-    for k, service in local.merged_services : k => {
-      name     = service.service
-      password = random_password.database_password[k].result
-      username = service.service
-    }
-    if service.enable_database_password
-  }
-
-  output_portainer_stack_configs = merge(
+  output_configs = merge(
     {
       for k, service in local.merged_services : k => {
         "/app/config.yaml" = templatefile(
@@ -211,6 +208,15 @@ locals {
     },
   )
 
+  output_databases = {
+    for k, service in local.merged_services : k => {
+      name     = service.service
+      password = random_password.database_password[k].result
+      username = service.service
+    }
+    if service.enable_database_password
+  }
+
   output_portainer_stacks = {
     for k, service in local.merged_services_outputs : k => service
     if service.platform == "docker" && service.portainer_endpoint_id != "" && service.service != null
@@ -225,6 +231,15 @@ locals {
   }
 
   output_servers = nonsensitive(jsondecode(data.tfe_outputs.infrastructure.values.servers))
+
+  output_sftpgo = {
+    for k, sftpgo_user in sftpgo_user.service : k => {
+      home_directory = sftpgo_user.home_dir
+      password       = sftpgo_user.password
+      username       = sftpgo_user.username
+      webdav_url     = var.terraform.sftpgo.webdav_url
+    }
+  }
 
   output_tailscale_tailnet_keys = {
     for k, tailscale_tailnet_key in tailscale_tailnet_key.service : k => tailscale_tailnet_key.key

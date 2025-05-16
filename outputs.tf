@@ -13,14 +13,14 @@ output "resend" {
   value     = local.output_resend_api_keys
 }
 
-output "services" {
-  sensitive = true
-  value     = local.merged_services
-}
-
 output "secret_hashes" {
   sensitive = true
   value     = local.output_secret_hashes
+}
+
+output "sftpgo" {
+  sensitive = true
+  value     = local.output_sftpgo
 }
 
 output "tailscale_tailnet_keys" {
