@@ -9,7 +9,7 @@ services:
       BACKUP_COMPRESSION: zst
       BACKUP_CRON_EXPRESSION: "@${schedule.cron}"
       BACKUP_EXCLUDE_REGEXP: '${service.config.backup_exclude_regexp}'
-      BACKUP_FILENAME: docker-backup-${schedule.cron}-%Y-%m-%dT%H-%M-%S.tar.zst
+      BACKUP_FILENAME: docker-backup-${schedule.cron}-%Y-%m-%dT%H-%M-%S.{{ .Extension }}
       BACKUP_PRUNING_PREFIX: docker-backup-${schedule.cron}-
       BACKUP_RETENTION_DAYS: ${schedule.retention_days}
       GPG_PASSPHRASE: ${server.secret_hash}
