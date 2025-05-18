@@ -4,7 +4,7 @@ networks:
 services:
   dailydisplay:
     environment:
-      CONFIG: ${service.config}
+      CONFIG: ${jsonencode(service.config)}
     image: ghcr.io/maxexcloo/dailydisplay:latest
     labels:
       caddy: ${service.fqdn}
