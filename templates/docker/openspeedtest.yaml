@@ -9,6 +9,9 @@ services:
       caddy: ${service.service}.${server.fqdn_external}
       caddy.import: external
       caddy.reverse_proxy: "{{upstreams 3000}}"
+      caddy.reverse_proxy.flush_interval: -1
+      caddy.reverse_proxy.request_buffers: 35MiB
+      caddy.reverse_proxy.response_buffers: 35MiB
     networks:
       - default
       - ${default.organisation}
@@ -20,6 +23,9 @@ services:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 3000}}"
+      caddy.reverse_proxy.flush_interval: -1
+      caddy.reverse_proxy.request_buffers: 35MiB
+      caddy.reverse_proxy.response_buffers: 35MiB
     networks:
       - default
       - ${default.organisation}
