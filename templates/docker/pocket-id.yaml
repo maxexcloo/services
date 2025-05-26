@@ -28,6 +28,6 @@ services:
       - ${default.organisation}
     restart: unless-stopped
     volumes:
-      - data:/app/backend/data
+      - data:/app/data
 volumes:
   data:
