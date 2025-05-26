@@ -5,11 +5,10 @@ services:
   pocket-id:
     environment:
       APP_NAME: ${service.title}
+      APP_URL: ${service.url}
       EMAIL_ONE_TIME_ACCESS_ENABLED: true
       EMAILS_VERIFIED: true
       MAXMIND_LICENSE_KEY: ${service.config.maxmind_license_key}
-      PUBLIC_APP_URL: ${service.url}
-      PUBLIC_UI_CONFIG_DISABLED: true
       SESSION_DURATION: 1440
       SMTP_FROM: ${default.email}
       SMTP_HOST: ${service.mail.host}
@@ -18,11 +17,12 @@ services:
       SMTP_TLS: starttls
       SMTP_USER: ${service.mail.username}
       TRUST_PROXY: true
+      UI_CONFIG_DISABLED: true
     image: ghcr.io/pocket-id/pocket-id:latest
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
-      caddy.reverse_proxy: "{{upstreams 80}}"
+      caddy.reverse_proxy: "{{upstreams 1411}}"
     networks:
       - default
       - ${default.organisation}
