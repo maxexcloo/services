@@ -16,6 +16,8 @@ services:
       WHITELIST: |-
         ${join("\n        ", service.config.whitelist)}
     image: itzg/minecraft-server:latest
+    labels:
+      docker-volume-backup.stop-during-backup: true
     ports:
       - 19132:19132/udp
       - 25565:25565
