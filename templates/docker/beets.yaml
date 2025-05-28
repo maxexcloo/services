@@ -6,6 +6,7 @@ services:
     environment:
       DOCKER_MODS: linuxserver/mods:universal-package-install
       INSTALL_PACKAGES: keyfinder-cli
+      # INSTALL_PIP_PACKAGES: beets[autobpm]|librosa
       TZ: ${server.config.timezone}
     image: linuxserver/beets:latest
     labels:
