@@ -5,8 +5,9 @@ services:
   beets:
     environment:
       DOCKER_MODS: linuxserver/mods:universal-package-install
-      INSTALL_PACKAGES: keyfinder-cli
-      # INSTALL_PIP_PACKAGES: beets[autobpm]|librosa
+      INSTALL_PACKAGES: build-base|keyfinder-cli|llvm15-dev|python3-dev
+      INSTALL_PIP_PACKAGES: librosa
+      LLVM_CONFIG: /usr/lib/llvm15/bin/llvm-config
       TZ: ${server.config.timezone}
     image: linuxserver/beets:latest
     labels:
