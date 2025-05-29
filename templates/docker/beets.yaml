@@ -6,7 +6,7 @@ services:
     environment:
       DOCKER_MODS: linuxserver/mods:universal-package-install
       INSTALL_PACKAGES: build-base|keyfinder-cli|llvm15-dev|python3-dev
-      INSTALL_PIP_PACKAGES: librosa
+      INSTALL_PIP_PACKAGES: librosa|resampy
       LLVM_CONFIG: /usr/lib/llvm15/bin/llvm-config
       TZ: ${server.config.timezone}
     image: linuxserver/beets:latest
