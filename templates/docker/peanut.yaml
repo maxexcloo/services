@@ -1,0 +1,23 @@
+networks:
+  ${default.organisation}:
+    external: true
+services:
+  peanut:
+    environment:
+      WEB_USERNAME: ${service.username}
+      WEB_PASSWORD: ${service.password}
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    image: brandawg93/peanut:latest
+    labels:
+      caddy: ${service.fqdn}
+      caddy.import: ${service.zone}
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+    networks:
+      - default
+      - ${default.organisation}
+    restart: unless-stopped
+    volumes:
+      - data:/config
+volumes:
+  data:
