@@ -12,7 +12,7 @@ services:
       PGID: 0
       PUID: 0
       TZ: ${server.config.timezone}
-    image: linuxserver/webtop:arch-xfce
+    image: linuxserver/webtop:${service.config.version}
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
