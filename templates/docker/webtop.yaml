@@ -17,7 +17,6 @@ services:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
       caddy.reverse_proxy: "{{upstreams 3000}}"
-      com.centurylinklabs.watchtower.monitor-only: true
     networks:
       - default
       - ${default.organisation}
