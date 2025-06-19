@@ -8,8 +8,8 @@ services:
       INSTALL_PACKAGES: build-base|keyfinder-cli|llvm15-dev|python3-dev
       INSTALL_PIP_PACKAGES: librosa|resampy
       LLVM_CONFIG: /usr/lib/llvm15/bin/llvm-config
-      PGID: 0
-      PUID: 0
+      PGID: 568
+      PUID: 568
       TZ: ${server.config.timezone}
     image: linuxserver/beets:latest
     labels:
