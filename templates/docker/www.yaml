@@ -15,7 +15,7 @@ services:
       caddy.reverse_proxy: "{{upstreams 8080}}"
     environment:
       TEMPLATE_NAME: lost-in-space
-    image: ghcr.io/tarampampam/error-pages:3
+    image: ghcr.io/tarampampam/error-pages:latest
     networks:
       - default
       - ${default.organisation}
