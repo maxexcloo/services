@@ -8,15 +8,6 @@ provider "cloudflare" {
   email   = var.default.email
 }
 
-provider "graphql" {
-  alias = "fly"
-  url   = var.terraform.fly.url_graphql
-
-  headers = {
-    Authorization = "Bearer ${var.terraform.fly.api_token}"
-  }
-}
-
 provider "onepassword" {
   service_account_token = var.terraform.onepassword.service_account_token
 }
@@ -24,7 +15,7 @@ provider "onepassword" {
 provider "restapi" {
   alias                = "fly"
   id_attribute         = "id"
-  uri                  = var.terraform.fly.url_rest
+  uri                  = var.terraform.fly.url
   write_returns_object = true
 
   headers = {

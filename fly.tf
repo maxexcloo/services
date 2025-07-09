@@ -1,85 +1,3 @@
-resource "graphql_mutation" "fly_app_certificate" {
-  for_each = local.filtered_services_fly
-
-  compute_mutation_keys = {}
-  delete_mutation       = "mutation { __typename }"
-  provider              = graphql.fly
-  read_query            = "query { __typename }"
-  update_mutation       = "mutation { __typename }"
-
-  create_mutation = <<-EOT
-    mutation($app: ID!, $hostname: String!) {
-      addCertificate(appId: $app, hostname: $hostname) {
-        certificate {
-          configured
-        }
-      }
-    }
-  EOT
-
-  depends_on = [
-    restapi_object.fly_app_service
-  ]
-
-  lifecycle {
-    ignore_changes = [
-      mutation_variables
-    ]
-
-    replace_triggered_by = [
-      restapi_object.fly_app_service[each.key]
-    ]
-  }
-
-  mutation_variables = {
-    app      = each.value.name
-    hostname = each.value.fqdn
-  }
-}
-
-resource "graphql_mutation" "fly_app_ip" {
-  for_each = local.filtered_services_fly
-
-  compute_mutation_keys = {}
-  delete_mutation       = "mutation { __typename }"
-  provider              = graphql.fly
-  read_query            = "query { __typename }"
-  update_mutation       = "mutation { __typename }"
-
-  create_mutation = <<-EOT
-    mutation($app: ID!) {
-      ipv4: allocateIpAddress(input: { appId: $app, type: shared_v4 }) {
-        ipAddress {
-          address
-        }
-      }
-      ipv6: allocateIpAddress(input: { appId: $app, type: v6 }) {
-        ipAddress {
-          address
-        }
-      }
-    }
-  EOT
-
-  depends_on = [
-    restapi_object.fly_app_service
-  ]
-
-  lifecycle {
-    ignore_changes = [
-      mutation_variables
-    ]
-
-    replace_triggered_by = [
-      graphql_mutation.fly_app_certificate[each.key]
-    ]
-  }
-
-  mutation_variables = {
-    app = each.value.name
-  }
-}
-
 resource "restapi_object" "fly_app_machine_service" {
   for_each = local.filtered_services_fly
 
@@ -147,8 +65,13 @@ resource "restapi_object" "fly_app_machine_service" {
     }
   }))
 
+  depends_on = [
+    terraform_data.fly_app_setup
+  ]
+
   force_new = [
     each.value.fly.region,
+    each.value.fqdn,
     each.value.name,
     sha256(jsonencode(local.output_configs[each.key]))
   ]
@@ -168,4 +91,45 @@ resource "restapi_object" "fly_app_service" {
     app_name = each.value.name
     org_slug = var.terraform.fly.org
   }))
+}
+
+resource "terraform_data" "fly_app_setup" {
+  for_each = local.filtered_services_fly
+
+  provisioner "local-exec" {
+    quiet = true
+
+    command = <<-CMD
+      curl -f -s \
+        -H "Authorization: Bearer ${var.terraform.fly.api_token}" \
+        -H "Content-Type: application/json" \
+        -X POST \
+        https://api.fly.io/graphql
+        -d @- <<EOF
+          {
+            "query": "mutation {
+              cert: addCertificate(appId: \"${each.value.name}\", hostname: \"${each.value.fqdn}\") {
+                certificate { configured }
+              }
+              ipv4: allocateIpAddress(input: { appId: \"${each.value.name}\", type: shared_v4 }) {
+                ipAddress { address }
+              }
+              ipv6: allocateIpAddress(input: { appId: \"${each.value.name}\", type: v6 }) {
+                ipAddress { address }
+              }
+            }"
+          }
+        EOF
+    CMD
+  }
+
+  depends_on = [
+    restapi_object.fly_app_service
+  ]
+
+  triggers_replace = {
+    app      = each.value.name
+    app_id   = restapi_object.fly_app_service[each.key].id
+    hostname = each.value.fqdn
+  }
 }

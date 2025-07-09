@@ -18,17 +18,11 @@ terraform {
     cloudflare = {
       source = "cloudflare/cloudflare"
     }
-    graphql = {
-      source = "sullivtr/graphql"
-    }
     onepassword = {
       source = "1password/onepassword"
     }
     sftpgo = {
       source = "drakkan/sftpgo"
-    }
-    random = {
-      source = "hashicorp/random"
     }
     restapi = {
       source = "mastercard/restapi"
