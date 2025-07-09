@@ -104,7 +104,7 @@ resource "terraform_data" "fly_app_setup" {
         -H "Authorization: Bearer ${var.terraform.fly.api_token}" \
         -H "Content-Type: application/json" \
         -X POST \
-        https://api.fly.io/graphql
+        https://api.fly.io/graphql \
         -d @- <<EOF
           {
             "query": "mutation {

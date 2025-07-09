@@ -15,7 +15,7 @@ resource "cloudflare_dns_record" "service" {
   name    = "${each.value.dns_name}.${each.value.dns_zone}"
   proxied = each.value.enable_cloudflare_proxy
   ttl     = 1
-  type    = can(cidrhost("${each.value.dns_content}/32", 0)) ? "A" : "CNAME"
+  type    = can(regex("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$", each.value.dns_content)) ? "A" : can(regex("^[a-fA-F0-9:]+$", each.value.dns_content)) ? "AAAA" : "CNAME"
   zone_id = element(data.cloudflare_zones.service[each.key].result, 0).id
 }
 
