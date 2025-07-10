@@ -21,14 +21,16 @@
 - Pre-compute expensive operations in locals
 - Consolidate data sources to minimize API calls
 - Mark sensitive values appropriately
+- **ALL files must end with trailing newline**
+- **Run `tofu fmt` after every change**
 
 ## Validation & Commit
-**Before any changes:**
+**After every change:**
 ```bash
-tofu validate && tofu plan
+tofu fmt && tofu validate && tofu plan
 ```
 
-**After changes, auto-commit:**
+**Then auto-commit:**
 ```bash
 git add . && git commit -m "Update OpenTofu configuration
 
@@ -47,3 +49,4 @@ Services/
 ├── *.tf                     # Resource files
 └── terraform.tfvars         # Instance values
 ```
+

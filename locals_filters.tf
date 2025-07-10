@@ -33,12 +33,12 @@ locals {
 
   service_filters = {
     for k, service in local.merged_services : k => {
-      enable_b2           = service.enable_b2
-      enable_dns          = service.enable_dns
-      enable_onepassword  = service.enable_database_password || service.enable_password || service.enable_b2 || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.password != "" || service.username != null
-      enable_sftpgo       = service.enable_sftpgo
-      is_fly_platform     = service.platform == "fly"
-      service_data        = service
+      enable_b2          = service.enable_b2
+      enable_dns         = service.enable_dns
+      enable_onepassword = service.enable_database_password || service.enable_password || service.enable_b2 || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.password != "" || service.username != null
+      enable_sftpgo      = service.enable_sftpgo
+      is_fly_platform    = service.platform == "fly"
+      service_data       = service
     }
   }
 
