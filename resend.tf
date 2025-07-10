@@ -1,6 +1,6 @@
 resource "restapi_object" "resend_api_key_service" {
   for_each = {
-    for k, service in local.merged_services : k => service
+    for k, service in local.services_merged : k => service
     if service.enable_resend
   }
 

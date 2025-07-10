@@ -1,5 +1,5 @@
 resource "restapi_object" "fly_app_machine_service" {
-  for_each = local.filtered_services_fly
+  for_each = local.filters_services_fly
 
   destroy_path              = "${restapi_object.fly_app_service[each.key].update_path}/machines/{id}?force=true"
   ignore_all_server_changes = true
@@ -26,11 +26,11 @@ resource "restapi_object" "fly_app_machine_service" {
           FLY_PROCESS_GROUP = "app"
           PRIMARY_REGION    = each.value.fly.region
         },
-        each.value.enable_resend ? { RESEND_API_KEY = local.output_resend_api_keys[each.key] } : {},
-        each.value.enable_tailscale ? { TAILSCALE_TAILNET_KEY = local.output_tailscale_tailnet_keys[each.key] } : {},
+        each.value.enable_resend ? { RESEND_API_KEY = local.outputs_resend_api_keys[each.key] } : {},
+        each.value.enable_tailscale ? { TAILSCALE_TAILNET_KEY = local.outputs_tailscale_tailnet_keys[each.key] } : {},
       )
       files = [
-        for path, content in local.output_configs[each.key] : {
+        for path, content in local.configs_outputs[each.key] : {
           guest_path = path
           raw_value  = base64encode(content)
         }
@@ -74,12 +74,12 @@ resource "restapi_object" "fly_app_machine_service" {
     each.value.fly.region,
     each.value.fqdn,
     each.value.name,
-    sha256(jsonencode(local.output_configs[each.key]))
+    sha256(jsonencode(local.configs_outputs[each.key]))
   ]
 }
 
 resource "restapi_object" "fly_app_service" {
-  for_each = local.filtered_services_fly
+  for_each = local.filters_services_fly
 
   destroy_path              = "/apps/${each.value.name}"
   ignore_all_server_changes = true
@@ -95,7 +95,7 @@ resource "restapi_object" "fly_app_service" {
 }
 
 resource "terraform_data" "fly_app_setup" {
-  for_each = local.filtered_services_fly
+  for_each = local.filters_services_fly
 
   provisioner "local-exec" {
     quiet = true

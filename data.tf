@@ -1,7 +1,7 @@
 data "b2_account_info" "default" {}
 
 data "cloudflare_zones" "unique_zones" {
-  for_each = local.unique_dns_zones
+  for_each = local.filters_unique_dns_zones
 
   name = each.value
 

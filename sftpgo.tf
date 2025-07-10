@@ -1,5 +1,5 @@
 resource "sftpgo_user" "service" {
-  for_each = local.filtered_services_enable_sftpgo
+  for_each = local.filters_services_enable_sftpgo
 
   home_dir = "${var.terraform.sftpgo.home_directory_base}/${each.key}"
   password = random_password.sftpgo[each.key].result

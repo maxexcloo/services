@@ -1,7 +1,7 @@
 resource "cloudflare_dns_record" "service" {
-  for_each = local.filtered_services_enable_dns
+  for_each = local.filters_services_enable_dns
 
-  content = each.value.enable_cloudflare_proxy ? local.output_servers[each.value.server].cloudflare_tunnel.cname : each.value.dns_content
+  content = each.value.enable_cloudflare_proxy ? local.outputs_servers[each.value.server].cloudflare_tunnel.cname : each.value.dns_content
   name    = "${each.value.dns_name}.${each.value.dns_zone}"
   proxied = each.value.enable_cloudflare_proxy
   ttl     = 1
@@ -10,7 +10,7 @@ resource "cloudflare_dns_record" "service" {
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "server" {
-  for_each = local.output_servers
+  for_each = local.outputs_servers
 
   account_id = var.terraform.cloudflare.account_id
   source     = "cloudflare"
@@ -23,7 +23,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "server" {
 
     ingress = concat(
       flatten([
-        for k, service in local.filtered_services_enable_dns : [
+        for k, service in local.filters_services_enable_dns : [
           {
             hostname = cloudflare_dns_record.service[k].name
             path     = "/.well-known/acme-challenge/*"
