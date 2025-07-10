@@ -47,18 +47,65 @@ variable "default" {
       zone                       = string
     })
     widget_config = object({
-      description                = string
-      enable_href                = bool
-      enable_monitoring          = bool
       filter_exclude_server_flag = string
       filter_include_server_flag = string
-      icon                       = string
       priority                   = number
-      title                      = string
-      url                        = string
       widget                     = optional(map(any))
     })
   })
+  default = {
+    cloud_platforms = ["cloud", "fly", "vercel"]
+    domain_external = "excloo.net"
+    domain_internal = "excloo.org"
+    domain_root     = "excloo.com"
+    email           = "max@excloo.com"
+    name            = "Max Schaefer"
+    oidc_name       = "pocket-id"
+    oidc_title      = "Pocket ID"
+    oidc_url        = "https://id.excloo.com"
+    organisation    = "excloo"
+    service_config = {
+      config                     = {}
+      description                = ""
+      dns_content                = null
+      dns_zone                   = null
+      enable_b2                  = false
+      enable_cloudflare_proxy    = false
+      enable_database_password   = false
+      enable_dns                 = false
+      enable_href                = true
+      enable_monitoring          = true
+      enable_password            = false
+      enable_resend              = false
+      enable_secret_hash         = false
+      enable_sftpgo              = false
+      enable_ssl                 = true
+      enable_ssl_validation      = true
+      enable_tailscale           = false
+      filter_exclude_server_flag = ""
+      filter_include_server_flag = ""
+      fly                        = {}
+      fqdn                       = null
+      group                      = "Uncategorized"
+      icon                       = "homepage"
+      password                   = ""
+      port                       = 443
+      server                     = null
+      server_flags               = []
+      server_service             = false
+      service                    = null
+      title                      = ""
+      url                        = null
+      username                   = null
+      zone                       = "external"
+    }
+    widget_config = {
+      filter_exclude_server_flag = ""
+      filter_include_server_flag = ""
+      priority                   = 0
+      widget                     = null
+    }
+  }
 }
 
 variable "services" {
