@@ -181,4 +181,3 @@ resource "onepassword_item" "service" {
     }
   }
 }
-

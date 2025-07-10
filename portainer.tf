@@ -22,4 +22,3 @@ resource "restapi_object" "portainer_stack" {
     each.value.portainer_endpoint_id
   ]
 }
-

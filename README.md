@@ -142,4 +142,3 @@ When modifying this configuration:
 2. Test changes in a separate workspace when possible
 3. Update documentation for new features or significant changes
 4. Follow the existing naming conventions and file organization
-

@@ -10,4 +10,3 @@ resource "tailscale_tailnet_key" "service" {
   reusable      = true
   tags          = ["tag:ephemeral"]
 }
-

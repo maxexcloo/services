@@ -11,4 +11,3 @@ resource "bcrypt_hash" "secret_hash" {
   cleartext = each.value
   cost      = 14
 }
-

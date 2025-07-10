@@ -18,4 +18,3 @@ resource "b2_bucket" "service" {
   bucket_name = "${each.key}-${random_password.b2[each.key].result}"
   bucket_type = "allPrivate"
 }
-

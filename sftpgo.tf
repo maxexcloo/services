@@ -14,4 +14,3 @@ resource "sftpgo_user" "service" {
     "/" = "*"
   }
 }
-

@@ -33,4 +33,3 @@ output "tailscale_tailnet_keys" {
   sensitive   = true
   value       = local.output_tailscale_tailnet_keys
 }
-
