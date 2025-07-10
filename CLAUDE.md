@@ -27,6 +27,12 @@ Services/
 - **Providers**: In `providers.tf` and `terraform.tf`
 - **Variables**: All in `variables.tf` with proper types/descriptions
 
+## Locals Formatting
+**In `locals_*.tf` files:**
+- Sort all locals alphabetically by name
+- Add a blank line between each local definition
+- Single-line locals above multi-line locals when practical
+
 ## Sorting Rules
 **ALWAYS sort alphabetically by:**
 1. Block type

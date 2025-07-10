@@ -1,8 +1,5 @@
 resource "tailscale_tailnet_key" "service" {
-  for_each = {
-    for k, service in local.service_merged : k => service
-    if service.enable_tailscale
-  }
+  for_each = local.filtered_services_tailscale
 
   description   = "ephemeral-${each.key}"
   ephemeral     = true

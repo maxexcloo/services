@@ -32,11 +32,6 @@ locals {
     for k, random_password in random_password.secret_hash : k => random_password.result
   }
 
-  output_secret_hash_services = {
-    for k, service in local.service_merged : k => random_password.secret_hash[k].result
-    if service.enable_secret_hash
-  }
-
   output_sftpgo = {
     for k, sftpgo_user in sftpgo_user.service : k => {
       home_directory = sftpgo_user.home_dir
