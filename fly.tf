@@ -1,19 +1,3 @@
-resource "restapi_object" "fly_app_service" {
-  for_each = local.filtered_services_fly
-
-  destroy_path              = "/apps/${each.value.name}"
-  ignore_all_server_changes = true
-  path                      = "/apps"
-  provider                  = restapi.fly
-  read_path                 = "/apps/${each.value.name}"
-  update_path               = "/apps/${each.value.name}"
-
-  data = sensitive(jsonencode({
-    app_name = each.value.name
-    org_slug = var.terraform.fly.org
-  }))
-}
-
 resource "restapi_object" "fly_app_machine_service" {
   for_each = local.filtered_services_fly
 
@@ -92,6 +76,22 @@ resource "restapi_object" "fly_app_machine_service" {
     each.value.name,
     sha256(jsonencode(local.config_outputs[each.key]))
   ]
+}
+
+resource "restapi_object" "fly_app_service" {
+  for_each = local.filtered_services_fly
+
+  destroy_path              = "/apps/${each.value.name}"
+  ignore_all_server_changes = true
+  path                      = "/apps"
+  provider                  = restapi.fly
+  read_path                 = "/apps/${each.value.name}"
+  update_path               = "/apps/${each.value.name}"
+
+  data = sensitive(jsonencode({
+    app_name = each.value.name
+    org_slug = var.terraform.fly.org
+  }))
 }
 
 resource "terraform_data" "fly_app_setup" {

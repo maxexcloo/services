@@ -8,7 +8,7 @@ resource "random_password" "b2" {
 
 resource "random_password" "database_password" {
   for_each = {
-    for k, service in local.service_merged : k => service
+    for k, service in local.services_merged : k => service
     if service.enable_database_password
   }
 
@@ -18,7 +18,7 @@ resource "random_password" "database_password" {
 
 resource "random_password" "secret_hash" {
   for_each = {
-    for k, service in local.service_merged : k => service
+    for k, service in local.services_merged : k => service
     if service.enable_secret_hash
   }
 

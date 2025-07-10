@@ -11,7 +11,7 @@ locals {
   }
 
   output_databases = {
-    for k, service in local.service_merged : k => {
+    for k, service in local.services_merged : k => {
       name     = service.service
       password = random_password.database_password[k].result
       username = service.service
@@ -20,7 +20,7 @@ locals {
   }
 
   output_portainer_stacks = {
-    for k, service in local.service_merged_outputs : k => service
+    for k, service in local.services_merged_outputs : k => service
     if service.platform == "docker" && service.portainer_endpoint_id != "" && service.service != null
   }
 

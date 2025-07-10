@@ -9,7 +9,7 @@ provider "cloudflare" {
 }
 
 provider "onepassword" {
-  service_account_token = var.terraform.onepassword.service_account_token
+  service_account_token = var.terraform.onepassword.services_account_token
 }
 
 provider "restapi" {

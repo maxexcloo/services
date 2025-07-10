@@ -1,6 +1,6 @@
 locals {
-  service_computations = {
-    for k, service in local.service_merged_all : k => {
+  services_computations = {
+    for k, service in local.services_merged_all : k => {
       has_server    = can(service.server)
       has_dns       = can(service.dns_name) && can(service.dns_zone)
       server_config = try(local.output_servers[service.server], {})
@@ -8,36 +8,36 @@ locals {
     }
   }
 
-  service_merged = {
-    for k, service in local.service_merged_all : k => merge(
-      var.default.service_config,
+  services_merged = {
+    for k, service in local.services_merged_all : k => merge(
+      var.default.services_config,
       {
-        dns_content = local.service_computations[k].has_server ? (
-          try(service.dns_zone, var.default.service_config.dns_zone) != var.default.domain_internal ?
-          local.service_computations[k].server_config.fqdn_external :
-          local.service_computations[k].server_config.fqdn_internal
-        ) : var.default.service_config.dns_content
-        dns_zone                = local.service_computations[k].has_server ? var.default.domain_internal : var.default.service_config.dns_zone
-        enable_cloudflare_proxy = contains(try(local.service_computations[k].server_config.flags, []), "cloudflare_proxy") && try(service.dns_zone, local.service_computations[k].has_server ? var.default.domain_internal : null) != var.default.domain_internal
-        enable_dns              = local.service_computations[k].has_dns
-        fqdn = local.service_computations[k].has_dns || local.service_computations[k].has_server ? (
-          local.service_computations[k].has_dns ? "${service.dns_name}.${service.dns_zone}" : (
-            "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.service_computations[k].server_config.fqdn_internal}"
+        dns_content = local.services_computations[k].has_server ? (
+          try(service.dns_zone, var.default.services_config.dns_zone) != var.default.domain_internal ?
+          local.services_computations[k].server_config.fqdn_external :
+          local.services_computations[k].server_config.fqdn_internal
+        ) : var.default.services_config.dns_content
+        dns_zone                = local.services_computations[k].has_server ? var.default.domain_internal : var.default.services_config.dns_zone
+        enable_cloudflare_proxy = contains(try(local.services_computations[k].server_config.flags, []), "cloudflare_proxy") && try(service.dns_zone, local.services_computations[k].has_server ? var.default.domain_internal : null) != var.default.domain_internal
+        enable_dns              = local.services_computations[k].has_dns
+        fqdn = local.services_computations[k].has_dns || local.services_computations[k].has_server ? (
+          local.services_computations[k].has_dns ? "${service.dns_name}.${service.dns_zone}" : (
+            "${try(service.port, var.default.services_config.port) == var.default.services_config.port && try(service.server_service, var.default.services_config.server_service) == var.default.services_config.server_service ? "${service.name}." : ""}${local.services_computations[k].server_config.fqdn_internal}"
           )
-        ) : var.default.service_config.fqdn
-        group        = try(service.dns_zone, local.service_computations[k].has_server ? var.default.domain_internal : var.default.service_config.group)
-        platform     = local.service_computations[k].platform
-        server_flags = try(local.service_computations[k].server_config.flags, var.default.service_config.server_flags)
-        url = local.service_computations[k].has_dns || local.service_computations[k].has_server ? (
-          "${try(service.enable_ssl, true) ? "https://" : "http://"}${local.service_computations[k].has_dns ? "${service.dns_name}.${service.dns_zone}" : "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.service_computations[k].server_config.fqdn_internal}"}${try(service.port, var.default.service_config.port) != var.default.service_config.port ? ":${service.port}" : ""}"
-        ) : var.default.service_config.url
-        zone = try(service.dns_zone, local.service_computations[k].has_server ? var.default.domain_internal : null) == var.default.domain_internal ? "internal" : var.default.service_config.zone
+        ) : var.default.services_config.fqdn
+        group        = try(service.dns_zone, local.services_computations[k].has_server ? var.default.domain_internal : var.default.services_config.group)
+        platform     = local.services_computations[k].platform
+        server_flags = try(local.services_computations[k].server_config.flags, var.default.services_config.server_flags)
+        url = local.services_computations[k].has_dns || local.services_computations[k].has_server ? (
+          "${try(service.enable_ssl, true) ? "https://" : "http://"}${local.services_computations[k].has_dns ? "${service.dns_name}.${service.dns_zone}" : "${try(service.port, var.default.services_config.port) == var.default.services_config.port && try(service.server_service, var.default.services_config.server_service) == var.default.services_config.server_service ? "${service.name}." : ""}${local.services_computations[k].server_config.fqdn_internal}"}${try(service.port, var.default.services_config.port) != var.default.services_config.port ? ":${service.port}" : ""}"
+        ) : var.default.services_config.url
+        zone = try(service.dns_zone, local.services_computations[k].has_server ? var.default.domain_internal : null) == var.default.domain_internal ? "internal" : var.default.services_config.zone
       },
       service
     )
   }
 
-  service_merged_all = merge(
+  services_merged_all = merge(
     merge([
       for server_name, server in local.output_servers : {
         for service in server.services : "server-${service.service}-${server_name}" => merge(
@@ -80,8 +80,8 @@ locals {
     ]...)
   )
 
-  service_merged_outputs = {
-    for k, service in local.service_merged : k => merge(
+  services_merged_outputs = {
+    for k, service in local.services_merged : k => merge(
       service,
       {
         b2                       = service.enable_b2 ? local.output_b2[k] : {}
@@ -105,11 +105,11 @@ locals {
           for widget in try(service.widgets, []) : merge(
             var.default.widget_config,
             {
-              description       = try(service.description, var.default.service_config.description)
-              enable_href       = try(service.enable_href, var.default.service_config.enable_href)
-              enable_monitoring = try(service.enable_monitoring, var.default.service_config.enable_monitoring)
-              icon              = try(service.icon, var.default.service_config.icon)
-              title             = try(service.title, var.default.service_config.title)
+              description       = try(service.description, var.default.services_config.description)
+              enable_href       = try(service.enable_href, var.default.services_config.enable_href)
+              enable_monitoring = try(service.enable_monitoring, var.default.services_config.enable_monitoring)
+              icon              = try(service.icon, var.default.services_config.icon)
+              title             = try(service.title, var.default.services_config.title)
               url               = can(service.url) ? service.url : ""
             },
             widget

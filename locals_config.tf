@@ -2,7 +2,7 @@ locals {
   config_homepage = merge(
     {
       for k, server in local.output_servers : "1 - ${k} (${server.title})" => merge([
-        for service in local.service_merged_outputs : {
+        for service in local.services_merged_outputs : {
           for widget in service.widgets : "${widget.priority != 0 ? widget.priority : can(widget.widget.type) ? "2" : "3"} - ${templatestring(widget.title, { default = var.default, server = server, service = service })}" => jsondecode(templatestring(jsonencode({
             description = widget.description
             href        = widget.enable_href ? widget.url : null
@@ -18,7 +18,7 @@ locals {
     },
     {
       "2 - Cloud" = merge([
-        for service in local.service_merged_outputs : {
+        for service in local.services_merged_outputs : {
           for widget in service.widgets : "${widget.priority != 0 ? widget.priority : can(widget.widget.type) ? "2" : "3"} - ${templatestring(widget.title, { default = var.default, service = service })}${service.platform == "cloud" ? "" : " (${title(service.platform)})"}" => jsondecode(templatestring(jsonencode({
             description = widget.description
             href        = widget.enable_href ? widget.url : null
@@ -34,14 +34,14 @@ locals {
 
   config_outputs = merge(
     {
-      for k, service in local.service_merged : k => {
+      for k, service in local.services_merged : k => {
         "/app/config.yaml" = templatefile(
           "templates/${service.service}/config.yaml",
           {
             default   = var.default
             gatus     = service
             servers   = local.output_servers
-            services  = local.service_merged
+            services  = local.services_merged
             tags      = var.tags
             terraform = var.terraform
           }
@@ -50,7 +50,7 @@ locals {
       if service.service == "gatus"
     },
     {
-      for k, service in local.service_merged : k => {
+      for k, service in local.services_merged : k => {
         "/app/config/bookmarks.yaml"  = ""
         "/app/config/docker.yaml"     = ""
         "/app/config/kubernetes.yaml" = ""
@@ -61,7 +61,7 @@ locals {
       if service.service == "homepage"
     },
     {
-      for k, service in local.service_merged : k => {
+      for k, service in local.services_merged : k => {
         "/config/finger.json" = templatefile("templates/${service.service}/finger.json", { default = var.default })
       }
       if service.service == "www"
