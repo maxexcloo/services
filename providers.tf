@@ -61,3 +61,4 @@ provider "tailscale" {
   oauth_client_secret = var.terraform.tailscale.oauth_client_secret
   tailnet             = var.default.domain_root
 }
+

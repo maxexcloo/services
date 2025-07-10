@@ -18,3 +18,4 @@ resource "restapi_object" "resend_api_key_service" {
     search_value = each.key
   }
 }
+

@@ -32,3 +32,4 @@ resource "random_password" "sftpgo" {
   length  = 24
   special = false
 }
+
