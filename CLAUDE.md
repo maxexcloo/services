@@ -1,5 +1,14 @@
 # CLAUDE.md - OpenTofu Project Rules
 
+## Code Quality
+- **ALL files must end with trailing newline**
+- **Run `tofu fmt` after every change**
+- Consolidate data sources to minimize API calls
+- Mark sensitive values appropriately
+- Pre-compute expensive operations in locals
+- Remove useless comments
+- Use `type = any` for complex nested structures
+
 ## Directory Structure
 ```
 Services/
@@ -14,9 +23,9 @@ Services/
 ## File Organization
 - **Data sources**: All in `data.tf`
 - **Locals**: Split into `locals_*.tf` files by function
-- **Variables**: All in `variables.tf` with proper types/descriptions
 - **Outputs**: All in `outputs.tf`
 - **Providers**: In `providers.tf` and `terraform.tf`
+- **Variables**: All in `variables.tf` with proper types/descriptions
 
 ## Sorting Rules
 **ALWAYS sort alphabetically by:**
@@ -26,16 +35,7 @@ Services/
 
 **Use explicit `depends_on` for dependencies that conflict with alphabetical order.**
 
-## Code Quality
-- Remove useless comments
-- Use `type = any` for complex nested structures
-- Pre-compute expensive operations in locals
-- Consolidate data sources to minimize API calls
-- Mark sensitive values appropriately
-- **ALL files must end with trailing newline**
-- **Run `tofu fmt` after every change**
-
-## Validation & Commit
+## Validate & Commit
 **After every change:**
 ```bash
 tofu fmt && tofu validate && tofu plan

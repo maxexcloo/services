@@ -1,11 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(tofu fmt:*)",
-      "Bash(tofu validate:*)",
-      "Bash(tofu plan:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(rg:*)",
+      "Bash(tofu fmt:*)",
+      "Bash(tofu plan:*)",
+      "Bash(tofu validate:*)"
     ],
     "deny": []
   }
