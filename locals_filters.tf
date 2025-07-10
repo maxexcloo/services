@@ -1,12 +1,15 @@
 locals {
   filters_portainer_endpoints_data = jsondecode(data.http.portainer_endpoints.response_body)
+
   filters_unique_dns_zones = toset([
     for k, service in local.filters_services_enable_dns : service.dns_zone
   ])
+
   filters_portainer_endpoints = {
     for k, endpoint in local.filters_portainer_endpoints_data : endpoint["Name"] => endpoint
     if !strcontains(endpoint["Name"], "-disabled")
   }
+
   filters_service_filters = {
     for k, service in local.services_merged : k => {
       enable_b2          = service.enable_b2
@@ -17,6 +20,7 @@ locals {
       service_data       = service
     }
   }
+
   filters_services_enable_b2 = {
     for k, filter in local.filters_service_filters : k => filter.service_data
     if filter.enable_b2
