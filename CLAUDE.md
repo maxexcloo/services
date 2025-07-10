@@ -49,4 +49,3 @@ Services/
 ├── *.tf                     # Resource files
 └── terraform.tfvars         # Instance values
 ```
-
