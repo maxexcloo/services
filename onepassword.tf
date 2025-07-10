@@ -1,5 +1,5 @@
 resource "onepassword_item" "service" {
-  for_each = local.filters_services_onepassword
+  for_each = local.filtered_services_onepassword
 
   category = "login"
   password = each.value.enable_password || each.value.password == "" ? null : each.value.password
@@ -26,25 +26,25 @@ resource "onepassword_item" "service" {
       field {
         label = "B2 Application Key"
         type  = "CONCEALED"
-        value = local.outputs_b2[each.key].application_key
+        value = local.output_b2[each.key].application_key
       }
 
       field {
         label = "B2 Application Key ID"
         type  = "STRING"
-        value = local.outputs_b2[each.key].application_key_id
+        value = local.output_b2[each.key].application_key_id
       }
 
       field {
         label = "B2 Bucket Name"
         type  = "STRING"
-        value = local.outputs_b2[each.key].bucket_name
+        value = local.output_b2[each.key].bucket_name
       }
 
       field {
         label = "B2 Endpoint"
         type  = "URL"
-        value = local.outputs_b2[each.key].endpoint
+        value = local.output_b2[each.key].endpoint
       }
     }
   }
@@ -58,25 +58,25 @@ resource "onepassword_item" "service" {
       field {
         label = "Database Name"
         type  = "STRING"
-        value = local.outputs_databases[each.key].name
+        value = local.output_databases[each.key].name
       }
 
       field {
         label = "Database Username"
         type  = "STRING"
-        value = local.outputs_databases[each.key].username
+        value = local.output_databases[each.key].username
       }
 
       field {
         label = "Database Password"
         type  = "CONCEALED"
-        value = local.outputs_databases[each.key].password
+        value = local.output_databases[each.key].password
       }
     }
   }
 
   dynamic "section" {
-    for_each = try(local.outputs_resend_api_keys[each.key], local.outputs_servers[each.value.server].resend_api_key, "") != "" ? [true] : []
+    for_each = try(local.output_resend_api_keys[each.key], local.output_servers[each.value.server].resend_api_key, "") != "" ? [true] : []
 
     content {
       label = "Mail"
@@ -102,7 +102,7 @@ resource "onepassword_item" "service" {
       field {
         label = "SMTP Password"
         type  = "CONCEALED"
-        value = try(local.outputs_resend_api_keys[each.key], local.outputs_servers[each.value.server].resend_api_key, "")
+        value = try(local.output_resend_api_keys[each.key], local.output_servers[each.value.server].resend_api_key, "")
       }
     }
   }
@@ -116,7 +116,7 @@ resource "onepassword_item" "service" {
       field {
         label = "Resend API Key"
         type  = "CONCEALED"
-        value = local.outputs_resend_api_keys[each.key]
+        value = local.output_resend_api_keys[each.key]
       }
     }
   }
@@ -130,7 +130,7 @@ resource "onepassword_item" "service" {
       field {
         label = "Secret Hash"
         type  = "CONCEALED"
-        value = local.outputs_secret_hashes[each.key]
+        value = local.output_secret_hashes[each.key]
       }
     }
   }
@@ -144,25 +144,25 @@ resource "onepassword_item" "service" {
       field {
         label = "SFTPGo Username"
         type  = "STRING"
-        value = local.outputs_sftpgo[each.key].username
+        value = local.output_sftpgo[each.key].username
       }
 
       field {
         label = "SFTPGo Password"
         type  = "CONCEALED"
-        value = local.outputs_sftpgo[each.key].password
+        value = local.output_sftpgo[each.key].password
       }
 
       field {
         label = "SFTPGo Home Directory"
         type  = "STRING"
-        value = local.outputs_sftpgo[each.key].home_directory
+        value = local.output_sftpgo[each.key].home_directory
       }
 
       field {
         label = "SFTPGo WebDAV URL"
         type  = "URL"
-        value = local.outputs_sftpgo[each.key].webdav_url
+        value = local.output_sftpgo[each.key].webdav_url
       }
     }
   }
@@ -176,7 +176,7 @@ resource "onepassword_item" "service" {
       field {
         label = "Tailscale Tailnet Key"
         type  = "CONCEALED"
-        value = local.outputs_tailscale_tailnet_keys[each.key]
+        value = local.output_tailscale_tailnet_keys[each.key]
       }
     }
   }

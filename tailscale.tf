@@ -1,6 +1,6 @@
 resource "tailscale_tailnet_key" "service" {
   for_each = {
-    for k, service in local.services_merged : k => service
+    for k, service in local.service_merged : k => service
     if service.enable_tailscale
   }
 
