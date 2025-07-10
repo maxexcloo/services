@@ -1,5 +1,4 @@
 locals {
-  # Merge all services from different sources
   merged_services_all = merge(
     merge([
       for server_name, server in local.output_servers : {
@@ -43,7 +42,6 @@ locals {
     ]...)
   )
 
-  # Final merged services with computed values
   merged_services = {
     for k, service in local.merged_services_all : k => merge(
       var.default.service_config,
@@ -63,7 +61,6 @@ locals {
     )
   }
 
-  # Services with all outputs merged
   merged_services_outputs = {
     for k, service in local.merged_services : k => merge(
       service,

@@ -1,5 +1,4 @@
 locals {
-  # Homepage service configuration
   merged_services_homepage = merge(
     {
       for k, server in local.output_servers : "1 - ${k} (${server.title})" => merge([
@@ -33,7 +32,6 @@ locals {
     }
   )
 
-  # Configuration file templates for different services
   output_configs = merge(
     {
       for k, service in local.merged_services : k => {

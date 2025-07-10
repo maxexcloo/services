@@ -110,7 +110,7 @@ variable "default" {
 
 variable "services" {
   description = "Service configurations for each platform and environment"
-  type        = map(any)
+  type        = any
 }
 
 variable "tags" {

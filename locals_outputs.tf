@@ -1,5 +1,4 @@
 locals {
-  # Output values for different services
   output_b2 = {
     for k, b2_bucket in b2_bucket.service : k => {
       application_key    = b2_application_key.service[k].application_key
@@ -44,5 +43,10 @@ locals {
 
   output_tailscale_tailnet_keys = {
     for k, tailscale_tailnet_key in tailscale_tailnet_key.service : k => tailscale_tailnet_key.key
+  }
+
+  secret_hash_services = {
+    for k, service in local.merged_services : k => random_password.secret_hash[k].result
+    if service.enable_secret_hash
   }
 }

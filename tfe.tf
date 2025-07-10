@@ -1,1 +1,0 @@
-# TFE outputs moved to data.tf for centralization

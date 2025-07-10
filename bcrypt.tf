@@ -9,7 +9,7 @@ resource "bcrypt_hash" "password" {
 }
 
 resource "bcrypt_hash" "secret_hash" {
-  for_each = local.output_secret_hashes
+  for_each = local.secret_hash_services
 
   cleartext = each.value
   cost      = 14

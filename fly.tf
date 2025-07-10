@@ -66,6 +66,7 @@ resource "restapi_object" "fly_app_machine_service" {
   }))
 
   depends_on = [
+    restapi_object.fly_app_service,
     terraform_data.fly_app_setup
   ]
 
