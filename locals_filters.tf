@@ -19,6 +19,11 @@ locals {
     if filter.enable_dns
   }
 
+  filtered_services_enable_password = {
+    for k, service in local.merged_services : k => service
+    if service.enable_password
+  }
+
   filtered_services_enable_sftpgo = {
     for k, filter in local.service_filters : k => filter.service_data
     if filter.enable_sftpgo

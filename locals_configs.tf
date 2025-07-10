@@ -27,7 +27,7 @@ locals {
             widget      = widget.widget
           }), { default = var.default, service = service }))
         }
-        if contains(var.default.cloud_platforms, service.platform) && service.server == null || service.server == null
+        if service.server == null
       ]...)
     }
   )

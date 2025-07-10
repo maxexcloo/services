@@ -135,7 +135,6 @@ resource "onepassword_item" "service" {
     }
   }
 
-
   dynamic "section" {
     for_each = each.value.enable_sftpgo ? [true] : []
 
