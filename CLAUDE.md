@@ -9,9 +9,9 @@
 
 ## Sorting Rules
 **ALWAYS sort alphabetically by:**
-1. Block type (data, locals, resource, variable, output)
-2. Resource/data source type
-3. Resource name
+1. Block type
+2. Data/resource source type
+3. Data/resource name
 
 **Use explicit `depends_on` for dependencies that conflict with alphabetical order.**
 
@@ -41,18 +41,9 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
 Services/
 ├── data.tf                  # All data sources
-├── locals_filters.tf        # Service filtering
-├── locals_services.tf       # Service merging
-├── locals_configs.tf        # Configuration templates
-├── locals_outputs.tf        # Output computations
+├── locals_*.tf              # All locals
 ├── variables.tf             # Variable definitions
 ├── outputs.tf               # Output definitions
 ├── *.tf                     # Resource files
 └── terraform.tfvars         # Instance values
 ```
-
-## Key Optimizations
-- Reduced Cloudflare API calls from 27 to 3
-- Single-pass service filtering
-- Pre-computed JSON parsing
-- Unique DNS zones for efficiency
