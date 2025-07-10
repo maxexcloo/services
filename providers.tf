@@ -45,8 +45,8 @@ provider "restapi" {
   uri                   = var.terraform.resend.url
 
   headers = {
-    "Authorization" = "Bearer ${var.terraform.resend.api_key}",
-    "Content-Type"  = "application/json"
+    Authorization = "Bearer ${var.terraform.resend.api_key}"
+    Content-Type  = "application/json"
   }
 }
 
