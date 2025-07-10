@@ -1,13 +1,3 @@
-data "cloudflare_zones" "service" {
-  for_each = local.filtered_services_enable_dns
-
-  name = each.value.dns_zone
-
-  account = {
-    id = var.terraform.cloudflare.account_id
-  }
-}
-
 resource "cloudflare_dns_record" "service" {
   for_each = local.filtered_services_enable_dns
 
@@ -16,7 +6,7 @@ resource "cloudflare_dns_record" "service" {
   proxied = each.value.enable_cloudflare_proxy
   ttl     = 1
   type    = can(regex("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$", each.value.dns_content)) ? "A" : can(regex("^[a-fA-F0-9:]+$", each.value.dns_content)) ? "AAAA" : "CNAME"
-  zone_id = element(data.cloudflare_zones.service[each.key].result, 0).id
+  zone_id = element(data.cloudflare_zones.unique_zones[each.value.dns_zone].result, 0).id
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "server" {

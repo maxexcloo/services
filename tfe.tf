@@ -1,4 +1,1 @@
-data "tfe_outputs" "infrastructure" {
-  organization = "Excloo"
-  workspace    = "Infrastructure"
-}
+# TFE outputs moved to data.tf for centralization

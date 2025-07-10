@@ -1,13 +1,3 @@
-data "http" "portainer_endpoints" {
-  insecure = true
-  url      = "${var.terraform.portainer.url}/api/endpoints"
-
-  request_headers = {
-    Content-Type = "application/json"
-    X-API-Key    = var.terraform.portainer.api_key
-  }
-}
-
 resource "restapi_object" "portainer_stack" {
   for_each = local.output_portainer_stacks
 

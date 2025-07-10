@@ -1,7 +1,3 @@
-data "onepassword_vault" "services" {
-  name = var.terraform.onepassword.vault
-}
-
 resource "onepassword_item" "service" {
   for_each = local.filtered_onepassword_services
 

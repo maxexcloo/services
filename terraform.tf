@@ -19,7 +19,7 @@ terraform {
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 4.0"
+      version = "~> 5.0"
     }
     http = {
       source  = "hashicorp/http"
@@ -27,7 +27,7 @@ terraform {
     }
     onepassword = {
       source  = "1password/onepassword"
-      version = "~> 1.0"
+      version = "~> 2.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -35,11 +35,11 @@ terraform {
     }
     restapi = {
       source  = "mastercard/restapi"
-      version = "~> 1.0"
+      version = "~> 2.0"
     }
     sftpgo = {
       source  = "drakkan/sftpgo"
-      version = "~> 1.0"
+      version = "~> 0.0.14"
     }
     tailscale = {
       source  = "tailscale/tailscale"
