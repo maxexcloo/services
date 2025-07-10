@@ -1,5 +1,16 @@
 # CLAUDE.md - OpenTofu Project Rules
 
+## Directory Structure
+```
+Services/
+├── data.tf                  # All data sources
+├── locals_*.tf              # All locals
+├── variables.tf             # Variable definitions
+├── outputs.tf               # Output definitions
+├── *.tf                     # Resource files
+└── terraform.tfvars         # Instance values
+```
+
 ## File Organization
 - **Data sources**: All in `data.tf`
 - **Locals**: Split into `locals_*.tf` files by function
@@ -37,15 +48,4 @@ git add . && git commit -m "Update OpenTofu configuration
 🤖 Generated with [Claude Code](https://claude.ai/code)
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
-```
-
-## Directory Structure
-```
-Services/
-├── data.tf                  # All data sources
-├── locals_*.tf              # All locals
-├── variables.tf             # Variable definitions
-├── outputs.tf               # Output definitions
-├── *.tf                     # Resource files
-└── terraform.tfvars         # Instance values
 ```
