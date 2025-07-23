@@ -18,22 +18,22 @@ locals {
   }
 
   filtered_services_b2 = {
-    for k, filter in local.filtered_service_filters : k => filter.services_data
+    for k, filter in local.filtered_service_filters : k => filter.service_data
     if filter.enable_b2
   }
 
   filtered_services_dns = {
-    for k, filter in local.filtered_service_filters : k => filter.services_data
+    for k, filter in local.filtered_service_filters : k => filter.service_data
     if filter.enable_dns
   }
 
   filtered_services_fly = {
-    for k, filter in local.filtered_service_filters : k => filter.services_data
+    for k, filter in local.filtered_service_filters : k => filter.service_data
     if filter.is_fly_platform
   }
 
   filtered_services_onepassword = {
-    for k, filter in local.filtered_service_filters : k => filter.services_data
+    for k, filter in local.filtered_service_filters : k => filter.service_data
     if filter.enable_onepassword
   }
 
@@ -48,7 +48,7 @@ locals {
   }
 
   filtered_services_sftpgo = {
-    for k, filter in local.filtered_service_filters : k => filter.services_data
+    for k, filter in local.filtered_service_filters : k => filter.service_data
     if filter.enable_sftpgo
   }
 

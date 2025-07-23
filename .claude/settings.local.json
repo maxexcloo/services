@@ -1,12 +1,14 @@
 {
   "permissions": {
     "allow": [
+      "Bash(find:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(rg:*)",
       "Bash(tofu fmt:*)",
       "Bash(tofu plan:*)",
-      "Bash(tofu validate:*)"
+      "Bash(tofu validate:*)",
+      "Bash(tofu init:*)"
     ],
     "deny": []
   }

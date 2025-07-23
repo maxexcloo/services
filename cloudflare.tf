@@ -1,12 +1,13 @@
 resource "cloudflare_dns_record" "service" {
   for_each = local.filtered_services_dns
 
+  comment = "DNS record for ${each.key} service"
   content = each.value.enable_cloudflare_proxy ? local.output_servers[each.value.server].cloudflare_tunnel.cname : each.value.dns_content
   name    = "${each.value.dns_name}.${each.value.dns_zone}"
   proxied = each.value.enable_cloudflare_proxy
   ttl     = 1
   type    = can(regex("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$", each.value.dns_content)) ? "A" : can(regex("^[a-fA-F0-9:]+$", each.value.dns_content)) ? "AAAA" : "CNAME"
-  zone_id = element(data.cloudflare_zones.unique_zones[each.value.dns_zone].result, 0).id
+  zone_id = data.cloudflare_zones.unique_zones[each.value.dns_zone].result[0].id
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "server" {

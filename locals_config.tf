@@ -37,14 +37,7 @@ locals {
       for k, service in local.services_merged : k => {
         "/app/config.yaml" = templatefile(
           "templates/${service.service}/config.yaml",
-          {
-            default   = var.default
-            gatus     = service
-            servers   = local.output_servers
-            services  = local.services_merged
-            tags      = var.tags
-            terraform = var.terraform
-          }
+          merge(local.template_vars[k], { gatus = service })
         )
       }
       if service.service == "gatus"
@@ -54,17 +47,29 @@ locals {
         "/app/config/bookmarks.yaml"  = ""
         "/app/config/docker.yaml"     = ""
         "/app/config/kubernetes.yaml" = ""
-        "/app/config/settings.yaml"   = templatefile("templates/${service.service}/settings.yaml", { default = var.default, homepage = service, services = local.config_homepage })
-        "/app/config/services.yaml"   = templatefile("templates/${service.service}/services.yaml", { services = local.config_homepage })
+        "/app/config/settings.yaml"   = templatefile("templates/${service.service}/settings.yaml", merge(local.template_vars[k], { homepage = service, services = local.config_homepage }))
+        "/app/config/services.yaml"   = templatefile("templates/${service.service}/services.yaml", merge(local.template_vars[k], { services = local.config_homepage }))
         "/app/config/widgets.yaml"    = ""
       }
       if service.service == "homepage"
     },
     {
       for k, service in local.services_merged : k => {
-        "/config/finger.json" = templatefile("templates/${service.service}/finger.json", { default = var.default })
+        "/config/finger.json" = templatefile("templates/${service.service}/finger.json", local.template_vars[k])
       }
       if service.service == "www"
     },
   )
+
+  template_vars = {
+    for k, service in local.services_merged_outputs : k => {
+      default   = var.default
+      server    = try(local.output_servers[service.server], {})
+      service   = service
+      servers   = local.output_servers
+      services  = local.services_merged
+      tags      = var.tags
+      terraform = var.terraform
+    }
+  }
 }

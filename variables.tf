@@ -111,12 +111,33 @@ variable "default" {
 variable "services" {
   description = "Service configurations for each platform and environment"
   type        = any
+
+  validation {
+    condition = alltrue([
+      for k, v in var.services : can(regex("^(docker|fly|vercel|cloud)-", k))
+    ])
+    error_message = "Service keys must start with a valid platform prefix (docker-, fly-, vercel-, cloud-)."
+  }
+
+  validation {
+    condition = alltrue([
+      for k, v in var.services : v != null && v != {}
+    ])
+    error_message = "Service configurations cannot be null or empty."
+  }
 }
 
 variable "tags" {
   default     = {}
   description = "Common tags to apply to all resources"
   type        = map(string)
+
+  validation {
+    condition = alltrue([
+      for k, v in var.tags : can(regex("^[a-zA-Z][a-zA-Z0-9_-]*$", k))
+    ])
+    error_message = "Tag keys must start with a letter and contain only alphanumeric characters, underscores, and hyphens."
+  }
 }
 
 variable "terraform" {

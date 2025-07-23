@@ -1,6 +1,4 @@
 locals {
-  output_servers = nonsensitive(jsondecode(data.tfe_outputs.infrastructure.values.servers))
-
   output_b2 = {
     for k, b2_bucket in b2_bucket.service : k => {
       application_key    = b2_application_key.service[k].application_key
@@ -31,6 +29,8 @@ locals {
   output_secret_hashes = {
     for k, random_password in random_password.secret_hash : k => random_password.result
   }
+
+  output_servers = nonsensitive(jsondecode(data.tfe_outputs.infrastructure.values.servers))
 
   output_sftpgo = {
     for k, sftpgo_user in sftpgo_user.service : k => {

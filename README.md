@@ -18,18 +18,23 @@ This project manages infrastructure and services for personal applications with 
 ### File Structure
 
 ```
-├── terraform.tf              # Terraform configuration and provider versions
-├── providers.tf              # Provider configurations
-├── variables.tf              # Variable definitions with types and validation
-├── outputs.tf                # Output definitions
-├── terraform.tfvars          # Variable values (sensitive)
-├── locals_*.tf               # Local value computations split by domain
-│   ├── locals_filters.tf     # Service filtering logic
-│   ├── locals_services.tf    # Service merging and configuration
-│   ├── locals_outputs.tf     # Output value computation
-│   └── locals_configs.tf     # Configuration file templates
-├── *.tf                      # Individual service configurations
-└── templates/                # Configuration templates for services
+├── data.tf                  # All data sources
+├── locals_*.tf              # All locals
+│   ├── locals_config.tf     # Configuration file templates
+│   ├── locals_filtered.tf   # Service filtering logic
+│   ├── locals_output.tf     # Output value computation
+│   └── locals_service.tf    # Service merging and configuration
+├── variables.tf             # Variable definitions
+├── outputs.tf               # Output definitions
+├── providers.tf             # Provider configurations
+├── terraform.tf             # Terraform configuration and provider versions
+├── *.tf                     # Resource files (alphabetically sorted)
+├── terraform.tfvars         # Instance values
+└── templates/               # Configuration templates for services
+    ├── docker/              # Docker service templates
+    ├── gatus/               # Gatus configuration templates
+    ├── homepage/            # Homepage configuration templates
+    └── www/                 # Web service templates
 ```
 
 ### Service Configuration
@@ -69,8 +74,8 @@ services = {
 # Initialize the workspace
 tofu init
 
-# Plan changes (always review before applying)
-tofu plan
+# Format, validate, and plan changes (always review before applying)
+tofu fmt && tofu validate
 
 # Apply changes
 tofu apply
@@ -132,13 +137,14 @@ Service configurations are generated from templates in the `templates/` director
 
 ### Validation
 
-Run `tofu validate` to check configuration syntax and `tofu plan` to preview changes before applying.
+Run `tofu fmt && tofu validate && tofu plan` to format, validate configuration syntax, and preview changes before applying.
 
 ## Contributing
 
 When modifying this configuration:
 
-1. Always run `tofu plan` before applying changes
-2. Test changes in a separate workspace when possible
-3. Update documentation for new features or significant changes
-4. Follow the existing naming conventions and file organization
+1. Always run `tofu fmt && tofu validate && tofu plan` before applying changes
+2. Follow the CLAUDE.md code quality rules (alphabetical sorting, trailing newlines, etc.)
+3. Test changes in a separate workspace when possible
+4. Update documentation for new features or significant changes
+5. Follow the existing naming conventions and file organization
