@@ -9,7 +9,11 @@
       "Bash(tofu plan:*)",
       "Bash(tofu validate:*)",
       "Bash(tofu init:*)",
-      "WebFetch(domain:registry.terraform.io)"
+      "WebFetch(domain:registry.terraform.io)",
+      "Bash(for:*)",
+      "Bash(do echo \"=== $file ===\")",
+      "Bash(grep:*)",
+      "Bash(done)"
     ],
     "deny": []
   }
