@@ -3,15 +3,15 @@
 ## Code Quality
 - **ALL files must end with trailing newline**
 - **Run `tofu fmt` after every change**
+- **Use OpenTofu >= 1.8** for latest features and stability
+- Add validation rules to variables for better error handling
 - Consolidate data sources to minimize API calls
+- Extract complex conditional logic to computed locals
 - Mark sensitive values appropriately
 - Pre-compute expensive operations in locals
 - Remove useless comments
 - Use `type = any` for complex nested structures
-- **Use OpenTofu >= 1.8** for latest features and stability
-- Add validation rules to variables for better error handling
 - Use modern syntax (avoid `element()`, prefer direct indexing)
-- Extract complex conditional logic to computed locals
 
 ## Directory Structure
 ```
@@ -33,17 +33,15 @@ Services/
 
 ## Locals Formatting
 **In `locals_*.tf` files:**
-- Sort all locals alphabetically by name
 - Add a blank line between each local definition
 - Single-line locals above multi-line locals when practical
+- Sort all locals alphabetically by name
 
 ## Sorting Rules
 **ALWAYS sort alphabetically by:**
 1. Block type
 2. Data/resource source type
 3. Data/resource name
-
-**Use explicit `depends_on` for dependencies that conflict with alphabetical order.**
 
 ## Validate & Commit
 **After every change:**
