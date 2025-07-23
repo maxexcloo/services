@@ -147,7 +147,12 @@ Run `tofu fmt && tofu validate && tofu plan` to format, validate configuration s
 When modifying this configuration:
 
 1. Always run `tofu fmt && tofu validate && tofu plan` before applying changes
-2. Follow the CLAUDE.md code quality rules (alphabetical sorting, trailing newlines, etc.)
+2. Follow the CLAUDE.md code quality rules:
+   - Recursive alphabetical sorting of all keys
+   - count/for_each at top with blank line after
+   - Simple values (single-line strings, numbers, bools, null) before complex values (arrays, multiline strings, objects, maps)
+   - No comments - code should be self-explanatory
+   - Trailing newlines in all files
 3. Test changes in a separate workspace when possible
 4. Update documentation for new features or significant changes
 5. Follow the existing naming conventions and file organization

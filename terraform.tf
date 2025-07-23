@@ -1,4 +1,6 @@
 terraform {
+  required_version = ">= 1.8"
+
   backend "remote" {
     hostname     = "app.terraform.io"
     organization = "Excloo"
@@ -50,6 +52,4 @@ terraform {
       version = "~> 0.68"
     }
   }
-
-  required_version = ">= 1.8"
 }

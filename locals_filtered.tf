@@ -11,7 +11,10 @@ locals {
       enable_b2          = service.enable_b2
       enable_dns         = service.enable_dns
       enable_onepassword = service.enable_database_password || service.enable_password || service.enable_b2 || service.enable_resend || service.enable_secret_hash || service.enable_tailscale || service.password != "" || service.username != null
+      enable_password    = service.enable_password
+      enable_secret_hash = service.enable_secret_hash
       enable_sftpgo      = service.enable_sftpgo
+      enable_tailscale   = service.enable_tailscale
       is_fly_platform    = service.platform == "fly"
       service_data       = service
     }
@@ -38,13 +41,13 @@ locals {
   }
 
   filtered_services_password = {
-    for k, service in local.services_merged : k => service
-    if service.enable_password
+    for k, filter in local.filtered_service_filters : k => filter.service_data
+    if filter.enable_password
   }
 
   filtered_services_secret_hash = {
-    for k, service in local.services_merged : k => random_password.secret_hash[k].result
-    if service.enable_secret_hash
+    for k, filter in local.filtered_service_filters : k => random_password.secret_hash[k].result
+    if filter.enable_secret_hash
   }
 
   filtered_services_sftpgo = {
@@ -53,8 +56,8 @@ locals {
   }
 
   filtered_services_tailscale = {
-    for k, service in local.services_merged : k => service
-    if service.enable_tailscale
+    for k, filter in local.filtered_service_filters : k => filter.service_data
+    if filter.enable_tailscale
   }
 
   filtered_unique_dns_zones = toset([

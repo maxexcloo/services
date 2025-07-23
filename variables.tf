@@ -1,7 +1,6 @@
 variable "default" {
   description = "Default configuration values including domains, email, and service defaults"
   type = object({
-    cloud_platforms = list(string)
     domain_external = string
     domain_internal = string
     domain_root     = string
@@ -12,10 +11,22 @@ variable "default" {
     oidc_url        = string
     organisation    = string
     service_config = object({
-      config                     = map(any)
       description                = string
+      filter_exclude_server_flag = string
+      filter_include_server_flag = string
+      group                      = string
+      icon                       = string
+      password                   = string
+      port                       = number
+      title                      = string
+      zone                       = string
       dns_content                = optional(string)
       dns_zone                   = optional(string)
+      fqdn                       = optional(string)
+      server                     = optional(string)
+      service                    = optional(string)
+      url                        = optional(string)
+      username                   = optional(string)
       enable_b2                  = bool
       enable_cloudflare_proxy    = bool
       enable_database_password   = bool
@@ -29,22 +40,10 @@ variable "default" {
       enable_ssl                 = bool
       enable_ssl_validation      = bool
       enable_tailscale           = bool
-      filter_exclude_server_flag = string
-      filter_include_server_flag = string
-      fly                        = map(any)
-      fqdn                       = optional(string)
-      group                      = string
-      icon                       = string
-      password                   = string
-      port                       = number
-      server                     = optional(string)
-      server_flags               = list(string)
       server_service             = bool
-      service                    = optional(string)
-      title                      = string
-      url                        = optional(string)
-      username                   = optional(string)
-      zone                       = string
+      config                     = map(any)
+      fly                        = map(any)
+      server_flags               = list(string)
     })
     widget_config = object({
       filter_exclude_server_flag = string
@@ -52,9 +51,9 @@ variable "default" {
       priority                   = number
       widget                     = optional(map(any))
     })
+    cloud_platforms = list(string)
   })
   default = {
-    cloud_platforms = ["cloud", "fly", "vercel"]
     domain_external = "excloo.net"
     domain_internal = "excloo.org"
     domain_root     = "excloo.com"
@@ -65,10 +64,22 @@ variable "default" {
     oidc_url        = "https://id.excloo.com"
     organisation    = "excloo"
     service_config = {
-      config                     = {}
       description                = ""
+      filter_exclude_server_flag = ""
+      filter_include_server_flag = ""
+      group                      = "Uncategorized"
+      icon                       = "homepage"
+      password                   = ""
+      port                       = 443
+      title                      = ""
+      zone                       = "external"
       dns_content                = null
       dns_zone                   = null
+      fqdn                       = null
+      server                     = null
+      service                    = null
+      url                        = null
+      username                   = null
       enable_b2                  = false
       enable_cloudflare_proxy    = false
       enable_database_password   = false
@@ -82,22 +93,10 @@ variable "default" {
       enable_ssl                 = true
       enable_ssl_validation      = true
       enable_tailscale           = false
-      filter_exclude_server_flag = ""
-      filter_include_server_flag = ""
-      fly                        = {}
-      fqdn                       = null
-      group                      = "Uncategorized"
-      icon                       = "homepage"
-      password                   = ""
-      port                       = 443
-      server                     = null
-      server_flags               = []
       server_service             = false
-      service                    = null
-      title                      = ""
-      url                        = null
-      username                   = null
-      zone                       = "external"
+      config                     = {}
+      fly                        = {}
+      server_flags               = []
     }
     widget_config = {
       filter_exclude_server_flag = ""
@@ -105,20 +104,13 @@ variable "default" {
       priority                   = 0
       widget                     = null
     }
+    cloud_platforms = ["cloud", "fly", "vercel"]
   }
 }
 
 variable "services" {
   description = "Service configurations for each platform and environment"
   type        = any
-
-  # Temporarily disabled - some existing services don't follow this pattern
-  # validation {
-  #   condition = alltrue([
-  #     for k, v in var.services : can(regex("^(docker|fly|vercel|cloud)-", k))
-  #   ])
-  #   error_message = "Service keys must start with a valid platform prefix (docker-, fly-, vercel-, cloud-)."
-  # }
 
   validation {
     condition = alltrue([

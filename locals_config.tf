@@ -47,8 +47,8 @@ locals {
         "/app/config/bookmarks.yaml"  = ""
         "/app/config/docker.yaml"     = ""
         "/app/config/kubernetes.yaml" = ""
-        "/app/config/settings.yaml"   = templatefile("templates/${service.service}/settings.yaml", merge(local.config_template_vars[k], { homepage = service, services = local.config_homepage }))
         "/app/config/services.yaml"   = templatefile("templates/${service.service}/services.yaml", merge(local.config_template_vars[k], { services = local.config_homepage }))
+        "/app/config/settings.yaml"   = templatefile("templates/${service.service}/settings.yaml", merge(local.config_template_vars[k], { homepage = service, services = local.config_homepage }))
         "/app/config/widgets.yaml"    = ""
       }
       if service.service == "homepage"

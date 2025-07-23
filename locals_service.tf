@@ -1,5 +1,4 @@
 locals {
-  # Helper computations for each service in services_merged_all
   services_computations = {
     for k, service in local.services_merged_all : k => {
       has_dns       = can(service.dns_name) && can(service.dns_zone)
@@ -9,7 +8,6 @@ locals {
     }
   }
 
-  # Services deployed across multiple servers based on flags
   services_cross_server = merge([
     for service_name, service in var.services : {
       for server_name, server in local.output_servers : "${service_name}-${server_name}" => merge(
@@ -28,7 +26,6 @@ locals {
     if can(service.server) == false
   ]...)
 
-  # DNS configuration helpers
   services_dns_config = {
     for k, service in local.services_merged_all : k => {
       content = local.services_computations[k].has_server ? (
@@ -36,12 +33,10 @@ locals {
         local.services_computations[k].server_config.fqdn_external :
         local.services_computations[k].server_config.fqdn_internal
       ) : var.default.service_config.dns_content
-
       zone = local.services_computations[k].has_server ? var.default.domain_internal : var.default.service_config.dns_zone
     }
   }
 
-  # Service filtering logic for server deployment
   services_filter_logic = {
     for service_name, service in var.services : service_name => {
       exclude_flag     = try(service.filter_exclude_server_flag, "")
@@ -52,15 +47,11 @@ locals {
     }
   }
 
-  # FQDN computation helper
   services_fqdn_config = {
     for k, service in local.services_merged_all : k => {
-      # Base hostname logic
       base_hostname = local.services_computations[k].has_dns ? "${service.dns_name}.${service.dns_zone}" : (
         "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.services_computations[k].server_config.fqdn_internal}"
       )
-
-      # Final FQDN
       fqdn = local.services_computations[k].has_dns || local.services_computations[k].has_server ? (
         local.services_computations[k].has_dns ? "${service.dns_name}.${service.dns_zone}" : (
           "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.services_computations[k].server_config.fqdn_internal}"
@@ -69,7 +60,6 @@ locals {
     }
   }
 
-  # Service groups from merged all services
   services_from_servers = merge([
     for server_name, server in local.output_servers : {
       for service in server.services : "server-${service.service}-${server_name}" => merge(
@@ -89,7 +79,6 @@ locals {
     }
   ]...)
 
-  # Main services configuration with computed values
   services_merged = {
     for k, service in local.services_merged_all : k => merge(
       var.default.service_config,
@@ -111,14 +100,12 @@ locals {
     )
   }
 
-  # Combined all services before merging with defaults
   services_merged_all = merge(
+    local.services_cross_server,
     local.services_from_servers,
-    local.services_with_explicit_config,
-    local.services_cross_server
+    local.services_with_explicit_config
   )
 
-  # Services with additional computed outputs and integrations
   services_merged_outputs = {
     for k, service in local.services_merged : k => merge(
       service,
@@ -158,7 +145,6 @@ locals {
     )
   }
 
-  # Services with explicit servers or cloud platforms
   services_with_explicit_config = {
     for service_name, service in var.services : service_name => merge(
       service,

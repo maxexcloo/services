@@ -8,9 +8,7 @@ resource "restapi_object" "fly_app_machine_service" {
   update_method             = "POST"
 
   data = sensitive(jsonencode({
-    region = each.value.fly.region
     config = {
-      image = each.value.fly.image
       checks = {
         http = {
           interval = "5s"
@@ -40,6 +38,7 @@ resource "restapi_object" "fly_app_machine_service" {
         cpus      = each.value.fly.cpus
         memory_mb = each.value.fly.memory
       }
+      image = each.value.fly.image
       services = [
         {
           internal_port = each.value.fly.port
@@ -63,6 +62,7 @@ resource "restapi_object" "fly_app_machine_service" {
         }
       ]
     }
+    region = each.value.fly.region
   }))
 
   depends_on = [
@@ -97,9 +97,17 @@ resource "restapi_object" "fly_app_service" {
 resource "terraform_data" "fly_app_setup" {
   for_each = local.filtered_services_fly
 
-  provisioner "local-exec" {
-    quiet = true
+  depends_on = [
+    restapi_object.fly_app_service
+  ]
 
+  triggers_replace = {
+    app      = each.value.name
+    app_id   = restapi_object.fly_app_service[each.key].id
+    hostname = each.value.fqdn
+  }
+
+  provisioner "local-exec" {
     command = <<-CMD
       curl -f -s \
         -H "Authorization: Bearer ${var.terraform.fly.api_token}" \
@@ -122,15 +130,6 @@ resource "terraform_data" "fly_app_setup" {
           }
         EOF
     CMD
-  }
-
-  depends_on = [
-    restapi_object.fly_app_service
-  ]
-
-  triggers_replace = {
-    app      = each.value.name
-    app_id   = restapi_object.fly_app_service[each.key].id
-    hostname = each.value.fqdn
+    quiet   = true
   }
 }

@@ -28,10 +28,6 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "server" {
   tunnel_id  = each.value.cloudflare_tunnel.id
 
   config = {
-    warp_routing = {
-      enabled = false
-    }
-
     ingress = concat(
       flatten([
         for k, service in local.filtered_services_dns : [
@@ -61,5 +57,9 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "server" {
         }
       ]
     )
+
+    warp_routing = {
+      enabled = false
+    }
   }
 }
