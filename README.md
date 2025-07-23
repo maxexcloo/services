@@ -6,10 +6,12 @@ OpenTofu configuration for managing personal services across multiple platforms 
 
 This project manages infrastructure and services for personal applications with features including:
 
-- **Multi-platform deployment**: Docker containers, Fly.io apps, and cloud services
-- **Service discovery**: Automated DNS configuration via Cloudflare
+- **Multi-platform deployment**: Docker containers, Fly.io apps, Vercel, and cloud services
+- **Service discovery**: Automated DNS configuration via Cloudflare with smart record type detection
 - **Secret management**: Integration with 1Password for secure credential storage
-- **Storage**: Backblaze B2 buckets for each service
+- **Storage**: Backblaze B2 buckets with automated application keys
+- **Email**: Resend API integration for transactional emails
+- **File Transfer**: SFTPGo user management for secure file access
 - **Monitoring**: Homepage dashboard and Gatus health checks
 - **Networking**: Tailscale mesh networking for secure communication
 
@@ -57,14 +59,15 @@ services = {
 ### Platforms
 
 - **docker**: Self-hosted Docker containers managed via Portainer
-- **fly**: Applications deployed to Fly.io
+- **fly**: Applications deployed to Fly.io with machine provisioning
+- **vercel**: Static sites and serverless functions on Vercel
 - **cloud**: Generic cloud services
 
 ## Usage
 
 ### Prerequisites
 
-1. OpenTofu/Terraform >= 1.0
+1. OpenTofu >= 1.8
 2. Terraform Cloud workspace configured
 3. Provider credentials configured in `terraform.tfvars`
 

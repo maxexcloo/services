@@ -8,7 +8,8 @@
       "Bash(tofu fmt:*)",
       "Bash(tofu plan:*)",
       "Bash(tofu validate:*)",
-      "Bash(tofu init:*)"
+      "Bash(tofu init:*)",
+      "WebFetch(domain:registry.terraform.io)"
     ],
     "deny": []
   }

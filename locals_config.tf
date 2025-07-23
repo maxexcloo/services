@@ -37,7 +37,7 @@ locals {
       for k, service in local.services_merged : k => {
         "/app/config.yaml" = templatefile(
           "templates/${service.service}/config.yaml",
-          merge(local.template_vars[k], { gatus = service })
+          merge(local.config_template_vars[k], { gatus = service })
         )
       }
       if service.service == "gatus"
@@ -47,21 +47,21 @@ locals {
         "/app/config/bookmarks.yaml"  = ""
         "/app/config/docker.yaml"     = ""
         "/app/config/kubernetes.yaml" = ""
-        "/app/config/settings.yaml"   = templatefile("templates/${service.service}/settings.yaml", merge(local.template_vars[k], { homepage = service, services = local.config_homepage }))
-        "/app/config/services.yaml"   = templatefile("templates/${service.service}/services.yaml", merge(local.template_vars[k], { services = local.config_homepage }))
+        "/app/config/settings.yaml"   = templatefile("templates/${service.service}/settings.yaml", merge(local.config_template_vars[k], { homepage = service, services = local.config_homepage }))
+        "/app/config/services.yaml"   = templatefile("templates/${service.service}/services.yaml", merge(local.config_template_vars[k], { services = local.config_homepage }))
         "/app/config/widgets.yaml"    = ""
       }
       if service.service == "homepage"
     },
     {
       for k, service in local.services_merged : k => {
-        "/config/finger.json" = templatefile("templates/${service.service}/finger.json", local.template_vars[k])
+        "/config/finger.json" = templatefile("templates/${service.service}/finger.json", local.config_template_vars[k])
       }
       if service.service == "www"
     },
   )
 
-  template_vars = {
+  config_template_vars = {
     for k, service in local.services_merged_outputs : k => {
       default   = var.default
       server    = try(local.output_servers[service.server], {})

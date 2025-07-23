@@ -8,6 +8,10 @@
 - Pre-compute expensive operations in locals
 - Remove useless comments
 - Use `type = any` for complex nested structures
+- **Use OpenTofu >= 1.8** for latest features and stability
+- Add validation rules to variables for better error handling
+- Use modern syntax (avoid `element()`, prefer direct indexing)
+- Extract complex conditional logic to computed locals
 
 ## Directory Structure
 ```
