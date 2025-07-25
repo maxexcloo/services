@@ -59,5 +59,5 @@ provider "sftpgo" {
 provider "tailscale" {
   oauth_client_id     = var.terraform.tailscale.oauth_client_id
   oauth_client_secret = var.terraform.tailscale.oauth_client_secret
-  tailnet             = var.default.domain_root
+  tailnet             = var.terraform.tailscale.organization
 }

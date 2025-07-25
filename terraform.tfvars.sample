@@ -1,0 +1,161 @@
+default = {
+  domain_external = "example.net"
+  domain_internal = "example.org"
+  domain_root     = "example.com"
+  email           = "user@example.com"
+  name            = "Your Name"
+  oidc_name       = "pocket-id"
+  oidc_title      = "Pocket ID"
+  oidc_url        = "https://id.example.com"
+  organisation    = "example"
+  service_config = {
+    description                = ""
+    filter_exclude_server_flag = ""
+    filter_include_server_flag = ""
+    group                      = "Uncategorized"
+    icon                       = "homepage"
+    password                   = ""
+    port                       = 443
+    title                      = ""
+    zone                       = "external"
+    dns_content                = null
+    dns_zone                   = null
+    fqdn                       = null
+    server                     = null
+    service                    = null
+    url                        = null
+    username                   = null
+    enable_b2                  = false
+    enable_cloudflare_proxy    = false
+    enable_database_password   = false
+    enable_dns                 = false
+    enable_href                = true
+    enable_monitoring          = true
+    enable_password            = false
+    enable_resend              = false
+    enable_secret_hash         = false
+    enable_sftpgo              = false
+    enable_ssl                 = true
+    enable_ssl_validation      = true
+    enable_tailscale           = false
+    server_service             = false
+    config                     = {}
+    fly                        = {}
+    server_flags               = []
+  }
+  widget_config = {
+    filter_exclude_server_flag = ""
+    filter_include_server_flag = ""
+    priority                   = 0
+    widget                     = null
+  }
+  cloud_platforms = ["cloud", "fly", "vercel"]
+}
+
+services = {
+  "docker-homepage" = {
+    description    = "Personal dashboard for all services"
+    dns_name       = "home"
+    dns_zone       = "example.com"
+    enable_dns     = true
+    group          = "Dashboard"
+    icon           = "homepage"
+    service        = "homepage"
+    title          = "Homepage"
+    enable_b2      = false
+    enable_resend  = false
+    enable_sftpgo  = false
+  }
+  "docker-grafana" = {
+    description   = "Monitoring and analytics platform"
+    dns_name      = "grafana"
+    dns_zone      = "example.com"
+    enable_dns    = true
+    group         = "Monitoring"
+    icon          = "grafana"
+    service       = "grafana"
+    title         = "Grafana"
+    enable_b2     = true
+    enable_resend = false
+    enable_sftpgo = false
+  }
+  "docker-miniflux" = {
+    description              = "RSS feed reader"
+    dns_name                 = "rss"
+    dns_zone                 = "example.com"
+    enable_database_password = true
+    enable_dns               = true
+    group                    = "Media"
+    icon                     = "miniflux"
+    service                  = "miniflux"
+    title                    = "Miniflux"
+    enable_b2                = false
+    enable_resend            = true
+    enable_sftpgo            = false
+  }
+  "fly-example-app" = {
+    description = "Example Fly.io application"
+    dns_name    = "app"
+    dns_zone    = "example.com"
+    enable_dns  = true
+    group       = "Applications"
+    icon        = "fly"
+    service     = "example-app"
+    title       = "Example App"
+    fly = {
+      app_name = "example-app"
+      region   = "ord"
+    }
+    enable_b2     = false
+    enable_resend = false
+    enable_sftpgo = false
+  }
+}
+
+tags = {
+  environment = "production"
+  project     = "services"
+}
+
+terraform = {
+  b2 = {
+    application_key    = "your_b2_application_key"
+    application_key_id = "your_b2_application_key_id"
+  }
+  cloudflare = {
+    account_id = "your_cloudflare_account_id"
+    api_key    = "your_cloudflare_api_key"
+  }
+  fly = {
+    api_token = "your_fly_io_api_token"
+    org       = "your_fly_organization"
+    url       = "https://api.fly.io"
+  }
+  onepassword = {
+    service_account_token = "your_1password_service_account_token"
+    vault                 = "your_vault_name"
+  }
+  portainer = {
+    api_key = "your_portainer_api_key"
+    url     = "https://portainer.example.com"
+  }
+  resend = {
+    api_key       = "your_resend_api_key"
+    smtp_host     = "smtp.resend.com"
+    smtp_port     = 587
+    smtp_username = "resend"
+    url           = "https://api.resend.com"
+  }
+  sftpgo = {
+    home_directory_base = "/srv/sftpgo/data"
+    host                = "sftpgo.example.com"
+    password            = "your_sftpgo_password"
+    username            = "admin"
+    webdav_url          = "https://sftpgo.example.com/webdav"
+  }
+  tailscale = {
+    oauth_client_id     = "your_tailscale_oauth_client_id"
+    oauth_client_secret = "your_tailscale_oauth_client_secret"
+    organization        = "your_tailscale_organization"
+  }
+}

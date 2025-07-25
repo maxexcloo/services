@@ -118,6 +118,13 @@ variable "services" {
     ])
     error_message = "Service configurations cannot be null or empty."
   }
+
+  validation {
+    condition = alltrue([
+      for k, v in var.services : can(regex("^[a-z][a-z0-9-]*-[a-z][a-z0-9-]*$", k))
+    ])
+    error_message = "Service keys must follow the pattern 'platform-servicename' with lowercase letters, numbers, and hyphens only."
+  }
 }
 
 variable "tags" {
@@ -175,6 +182,7 @@ variable "terraform" {
     tailscale = object({
       oauth_client_id     = string
       oauth_client_secret = string
+      organization        = string
     })
   })
 }

@@ -31,7 +31,8 @@ This project manages infrastructure and services for personal applications with 
 ├── providers.tf             # Provider configurations
 ├── terraform.tf             # Terraform configuration and provider versions
 ├── *.tf                     # Resource files (alphabetically sorted)
-├── terraform.tfvars         # Instance values
+├── terraform.tfvars         # Instance values (see terraform.tfvars.sample)
+├── terraform.tfvars.sample  # Example configuration template
 └── templates/               # Configuration templates for services
     ├── docker/              # Docker service templates
     ├── gatus/               # Gatus configuration templates
@@ -69,7 +70,7 @@ services = {
 
 1. OpenTofu >= 1.8
 2. Terraform Cloud workspace configured
-3. Provider credentials configured in `terraform.tfvars`
+3. Provider credentials configured in `terraform.tfvars` (see `terraform.tfvars.sample` for example configuration)
 
 ### Commands
 
@@ -87,9 +88,28 @@ tofu apply
 tofu output
 ```
 
+### Getting Started
+
+1. Copy the sample configuration file:
+   ```bash
+   cp terraform.tfvars.sample terraform.tfvars
+   ```
+
+2. Update `terraform.tfvars` with your actual configuration values:
+   - Replace all example values with your real credentials and settings
+   - Configure your domains, services, and platform integrations
+   - See the sample file for complete examples of all supported configurations
+
+3. Initialize and apply:
+   ```bash
+   tofu init
+   tofu plan
+   tofu apply
+   ```
+
 ### Adding a New Service
 
-1. Add service configuration to `terraform.tfvars`:
+1. Add service configuration to `terraform.tfvars` (reference `terraform.tfvars.sample` for examples):
    ```hcl
    services = {
      "docker-myapp" = {
@@ -117,6 +137,24 @@ Service configurations are generated from templates in the `templates/` director
 - `settings.yaml` - Service-specific settings
 - `docker-compose.yml` - Docker container definitions
 
+### Platform Examples
+
+**Docker Services** (prefix: `docker-`):
+- `docker-homepage` - Personal dashboard
+- `docker-grafana` - Monitoring platform
+- `docker-miniflux` - RSS feed reader
+
+**Fly.io Services** (prefix: `fly-`):
+- `fly-webapp` - Web applications
+- `fly-api` - API services
+
+**Configuration Features**:
+- **DNS**: Automatic Cloudflare DNS record creation
+- **Storage**: Backblaze B2 bucket provisioning
+- **Secrets**: 1Password integration for credentials
+- **Monitoring**: Homepage dashboard and Gatus health checks
+- **Email**: Resend API for transactional emails
+
 ## Security
 
 - **Sensitive variables**: All provider credentials are marked as sensitive
@@ -134,9 +172,10 @@ Service configurations are generated from templates in the `templates/` director
 
 ### Common Issues
 
-1. **Provider authentication errors**: Verify credentials in `terraform.tfvars`
+1. **Provider authentication errors**: Verify credentials in `terraform.tfvars` (use `terraform.tfvars.sample` as reference)
 2. **DNS propagation delays**: Cloudflare changes may take time to propagate
 3. **Resource conflicts**: Check for naming collisions across services
+4. **Service naming**: Ensure service keys follow the `platform-servicename` pattern (e.g., `docker-homepage`, `fly-myapp`)
 
 ### Validation
 
