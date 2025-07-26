@@ -76,7 +76,7 @@ resource "onepassword_item" "service" {
   }
 
   dynamic "section" {
-    for_each = try(local.output_resend_api_keys[each.key], local.output_servers[each.value.server].resend_api_key, "") != "" ? [true] : []
+    for_each = contains(keys(local.filtered_services_mail_section), each.key) ? [true] : []
 
     content {
       label = "Mail"

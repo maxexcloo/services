@@ -1,8 +1,5 @@
 resource "restapi_object" "resend_api_key_service" {
-  for_each = {
-    for k, service in local.services_merged : k => service
-    if service.enable_resend
-  }
+  for_each = local.filtered_services_resend
 
   data                      = jsonencode({ name = each.key })
   id_attribute              = "id"

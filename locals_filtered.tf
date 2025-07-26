@@ -25,6 +25,11 @@ locals {
     if filter.enable_b2
   }
 
+  filtered_services_database_password = {
+    for k, filter in local.filtered_service_filters : k => filter.service_data
+    if filter.service_data.enable_database_password
+  }
+
   filtered_services_dns = {
     for k, filter in local.filtered_service_filters : k => filter.service_data
     if filter.enable_dns
@@ -33,6 +38,11 @@ locals {
   filtered_services_fly = {
     for k, filter in local.filtered_service_filters : k => filter.service_data
     if filter.is_fly_platform
+  }
+
+  filtered_services_mail_section = {
+    for k, filter in local.filtered_service_filters : k => filter.service_data
+    if try(local.output_resend_api_keys[k], local.output_servers[filter.service_data.server].resend_api_key, "") != ""
   }
 
   filtered_services_onepassword = {
@@ -45,8 +55,13 @@ locals {
     if filter.enable_password
   }
 
+  filtered_services_resend = {
+    for k, filter in local.filtered_service_filters : k => filter.service_data
+    if filter.service_data.enable_resend
+  }
+
   filtered_services_secret_hash = {
-    for k, filter in local.filtered_service_filters : k => random_password.secret_hash[k].result
+    for k, filter in local.filtered_service_filters : k => filter.service_data
     if filter.enable_secret_hash
   }
 

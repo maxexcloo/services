@@ -8,6 +8,6 @@ resource "bcrypt_hash" "password" {
 resource "bcrypt_hash" "secret_hash" {
   for_each = local.filtered_services_secret_hash
 
-  cleartext = each.value
+  cleartext = random_password.secret_hash[each.key].result
   cost      = 14
 }
