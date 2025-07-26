@@ -1,13 +1,3 @@
-locals {
-  dns_record_types = {
-    for k, v in local.filtered_services_dns : k => (
-      can(regex("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$", v.dns_content)) ? "A" :
-      can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", v.dns_content)) ? "AAAA" :
-      "CNAME"
-    )
-  }
-}
-
 resource "cloudflare_dns_record" "service" {
   for_each = local.filtered_services_dns
 
@@ -16,7 +6,7 @@ resource "cloudflare_dns_record" "service" {
   name    = "${each.value.dns_name}.${each.value.dns_zone}"
   proxied = each.value.enable_cloudflare_proxy
   ttl     = 1
-  type    = local.dns_record_types[each.key]
+  type    = local.services_dns_record_types[each.key]
   zone_id = data.cloudflare_zones.unique_zones[each.value.dns_zone].result[0].id
 }
 

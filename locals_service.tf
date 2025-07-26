@@ -37,6 +37,14 @@ locals {
     }
   }
 
+  services_dns_record_types = {
+    for k, v in local.filtered_services_dns : k => (
+      can(regex("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$", v.dns_content)) ? "A" :
+      can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", v.dns_content)) ? "AAAA" :
+      "CNAME"
+    )
+  }
+
   services_filter_logic = {
     for service_name, service in var.services : service_name => {
       exclude_flag     = try(service.filter_exclude_server_flag, "")
@@ -114,19 +122,19 @@ locals {
         cloudflare_account_token = try(local.output_servers[service.server].cloudflare_account_token, null)
         cloudflare_tunnel        = try(local.output_servers[service.server].cloudflare_tunnel, null)
         database                 = service.enable_database_password ? local.output_databases[k] : {}
+        password                 = service.enable_password ? onepassword_item.service[k].password : ""
+        password_bcrypt          = service.enable_password ? replace(bcrypt_hash.password[k].id, "$", "$$") : ""
+        portainer_endpoint_id    = try(local.filtered_portainer_endpoints[service.server]["Id"], "")
+        secret_hash              = service.enable_secret_hash ? local.output_secret_hashes[k] : ""
+        secret_hash_bcrypt       = service.enable_secret_hash ? replace(bcrypt_hash.secret_hash[k].id, "$", "$$") : ""
+        sftpgo                   = service.enable_sftpgo ? local.output_sftpgo[k] : {}
+        tailscale_tailnet_key    = service.enable_tailscale ? local.output_tailscale_tailnet_keys[k] : ""
         mail = {
           host     = var.terraform.resend.smtp_host
           password = try(local.output_resend_api_keys[k], local.output_servers[service.server].resend_api_key, "")
           port     = var.terraform.resend.smtp_port
           username = var.terraform.resend.smtp_username
         }
-        password              = service.enable_password ? onepassword_item.service[k].password : ""
-        password_bcrypt       = service.enable_password ? replace(bcrypt_hash.password[k].id, "$", "$$") : ""
-        portainer_endpoint_id = try(local.filtered_portainer_endpoints[service.server]["Id"], "")
-        secret_hash           = service.enable_secret_hash ? local.output_secret_hashes[k] : ""
-        secret_hash_bcrypt    = service.enable_secret_hash ? replace(bcrypt_hash.secret_hash[k].id, "$", "$$") : ""
-        sftpgo                = service.enable_sftpgo ? local.output_sftpgo[k] : {}
-        tailscale_tailnet_key = service.enable_tailscale ? local.output_tailscale_tailnet_keys[k] : ""
         widgets = [
           for widget in try(service.widgets, []) : merge(
             var.default.widget_config,

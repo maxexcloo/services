@@ -6,39 +6,46 @@ OpenTofu configuration for managing personal services across multiple platforms 
 
 This project manages infrastructure and services for personal applications with features including:
 
-- **Multi-platform deployment**: Docker containers, Fly.io apps, Vercel, and cloud services
-- **Service discovery**: Automated DNS configuration via Cloudflare with smart record type detection
-- **Secret management**: Integration with 1Password for secure credential storage
-- **Storage**: Backblaze B2 buckets with automated application keys
 - **Email**: Resend API integration for transactional emails
 - **File Transfer**: SFTPGo user management for secure file access
 - **Monitoring**: Homepage dashboard and Gatus health checks
+- **Multi-platform deployment**: Docker containers, Fly.io apps, Vercel, and cloud services
 - **Networking**: Tailscale mesh networking for secure communication
+- **Secret management**: Integration with 1Password for secure credential storage
+- **Service discovery**: Automated DNS configuration via Cloudflare with smart record type detection
+- **Storage**: Backblaze B2 buckets with automated application keys
 
 ## Architecture
 
 ### File Structure
 
 ```
+├── *.tf                     # Resource files (alphabetically sorted)
 ├── data.tf                  # All data sources
 ├── locals_*.tf              # All locals
 │   ├── locals_config.tf     # Configuration file templates
 │   ├── locals_filtered.tf   # Service filtering logic
 │   ├── locals_output.tf     # Output value computation
 │   └── locals_service.tf    # Service merging and configuration
-├── variables.tf             # Variable definitions
 ├── outputs.tf               # Output definitions
 ├── providers.tf             # Provider configurations
 ├── terraform.tf             # Terraform configuration and provider versions
-├── *.tf                     # Resource files (alphabetically sorted)
 ├── terraform.tfvars         # Instance values (see terraform.tfvars.sample)
 ├── terraform.tfvars.sample  # Example configuration template
+├── variables.tf             # Variable definitions
 └── templates/               # Configuration templates for services
     ├── docker/              # Docker service templates
     ├── gatus/               # Gatus configuration templates
     ├── homepage/            # Homepage configuration templates
     └── www/                 # Web service templates
 ```
+
+### Platforms
+
+- **cloud**: Generic cloud services
+- **docker**: Self-hosted Docker containers managed via Portainer
+- **fly**: Applications deployed to Fly.io with machine provisioning
+- **vercel**: Static sites and serverless functions on Vercel
 
 ### Service Configuration
 
@@ -56,13 +63,6 @@ services = {
   }
 }
 ```
-
-### Platforms
-
-- **docker**: Self-hosted Docker containers managed via Portainer
-- **fly**: Applications deployed to Fly.io with machine provisioning
-- **vercel**: Static sites and serverless functions on Vercel
-- **cloud**: Generic cloud services
 
 ## Usage
 
@@ -113,59 +113,33 @@ tofu output
    ```hcl
    services = {
      "docker-myapp" = {
-       service      = "myapp"
+       description  = "My Application"
        dns_name     = "myapp"
        dns_zone     = "example.com"
-       enable_dns   = true
        enable_b2    = true
-       description  = "My Application"
+       enable_dns   = true
+       service      = "myapp"
      }
    }
    ```
 
-2. Create service-specific resource file (e.g., `myapp.tf`) if needed
+2. Create service docker compose file (e.g., `myapp.yaml`) in `templates/docker/` if needed
 
 3. Add templates in `templates/myapp/` for configuration files
 
 4. Plan and apply changes
 
-### Configuration Templates
-
-Service configurations are generated from templates in the `templates/` directory. Common templates include:
-
-- `config.yaml` - Application configuration
-- `settings.yaml` - Service-specific settings
-- `docker-compose.yml` - Docker container definitions
-
-### Platform Examples
-
-**Docker Services** (prefix: `docker-`):
-- `docker-homepage` - Personal dashboard
-- `docker-grafana` - Monitoring platform
-- `docker-miniflux` - RSS feed reader
-
-**Fly.io Services** (prefix: `fly-`):
-- `fly-webapp` - Web applications
-- `fly-api` - API services
-
-**Configuration Features**:
-- **DNS**: Automatic Cloudflare DNS record creation
-- **Storage**: Backblaze B2 bucket provisioning
-- **Secrets**: 1Password integration for credentials
-- **Monitoring**: Homepage dashboard and Gatus health checks
-- **Email**: Resend API for transactional emails
-
 ## Security
 
-- **Sensitive variables**: All provider credentials are marked as sensitive
-- **Secret management**: Passwords and API keys generated and stored in 1Password
 - **Access control**: Tailscale provides secure network access
+- **Secret management**: Passwords and API keys generated and stored in 1Password
+- **Sensitive variables**: All provider credentials are marked as sensitive
 - **State encryption**: Terraform state stored securely in Terraform Cloud
 
 ## Monitoring
 
-- **Homepage**: Centralized dashboard at configured URL
 - **Gatus**: Health monitoring and alerting
+- **Homepage**: Centralized dashboard at configured URL
 - **Service discovery**: Automatic DNS updates for service availability
 
 ## Troubleshooting
