@@ -1,10 +1,23 @@
 locals {
+  services_dns_expanded = merge([
+    for k, service in local.services_merged_all : {
+      for i, hostname in coalesce(service.dns, []) : "${k}-dns-${i}" => {
+        hostname    = hostname
+        is_primary  = i == 0
+        service_key = k
+        subdomain   = split(".", hostname)[0]
+        zone        = join(".", slice(split(".", hostname), 1, length(split(".", hostname))))
+      }
+    } if can(service.dns)
+  ]...)
+
   services_computations = {
     for k, service in local.services_merged_all : k => {
-      has_dns       = can(service.dns_name) && can(service.dns_zone)
-      has_server    = can(service.server)
-      platform      = split("-", k)[0]
-      server_config = try(local.output_servers[service.server], {})
+      has_dns          = can(service.dns) && length(coalesce(service.dns, [])) > 0
+      has_server       = can(service.server)
+      platform         = split("-", k)[0]
+      primary_hostname = can(service.dns) && length(coalesce(service.dns, [])) > 0 ? service.dns[0] : null
+      server_config    = try(local.output_servers[service.server], {})
     }
   }
 
@@ -29,21 +42,18 @@ locals {
   services_dns_config = {
     for k, service in local.services_merged_all : k => {
       content = local.services_computations[k].has_server ? (
-        try(service.dns_zone, var.default.service_config.dns_zone) != var.default.domain_internal ?
-        local.services_computations[k].server_config.fqdn_external :
-        local.services_computations[k].server_config.fqdn_internal
-      ) : var.default.service_config.dns_content
-      zone = local.services_computations[k].has_server ? var.default.domain_internal : var.default.service_config.dns_zone
+        local.services_computations[k].has_dns ? (
+          join(".", slice(split(".", local.services_computations[k].primary_hostname), 1, length(split(".", local.services_computations[k].primary_hostname)))) != var.default.domain_internal ?
+          local.services_computations[k].server_config.fqdn_external :
+          local.services_computations[k].server_config.fqdn_internal
+          ) : (
+          local.services_computations[k].server_config.fqdn_internal
+        )
+      ) : null
+      primary_zone = local.services_computations[k].has_dns ? join(".", slice(split(".", local.services_computations[k].primary_hostname), 1, length(split(".", local.services_computations[k].primary_hostname)))) : null
     }
   }
 
-  services_dns_record_types = {
-    for k, v in local.filtered_services_dns : k => (
-      can(regex("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$", v.dns_content)) ? "A" :
-      can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", v.dns_content)) ? "AAAA" :
-      "CNAME"
-    )
-  }
 
   services_filter_logic = {
     for service_name, service in var.services : service_name => {
@@ -57,11 +67,13 @@ locals {
 
   services_fqdn_config = {
     for k, service in local.services_merged_all : k => {
-      base_hostname = local.services_computations[k].has_dns ? "${service.dns_name}.${service.dns_zone}" : (
-        "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.services_computations[k].server_config.fqdn_internal}"
+      base_hostname = local.services_computations[k].has_dns ? local.services_computations[k].primary_hostname : (
+        local.services_computations[k].has_server ? (
+          "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.services_computations[k].server_config.fqdn_internal}"
+        ) : null
       )
       fqdn = local.services_computations[k].has_dns || local.services_computations[k].has_server ? (
-        local.services_computations[k].has_dns ? "${service.dns_name}.${service.dns_zone}" : (
+        local.services_computations[k].has_dns ? local.services_computations[k].primary_hostname : (
           "${try(service.port, var.default.service_config.port) == var.default.service_config.port && try(service.server_service, var.default.service_config.server_service) == var.default.service_config.server_service ? "${service.name}." : ""}${local.services_computations[k].server_config.fqdn_internal}"
         )
       ) : var.default.service_config.fqdn
@@ -92,17 +104,16 @@ locals {
       var.default.service_config,
       {
         dns_content             = local.services_dns_config[k].content
-        dns_zone                = local.services_dns_config[k].zone
-        enable_cloudflare_proxy = contains(try(local.services_computations[k].server_config.flags, []), "cloudflare_proxy") && try(service.dns_zone, local.services_computations[k].has_server ? var.default.domain_internal : null) != var.default.domain_internal
+        enable_cloudflare_proxy = contains(try(local.services_computations[k].server_config.flags, []), "cloudflare_proxy") && local.services_dns_config[k].primary_zone != null && local.services_dns_config[k].primary_zone != var.default.domain_internal
         enable_dns              = local.services_computations[k].has_dns
         fqdn                    = local.services_fqdn_config[k].fqdn
-        group                   = try(service.dns_zone, local.services_computations[k].has_server ? var.default.domain_internal : var.default.service_config.group)
+        group                   = local.services_dns_config[k].primary_zone != null ? local.services_dns_config[k].primary_zone : (local.services_computations[k].has_server ? var.default.domain_internal : var.default.service_config.group)
         platform                = local.services_computations[k].platform
         server_flags            = try(local.services_computations[k].server_config.flags, var.default.service_config.server_flags)
         url = local.services_computations[k].has_dns || local.services_computations[k].has_server ? (
           "${try(service.enable_ssl, true) ? "https://" : "http://"}${local.services_fqdn_config[k].base_hostname}${try(service.port, var.default.service_config.port) != var.default.service_config.port ? ":${service.port}" : ""}"
         ) : var.default.service_config.url
-        zone = try(service.dns_zone, local.services_computations[k].has_server ? var.default.domain_internal : null) == var.default.domain_internal ? "internal" : var.default.service_config.zone
+        zone = local.services_dns_config[k].primary_zone == var.default.domain_internal || (local.services_dns_config[k].primary_zone == null && local.services_computations[k].has_server) ? "internal" : var.default.service_config.zone
       },
       service
     )

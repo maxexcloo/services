@@ -11,7 +11,7 @@ services:
     labels:
       caddy: ${service.fqdn}
       caddy.import: ${service.zone}
-      caddy.redir: /.well-known/webfinger* https://${service.dns_zone}{uri} permanent
+      caddy.redir: /.well-known/webfinger* https://${length(service.dns) > 1 ? service.dns[1] : service.dns[0]}{uri} permanent
       caddy.reverse_proxy: "{{upstreams 8080}}"
     environment:
       TEMPLATE_NAME: lost-in-space
@@ -28,7 +28,7 @@ services:
       WF_FINGER_FILE: /config/finger.json
     image: ghcr.io/artemstepanov/go-finger:main
     labels:
-      caddy: ${service.dns_zone}
+      caddy: ${length(service.dns) > 1 ? service.dns[1] : service.dns[0]}
       caddy.@match.not: path /.well-known/webfinger*
       caddy.import: ${service.zone}
       caddy.redir: "@match https://${service.fqdn}{uri} permanent"

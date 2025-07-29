@@ -1,54 +1,79 @@
-# CLAUDE.md - OpenTofu Rules
+# CLAUDE.md - Development Guide
 
-## Code Quality
-- Add validation rules to variables
-- ALL files must end with trailing newline
-- Consolidate data sources to minimize API calls
-- Consolidate defaults in `var.default` structure
-- Extract complex conditional logic to computed locals
-- Mark sensitive values appropriately
-- No comments - code should be self-explanatory
-- Pre-compute expensive operations in locals
-- Run `tofu fmt` after every change
-- Use modern syntax (avoid `element()`, prefer direct indexing)
-- Use OpenTofu >= 1.8
-- Use `type = any` for complex nested structures
+## Project Overview
+**Purpose**: Infrastructure as Code for services deployment using OpenTofu  
+**Status**: Active
 
 ## Commands
 ```bash
-tofu fmt && tofu validate && tofu plan
-git add . && git commit -m "Update OpenTofu configuration
+# Development
+tofu fmt         # Format configuration
+tofu validate    # Validate configuration
+tofu plan        # Plan changes
 
-🤖 Generated with [Claude Code](https://claude.ai/code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
+# Build
+tofu apply       # Apply configuration
 ```
 
-## File Organization
-- Data sources: All in `data.tf`
-- Locals: Split into `locals_*.tf` files by function
-- Outputs: All in `outputs.tf`
-- Providers: In `providers.tf` and `terraform.tf`
-- Variables: All in `variables.tf` with proper types/descriptions
+## Tech Stack
+- **Language**: HCL (HashiCorp Configuration Language)
+- **Framework**: OpenTofu
+- **Testing**: tofu validate and tofu plan
 
-## Locals Formatting
-- All locals must start with the filename prefix (e.g., `locals_dns.tf` → all locals start with `dns_`)
-- Add a blank line between each local definition
-- Sort all locals alphabetically by name
+## Code Standards
 
-## Sorting Rules
-Sort alphabetically and recursively by:
-1. Block type
-2. Data/resource source type
-3. Data/resource name
-4. All keys within blocks recursively
+### Organization
+- **Config/Data**: Alphabetical and recursive (imports, dependencies, object keys)
+- **Documentation**: Sort sections, lists, and references alphabetically when logical
+- **Files**: Alphabetical in documentation and directories
+- **Functions**: Group by purpose, alphabetical within groups
+- **Variables**: Alphabetical within scope
 
-### Key Ordering Within Blocks
-1. `count` and `for_each` at the top with blank line after
-2. Keys with simple values (single-line strings, numbers, bools, null)
-3. Keys with complex values (arrays, multiline strings, objects, maps)
-4. Within nested objects, apply same recursive sorting rules
+### Quality
+- **Comments**: Minimal - only for complex business logic
+- **Documentation**: Update README.md and docs with every feature change
+- **Formatting**: Run tofu fmt before commits
+- **KISS principle**: Keep it simple - prefer readable code over clever code
+- **Naming**: snake_case for all resources and variables
+- **Trailing newlines**: Required in all files
 
-### Simple vs Complex Values
-- Complex: Arrays (even single-item), multiline strings, objects, maps
-- Simple: Single-line strings, numbers, booleans, null values
+## Project Structure
+- **data.tf**: All data sources
+- **locals_*.tf**: All locals (prefixed by filename)
+- **outputs.tf**: Output definitions
+- **providers.tf**: Provider configurations
+- **terraform.tf**: Terraform configuration
+- **templates/**: Configuration templates for services
+- **variables.tf**: Variable definitions
+- ***.tf**: Resource files
+
+## Project Specs
+- **Consolidate defaults**: Use `var.default` structure for default values
+- **Docker services**: Manages containerized services via Portainer API
+- **Locals prefix**: Locals in `locals_*.tf` files must start with filename prefix
+- **Multi-environment**: Supports multiple deployment environments
+- **No comments**: Code is self-explanatory
+- **Service templates**: YAML templates for Docker Compose services
+- **Sorting order**: Key order within blocks: 1) count/for_each (with blank line after), 2) Simple values (strings, numbers, bools, null), 3) Complex values (arrays, objects, maps)
+- **Type definitions**: Use `type = any` for complex nested structures
+
+## README Guidelines
+- **Structure**: Title → Description → Quick Start → Features → Installation → Usage → Contributing
+- **Badges**: Include relevant status badges (build, version, license)
+- **Code examples**: Always include working examples in code blocks
+- **Installation**: Provide copy-paste commands that work
+- **Quick Start**: Get users running in under 5 minutes
+
+## Git Workflow
+```bash
+# After every change
+tofu fmt && tofu validate && tofu plan
+git add . && git commit -m "type: description"
+
+# Always commit after verified working changes
+# Keep commits small and focused
+```
+
+---
+
+*Simple context for AI assistants working on this open source project.*

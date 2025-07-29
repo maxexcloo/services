@@ -76,6 +76,6 @@ locals {
   }
 
   filtered_unique_dns_zones = toset([
-    for k, service in local.filtered_services_dns : service.dns_zone
+    for k, dns_record in local.services_dns_expanded : dns_record.zone
   ])
 }

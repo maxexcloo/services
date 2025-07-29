@@ -12,25 +12,9 @@ variable "default" {
     organisation    = string
     service_config = object({
       description                = string
-      filter_exclude_server_flag = string
-      filter_include_server_flag = string
-      group                      = string
-      icon                       = string
-      password                   = string
-      port                       = number
-      title                      = string
-      zone                       = string
-      dns_content                = optional(string)
-      dns_zone                   = optional(string)
-      fqdn                       = optional(string)
-      server                     = optional(string)
-      service                    = optional(string)
-      url                        = optional(string)
-      username                   = optional(string)
       enable_b2                  = bool
       enable_cloudflare_proxy    = bool
       enable_database_password   = bool
-      enable_dns                 = bool
       enable_href                = bool
       enable_monitoring          = bool
       enable_password            = bool
@@ -40,8 +24,22 @@ variable "default" {
       enable_ssl                 = bool
       enable_ssl_validation      = bool
       enable_tailscale           = bool
+      filter_exclude_server_flag = string
+      filter_include_server_flag = string
+      fqdn                       = optional(string)
+      group                      = string
+      icon                       = string
+      password                   = string
+      port                       = number
+      server                     = optional(string)
       server_service             = bool
+      service                    = optional(string)
+      title                      = string
+      url                        = optional(string)
+      username                   = optional(string)
+      zone                       = string
       config                     = map(any)
+      dns                        = optional(list(string))
       fly                        = map(any)
       server_flags               = list(string)
     })
@@ -65,25 +63,9 @@ variable "default" {
     organisation    = "excloo"
     service_config = {
       description                = ""
-      filter_exclude_server_flag = ""
-      filter_include_server_flag = ""
-      group                      = "Uncategorized"
-      icon                       = "homepage"
-      password                   = ""
-      port                       = 443
-      title                      = ""
-      zone                       = "external"
-      dns_content                = null
-      dns_zone                   = null
-      fqdn                       = null
-      server                     = null
-      service                    = null
-      url                        = null
-      username                   = null
       enable_b2                  = false
       enable_cloudflare_proxy    = false
       enable_database_password   = false
-      enable_dns                 = false
       enable_href                = true
       enable_monitoring          = true
       enable_password            = false
@@ -93,8 +75,22 @@ variable "default" {
       enable_ssl                 = true
       enable_ssl_validation      = true
       enable_tailscale           = false
+      filter_exclude_server_flag = ""
+      filter_include_server_flag = ""
+      fqdn                       = null
+      group                      = "Uncategorized"
+      icon                       = "homepage"
+      password                   = ""
+      port                       = 443
+      server                     = null
       server_service             = false
+      service                    = null
+      title                      = ""
+      url                        = null
+      username                   = null
+      zone                       = "external"
       config                     = {}
+      dns                        = null
       fly                        = {}
       server_flags               = []
     }
@@ -105,6 +101,7 @@ variable "default" {
       widget                     = null
     }
     cloud_platforms = ["cloud", "fly", "vercel"]
+    dns             = null
   }
 }
 
@@ -128,9 +125,9 @@ variable "services" {
 }
 
 variable "tags" {
-  default     = {}
   description = "Common tags to apply to all resources"
   type        = map(string)
+  default     = {}
 
   validation {
     condition = alltrue([

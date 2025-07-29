@@ -1,5 +1,8 @@
 # Services
 
+[![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/status-active-success)](https://img.shields.io/badge/status-active-success)
+
 OpenTofu configuration for managing personal services across Docker, Fly.io, and cloud providers.
 
 ## Commands
@@ -13,12 +16,11 @@ tofu output
 
 ## Contributing
 
-Follow CLAUDE.md rules:
-- Alphabetical sorting of all keys
-- No comments - code should be self-explanatory
-- Run `tofu fmt && tofu validate && tofu plan` before applying
-- Simple values before complex values
-- Trailing newlines in all files
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Make changes following the code standards in CLAUDE.md
+4. Run `tofu fmt && tofu validate && tofu plan` to verify changes
+5. Submit a pull request
 
 ## Features
 
