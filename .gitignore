@@ -2,3 +2,4 @@
 .terraform
 .terraform.*
 *.tfvars
+plan.out

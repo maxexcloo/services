@@ -82,7 +82,7 @@ services = {
 
 ## Documentation
 
-- **[Architecture](architecture.md)** - Technical implementation details
+- **[Architecture](ARCHITECTURE.md)** - Technical implementation details
 - **[CLAUDE.md](CLAUDE.md)** - Development guidelines and standards
 
 ## Contributing

@@ -56,6 +56,7 @@ variable "tags" {
 variable "terraform" {
   description = "Provider configurations and credentials"
   sensitive   = true
+
   type = object({
     b2 = object({
       application_key    = string

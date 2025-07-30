@@ -97,16 +97,6 @@ resource "restapi_object" "fly_app_service" {
 resource "terraform_data" "fly_app_setup" {
   for_each = local.services_by_feature.fly
 
-  depends_on = [
-    restapi_object.fly_app_service
-  ]
-
-  triggers_replace = {
-    app      = each.value.name
-    app_id   = restapi_object.fly_app_service[each.key].id
-    hostname = each.value.fqdn
-  }
-
   provisioner "local-exec" {
     command = <<-CMD
       curl -f -s \
@@ -131,5 +121,15 @@ resource "terraform_data" "fly_app_setup" {
         EOF
     CMD
     quiet   = true
+  }
+
+  depends_on = [
+    restapi_object.fly_app_service
+  ]
+
+  triggers_replace = {
+    app      = each.value.name
+    app_id   = restapi_object.fly_app_service[each.key].id
+    hostname = each.value.fqdn
   }
 }

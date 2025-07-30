@@ -18,7 +18,7 @@ resource "restapi_object" "portainer_stack" {
         oidc_title = var.default.oidc.title
       })
       server  = local.output_servers[each.value.server]
-      service = each.value
+      service = local.services_merged_outputs[each.key]
     })
   }))
 
