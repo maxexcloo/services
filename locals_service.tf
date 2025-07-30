@@ -6,7 +6,7 @@ locals {
         is_primary  = i == 0
         service_key = k
         subdomain   = split(".", hostname)[0]
-        zone        = join(".", slice(split(".", hostname), 1, length(split(".", hostname))))
+        zone        = length(split(".", hostname)) == 2 ? hostname : join(".", slice(split(".", hostname), 1, length(split(".", hostname))))
       }
     } if can(service.dns)
   ]...)
