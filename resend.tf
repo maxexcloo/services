@@ -1,5 +1,5 @@
 resource "restapi_object" "resend_api_key_service" {
-  for_each = local.filtered_services_resend
+  for_each = local.services_by_feature.resend
 
   data                      = jsonencode({ name = each.key })
   id_attribute              = "id"

@@ -1,5 +1,5 @@
 resource "tailscale_tailnet_key" "service" {
-  for_each = local.filtered_services_tailscale
+  for_each = local.services_by_feature.tailscale
 
   description   = "ephemeral-${each.key}"
   ephemeral     = true

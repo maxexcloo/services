@@ -1,15 +1,15 @@
 resource "onepassword_item" "service" {
-  for_each = local.filtered_services_onepassword
+  for_each = local.services_by_feature.onepassword
 
   category = "login"
-  password = each.value.enable_password || each.value.password == "" ? null : each.value.password
-  title    = "${each.value.title} (${each.value.server != null ? each.value.server : each.value.platform})"
-  url      = each.value.url
-  username = each.value.username
+  password = try(each.value.enable_password, false) || try(each.value.password, "") == "" ? null : try(each.value.password, null)
+  title    = "${each.value.title} (${try(each.value.server, null) != null ? each.value.server : each.value.platform})"
+  url      = try(each.value.url, null)
+  username = try(each.value.username, null)
   vault    = data.onepassword_vault.services.uuid
 
   dynamic "password_recipe" {
-    for_each = each.value.enable_password ? [true] : []
+    for_each = try(each.value.enable_password, false) ? [true] : []
 
     content {
       length  = 24
@@ -18,7 +18,7 @@ resource "onepassword_item" "service" {
   }
 
   dynamic "section" {
-    for_each = each.value.enable_b2 ? [true] : []
+    for_each = each.value.has_b2 ? [true] : []
 
     content {
       label = "B2"
@@ -50,7 +50,7 @@ resource "onepassword_item" "service" {
   }
 
   dynamic "section" {
-    for_each = each.value.enable_database_password ? [true] : []
+    for_each = each.value.has_database ? [true] : []
 
     content {
       label = "Database"
@@ -76,7 +76,7 @@ resource "onepassword_item" "service" {
   }
 
   dynamic "section" {
-    for_each = contains(keys(local.filtered_services_mail_section), each.key) ? [true] : []
+    for_each = contains(keys(local.services_mail_section), each.key) ? [true] : []
 
     content {
       label = "Mail"
@@ -108,7 +108,7 @@ resource "onepassword_item" "service" {
   }
 
   dynamic "section" {
-    for_each = each.value.enable_resend ? [true] : []
+    for_each = each.value.has_resend ? [true] : []
 
     content {
       label = "Resend"
@@ -122,7 +122,7 @@ resource "onepassword_item" "service" {
   }
 
   dynamic "section" {
-    for_each = each.value.enable_secret_hash ? [true] : []
+    for_each = each.value.has_secret_hash ? [true] : []
 
     content {
       label = "Secret Hash"
@@ -136,7 +136,7 @@ resource "onepassword_item" "service" {
   }
 
   dynamic "section" {
-    for_each = each.value.enable_sftpgo ? [true] : []
+    for_each = each.value.has_sftpgo ? [true] : []
 
     content {
       label = "SFTPGo"
@@ -168,7 +168,7 @@ resource "onepassword_item" "service" {
   }
 
   dynamic "section" {
-    for_each = each.value.enable_tailscale ? [true] : []
+    for_each = each.value.has_tailscale ? [true] : []
 
     content {
       label = "Tailscale"

@@ -24,45 +24,36 @@ tofu apply       # Apply configuration
 
 ### Organization
 - **Config/Data**: Alphabetical and recursive (imports, dependencies, object keys)
-- **Documentation**: Sort sections, lists, and references alphabetically when logical
-- **Files**: Alphabetical in documentation and directories
+- **Files**: Alphabetical in documentation and directories  
 - **Functions**: Group by purpose, alphabetical within groups
 - **Variables**: Alphabetical within scope
 
 ### Quality
 - **Comments**: Minimal - only for complex business logic
-- **Documentation**: Update README.md and docs with every feature change
 - **Formatting**: Run tofu fmt before commits
 - **KISS principle**: Keep it simple - prefer readable code over clever code
 - **Naming**: snake_case for all resources and variables
 - **Trailing newlines**: Required in all files
 
-## Project Structure
-- **data.tf**: All data sources
-- **locals_*.tf**: All locals (prefixed by filename)
-- **outputs.tf**: Output definitions
-- **providers.tf**: Provider configurations
-- **terraform.tf**: Terraform configuration
-- **templates/**: Configuration templates for services
-- **variables.tf**: Variable definitions
-- ***.tf**: Resource files
-
-## Project Specs
-- **Consolidate defaults**: Use `var.default` structure for default values
-- **Docker services**: Manages containerized services via Portainer API
-- **Locals prefix**: Locals in `locals_*.tf` files must start with filename prefix
-- **Multi-environment**: Supports multiple deployment environments
-- **No comments**: Code is self-explanatory
-- **Service templates**: YAML templates for Docker Compose services
+### HCL Conventions
 - **Sorting order**: Key order within blocks: 1) count/for_each (with blank line after), 2) Simple values (strings, numbers, bools, null), 3) Complex values (arrays, objects, maps)
 - **Type definitions**: Use `type = any` for complex nested structures
+- **Locals prefix**: Locals in `locals_*.tf` files must start with filename prefix
 
-## README Guidelines
-- **Structure**: Title → Description → Quick Start → Features → Installation → Usage → Contributing
+## Documentation Standards
+
+### README Guidelines
 - **Badges**: Include relevant status badges (build, version, license)
 - **Code examples**: Always include working examples in code blocks
 - **Installation**: Provide copy-paste commands that work
 - **Quick Start**: Get users running in under 5 minutes
+- **Structure**: Title → Description → Quick Start → Features → Installation → Usage → Contributing
+
+### Documentation Updates
+- Avoid duplication between README, architecture, and development docs
+- Link to detailed technical docs from overview docs
+- Sort sections, lists, and references alphabetically when logical
+- Update README.md and docs with every feature change
 
 ## Git Workflow
 ```bash
@@ -76,4 +67,4 @@ git add . && git commit -m "type: description"
 
 ---
 
-*Simple context for AI assistants working on this open source project.*
+*Development guidelines for AI assistants working on this Infrastructure as Code project.*

@@ -1,151 +1,61 @@
 variable "default" {
-  description = "Default configuration values including domains, email, and service defaults"
-
+  description = "Default configuration values"
   type = object({
-    cloud_platforms = list(string)
-    domain_external = string
-    domain_internal = string
-    domain_root     = string
-    email           = string
-    name            = string
-    oidc_name       = string
-    oidc_title      = string
-    oidc_url        = string
-    organisation    = string
-
-    service_config = object({
-      config                     = map(any)
-      description                = string
-      dns                        = optional(list(string))
-      enable_b2                  = bool
-      enable_cloudflare_proxy    = bool
-      enable_database_password   = bool
-      enable_href                = bool
-      enable_monitoring          = bool
-      enable_password            = bool
-      enable_resend              = bool
-      enable_secret_hash         = bool
-      enable_sftpgo              = bool
-      enable_ssl                 = bool
-      enable_ssl_validation      = bool
-      enable_tailscale           = bool
-      filter_exclude_server_flag = string
-      filter_include_server_flag = string
-      fly                        = map(any)
-      fqdn                       = optional(string)
-      group                      = string
-      icon                       = string
-      password                   = string
-      port                       = number
-      server                     = optional(string)
-      server_flags               = list(string)
-      server_service             = bool
-      service                    = optional(string)
-      title                      = string
-      url                        = optional(string)
-      username                   = optional(string)
-      zone                       = string
+    domains = object({
+      external = string
+      internal = string
+      root     = string
     })
-
-    widget_config = object({
-      filter_exclude_server_flag = string
-      filter_include_server_flag = string
-      priority                   = number
-      widget                     = optional(map(any))
+    email        = string
+    name         = string
+    organisation = string
+    oidc = object({
+      name  = string
+      title = string
+      url   = string
     })
+    platforms = list(string)
   })
 
   default = {
-    cloud_platforms = ["cloud", "fly", "vercel"]
-    domain_external = "excloo.net"
-    domain_internal = "excloo.org"
-    domain_root     = "excloo.com"
-    email           = "max@excloo.com"
-    name            = "Max Schaefer"
-    oidc_name       = "pocket-id"
-    oidc_title      = "Pocket ID"
-    oidc_url        = "https://id.excloo.com"
-    organisation    = "excloo"
-
-    service_config = {
-      config                     = {}
-      description                = ""
-      dns                        = null
-      enable_b2                  = false
-      enable_cloudflare_proxy    = false
-      enable_database_password   = false
-      enable_href                = true
-      enable_monitoring          = true
-      enable_password            = false
-      enable_resend              = false
-      enable_secret_hash         = false
-      enable_sftpgo              = false
-      enable_ssl                 = true
-      enable_ssl_validation      = true
-      enable_tailscale           = false
-      filter_exclude_server_flag = ""
-      filter_include_server_flag = ""
-      fly                        = {}
-      fqdn                       = null
-      group                      = "Uncategorized"
-      icon                       = "homepage"
-      password                   = ""
-      port                       = 443
-      server                     = null
-      server_flags               = []
-      server_service             = false
-      service                    = null
-      title                      = ""
-      url                        = null
-      username                   = null
-      zone                       = "external"
+    domains = {
+      external = "excloo.net"
+      internal = "excloo.org"
+      root     = "excloo.com"
     }
-
-    widget_config = {
-      filter_exclude_server_flag = ""
-      filter_include_server_flag = ""
-      priority                   = 0
-      widget                     = null
+    email        = "max@excloo.com"
+    name         = "Max Schaefer"
+    organisation = "excloo"
+    oidc = {
+      name  = "pocket-id"
+      title = "Pocket ID"
+      url   = "https://id.excloo.com"
     }
+    platforms = ["cloud", "fly", "vercel"]
   }
 }
 
 variable "services" {
-  description = "Service configurations for each platform and environment"
+  description = "Service configurations using convention over configuration"
   type        = any
-
-  validation {
-    condition = alltrue([
-      for k, v in var.services : v != null && v != {}
-    ])
-    error_message = "Service configurations cannot be null or empty."
-  }
 
   validation {
     condition = alltrue([
       for k, v in var.services : can(regex("^[a-z][a-z0-9-]*-[a-z][a-z0-9-]*$", k))
     ])
-    error_message = "Service keys must follow the pattern 'platform-servicename' with lowercase letters, numbers, and hyphens only."
+    error_message = "Service keys must follow 'platform-servicename' pattern."
   }
 }
 
 variable "tags" {
-  default     = {}
-  description = "Common tags to apply to all resources"
+  description = "Common tags for resources"
   type        = map(string)
-
-  validation {
-    condition = alltrue([
-      for k, v in var.tags : can(regex("^[a-zA-Z][a-zA-Z0-9_-]*$", k))
-    ])
-    error_message = "Tag keys must start with a letter and contain only alphanumeric characters, underscores, and hyphens."
-  }
+  default     = {}
 }
 
 variable "terraform" {
-  description = "Terraform provider configurations and API credentials"
+  description = "Provider configurations and credentials"
   sensitive   = true
-
   type = object({
     b2 = object({
       application_key    = string

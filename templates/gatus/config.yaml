@@ -22,22 +22,22 @@ endpoints:
     url: "icmp://${k}"
 %{ endfor ~}
 %{ for service in services ~}
-%{ if service.enable_monitoring && service.fqdn != null && service.group != default.service_config.group && service.title != default.service_config.title ~}
+%{ if try(service.enable_monitoring, true) && try(service.fqdn, null) != null && try(service.group, "Uncategorized") != "Default" && try(service.title, "Default") != "Default" ~}
   - alerts:
       - type: email
-%{ if service.enable_ssl_validation == false ~}
+%{ if try(service.enable_ssl_validation, true) == false ~}
     client:
       insecure: true
 %{ endif ~}
     conditions:
-%{ if service.enable_ssl && service.enable_ssl_validation ~}
+%{ if try(service.enable_ssl, true) && try(service.enable_ssl_validation, true) ~}
       - "[CERTIFICATE_EXPIRATION] > 48h"
 %{ endif ~}
       - "[RESPONSE_TIME] < 5000"
       - "[STATUS] == any(200, 401)"
-    group: "Services (${service.group})"
-    name: "${service.title} (${service.server != null ? service.server : service.platform})"
-    url: "${service.url}"
+    group: "Services (${try(service.group, "Uncategorized")})"
+    name: "${try(service.title, "Service")} (${try(service.server, null) != null ? service.server : try(service.platform, "unknown")})"
+    url: "${try(service.url, "")}"
 %{ endif ~}
 %{ endfor ~}
 ui:

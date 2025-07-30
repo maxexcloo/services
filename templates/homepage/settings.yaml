@@ -1,9 +1,9 @@
 headerStyle: clean
 title: ${homepage.title}
 layout:
-%{ for category, services in services ~}
-%{ if length(services) > 0 ~}
-  ${split(" - ", category)[1]}:
+%{ for service_name, service in services ~}
+%{ if length(try(service.widgets, [])) > 0 && try(service.has_href, true) ~}
+  ${try(service.group, "Uncategorized")}:
     columns: 4
     style: row
 %{ endif ~}
