@@ -5,7 +5,7 @@ resource "onepassword_item" "service" {
   password = try(each.value.enable_password, false) || try(each.value.password, "") == "" ? null : try(each.value.password, null)
   title    = "${each.value.title} (${try(each.value.server, null) != null ? each.value.server : each.value.platform})"
   url      = try(each.value.url, null)
-  username = try(each.value.username, null)
+  username = try(each.value.username, "") != "" ? each.value.username : null
   vault    = data.onepassword_vault.services.uuid
 
   dynamic "password_recipe" {

@@ -61,3 +61,7 @@ provider "tailscale" {
   oauth_client_secret = var.terraform.tailscale.oauth_client_secret
   tailnet             = var.terraform.tailscale.organization
 }
+
+provider "tfe" {
+  # Uses TF_TOKEN environment variable or Terraform Cloud credentials
+}
